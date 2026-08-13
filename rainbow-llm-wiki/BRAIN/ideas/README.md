@@ -9,8 +9,8 @@
 - Slug convention: `idea-name.md`
 
 ## 2. What Does NOT Go Here
-- Active builds $\rightarrow$ [`projects/`](../projects/README.md) (Graduation: move file to `projects/` when work starts).
-- General mental frameworks $\rightarrow$ [`concepts/`](../concepts/README.md)
+- Active builds [`projects/`](../projects/README.md) (Graduation: move file to `projects/` when work starts).
+- General mental frameworks [`concepts/`](../concepts/README.md)
 
 ---
 

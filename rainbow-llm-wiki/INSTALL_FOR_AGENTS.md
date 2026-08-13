@@ -150,8 +150,8 @@ When operating on this brain in future sessions:
 
 | Inbound Trigger | Action Required |
 |---|---|
-| New meeting transcript or notes | Run [`skills/ingest/SKILL.md`](skills/ingest/SKILL.md) $\rightarrow$ extract entities $\rightarrow$ run [`skills/enrich/SKILL.md`](skills/enrich/SKILL.md) |
-| Researching a person or company | Check `$BRAIN_PATH/aliases.json` $\rightarrow$ read `$BRAIN_PATH/people/slug.md` $\rightarrow$ enrich delta |
-| Answering knowledge questions | Search `$BRAIN_PATH/` $\rightarrow$ inspect `## State` & `See Also` links $\rightarrow$ synthesize answer |
-| User corrects a fact | Update Compiled Truth immediately $\rightarrow$ add Timeline entry $\rightarrow$ mark `confidence: high` |
-| Routine maintenance / cleanup | Run `node scripts/lint.js` $\rightarrow$ prune `$BRAIN_PATH/inbox/` $\rightarrow$ resolve stale open threads |
+| New meeting transcript or notes | Run [`skills/ingest/SKILL.md`](skills/ingest/SKILL.md) extract entities run [`skills/enrich/SKILL.md`](skills/enrich/SKILL.md) |
+| Researching a person or company | Check `$BRAIN_PATH/aliases.json` read `$BRAIN_PATH/people/slug.md` enrich delta |
+| Answering knowledge questions | Search `$BRAIN_PATH/` inspect `## State` & `See Also` links synthesize answer |
+| User corrects a fact | Update Compiled Truth immediately add Timeline entry mark `confidence: high` |
+| Routine maintenance / cleanup | Run `node scripts/lint.js` prune `$BRAIN_PATH/inbox/` resolve stale open threads |

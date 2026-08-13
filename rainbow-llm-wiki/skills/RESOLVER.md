@@ -20,5 +20,5 @@
 ## Chaining Skills
 
 Skills are designed to chain cleanly:
-- **Ingestion $\rightarrow$ Enrichment**: When ingesting a meeting transcript with [`skills/ingest/SKILL.md`](ingest/SKILL.md), extract mentioned participants and trigger [`skills/enrich/SKILL.md`](enrich/SKILL.md) for any new or thin profiles.
-- **Deduplication $\rightarrow$ Maintenance**: After merging duplicate pages with [`skills/dedup-merge/SKILL.md`](dedup-merge/SKILL.md), run [`skills/maintain/SKILL.md`](maintain/SKILL.md) to verify all backlinks and indexes are clean.
+- **Ingestion Enrichment**: When ingesting a meeting transcript with [`skills/ingest/SKILL.md`](ingest/SKILL.md), extract mentioned participants and trigger [`skills/enrich/SKILL.md`](enrich/SKILL.md) for any new or thin profiles.
+- **Deduplication Maintenance**: After merging duplicate pages with [`skills/dedup-merge/SKILL.md`](dedup-merge/SKILL.md), run [`skills/maintain/SKILL.md`](maintain/SKILL.md) to verify all backlinks and indexes are clean.

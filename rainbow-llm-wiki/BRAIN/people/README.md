@@ -10,8 +10,8 @@
 - Disambiguation: `john-smith-acme.md` if collisions occur.
 
 ## 2. What Does NOT Go Here
-- Organizations or companies $\rightarrow$ [`companies/`](../companies/README.md)
-- Collections of people or teams $\rightarrow$ link individual people to a company or project.
+- Organizations or companies [`companies/`](../companies/README.md)
+- Collections of people or teams link individual people to a company or project.
 
 ---
 

@@ -9,8 +9,8 @@
 - Slug convention: `company-round-year.md` (e.g. `acme-series-a-2026.md`)
 
 ## 2. What Does NOT Go Here
-- General company profiles $\rightarrow$ [`companies/`](../companies/README.md)
-- Investor biographies $\rightarrow$ [`people/`](../people/README.md)
+- General company profiles [`companies/`](../companies/README.md)
+- Investor biographies [`people/`](../people/README.md)
 
 ---
 

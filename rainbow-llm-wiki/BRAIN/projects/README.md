@@ -9,8 +9,8 @@
 - Slug convention: `project-name.md`
 
 ## 2. What Does NOT Go Here
-- Ideas with no active development $\rightarrow$ [`ideas/`](../ideas/README.md)
-- Mental models or theory $\rightarrow$ [`concepts/`](../concepts/README.md)
+- Ideas with no active development [`ideas/`](../ideas/README.md)
+- Mental models or theory [`concepts/`](../concepts/README.md)
 
 ---
 

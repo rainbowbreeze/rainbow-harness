@@ -9,8 +9,8 @@
 - Slug convention: `YYYY-MM-DD-topic-or-participants.md`
 
 ## 2. What Does NOT Go Here
-- General bios of participants $\rightarrow$ [`people/`](../people/README.md) (enrich people pages using insights from the meeting).
-- Broad company profiles $\rightarrow$ [`companies/`](../companies/README.md)
+- General bios of participants [`people/`](../people/README.md) (enrich people pages using insights from the meeting).
+- Broad company profiles [`companies/`](../companies/README.md)
 
 ---
 

@@ -39,38 +39,38 @@ graph TD
 ### Detailed Decision Steps
 
 1. **Is it an individual human being?**
-   $\rightarrow$ `people/` (Slug: `first-last.md`)
+   `people/` (Slug: `first-last.md`)
    *Check `aliases` across all existing people pages before creating.*
 
 2. **Is it an organization, company, institution, VC fund, or brand?**
-   $\rightarrow$ `companies/` (Slug: `company-name.md`)
+   `companies/` (Slug: `company-name.md`)
 
 3. **Is it a specific financial transaction, term sheet, investment, or acquisition?**
-   $\rightarrow$ `deals/` (Slug: `entity-round-year.md` or `company-partner-deal.md`)
+   `deals/` (Slug: `entity-round-year.md` or `company-partner-deal.md`)
 
 4. **Is it a record, summary, action items, or transcript of a specific meeting/call?**
-   $\rightarrow$ `meetings/` (Slug: `YYYY-MM-DD-topic-or-participants.md`)
+   `meetings/` (Slug: `YYYY-MM-DD-topic-or-participants.md`)
 
 5. **Is it an active initiative with a repository, specification, assigned owner, or active build?**
-   $\rightarrow$ `projects/` (Slug: `project-name.md`)
+   `projects/` (Slug: `project-name.md`)
 
 6. **Is it a raw possibility or product feature that could be built, but has no active work?**
-   $\rightarrow$ `ideas/` (Slug: `idea-name.md`)
+   `ideas/` (Slug: `idea-name.md`)
 
 7. **Is it a reusable mental model, design pattern, framework, or concept you could teach?**
-   $\rightarrow$ `concepts/` (Slug: `concept-name.md`)
+   `concepts/` (Slug: `concept-name.md`)
 
 8. **Is it developed prose, essay, article, or narrative writing?**
-   $\rightarrow$ `writing/` (Slug: `title-or-topic.md`)
+   `writing/` (Slug: `title-or-topic.md`)
 
 9. **Is it a bulk export, large dataset snapshot, or immutable external archive?**
-   $\rightarrow$ `sources/` (Slug: `source-name-YYYY-MM-DD.md`)
+   `sources/` (Slug: `source-name-YYYY-MM-DD.md`)
 
 10. **Is it a retired, dead, or superseded note preserved solely for history?**
-    $\rightarrow$ `archive/`
+    `archive/`
 
 11. **Ambiguous / Unclassified / Quick Capture?**
-    $\rightarrow$ `inbox/` (Temporary staging. Flagged for categorization during linting).
+    `inbox/` (Temporary staging. Flagged for categorization during linting).
 
 ---
 
@@ -79,25 +79,25 @@ graph TD
 When an entity or idea sits on the boundary between two directories:
 
 - **Concept vs. Idea:**
-  - Could you *teach* it as a mental model or universal framework? $\rightarrow$ `concepts/`
-  - Could you *build* or implement it as a software feature/product? $\rightarrow$ `ideas/`
+  - Could you *teach* it as a mental model or universal framework? `concepts/`
+  - Could you *build* or implement it as a software feature/product? `ideas/`
 - **Idea vs. Project:**
-  - Is anyone actively writing code, assigning tasks, or executing? $\rightarrow$ `projects/`
-  - Is it purely hypothetical or awaiting prioritization? $\rightarrow$ `ideas/`
+  - Is anyone actively writing code, assigning tasks, or executing? `projects/`
+  - Is it purely hypothetical or awaiting prioritization? `ideas/`
   - *Graduation moment:* When work starts on an idea, move the file from `ideas/` to `projects/` and log the transition.
 - **Concept vs. Writing:**
-  - A concept page is concise, structured compiled truth ($\sim$200–500 words). $\rightarrow$ `concepts/`
-  - A writing page is long-form prose, narrative, or developed argumentation. $\rightarrow$ `writing/`
+  - A concept page is concise, structured compiled truth ($\sim$200–500 words). `concepts/`
+  - A writing page is long-form prose, narrative, or developed argumentation. `writing/`
 - **Person vs. Company:**
-  - Focuses on the human, their career arc, beliefs, and interactions. $\rightarrow$ `people/`
-  - Focuses on the organization, metrics, market position, and products. $\rightarrow$ `companies/`
+  - Focuses on the human, their career arc, beliefs, and interactions. `people/`
+  - Focuses on the organization, metrics, market position, and products. `companies/`
   - *Rule:* Create both pages and cross-link them with typed relationships.
 - **Meeting vs. Project / Person:**
-  - A meeting file captures the chronological event, raw transcript, and specific action items. $\rightarrow$ `meetings/`
+  - A meeting file captures the chronological event, raw transcript, and specific action items. `meetings/`
   - Action items and insights from meetings must be extracted to enrich the relevant `people/`, `companies/`, or `projects/` pages.
 - **Sources vs. `.raw/` sidecars:**
-  - Data specific to a single person or company (API payload, LinkedIn scrape) $\rightarrow$ `people/.raw/slug-date.json` or `companies/.raw/slug-date.json`
-  - Multi-entity bulk datasets, chat exports, or book PDFs $\rightarrow$ `sources/`
+  - Data specific to a single person or company (API payload, LinkedIn scrape) `people/.raw/slug-date.json` or `companies/.raw/slug-date.json`
+  - Multi-entity bulk datasets, chat exports, or book PDFs `sources/`
 
 ---
 

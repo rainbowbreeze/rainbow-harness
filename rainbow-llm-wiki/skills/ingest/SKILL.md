@@ -34,8 +34,8 @@ When receiving new content:
    - Extract action items and decisions.
    - Trigger `skills/enrich/SKILL.md` for all meeting attendees.
 2. **Quick Notes & Fleeting Thoughts**:
-   - Walk `BRAIN/RESOLVER.md`. If destination is unambiguous (e.g. idea $\rightarrow$ `BRAIN/ideas/`, mental model $\rightarrow$ `BRAIN/concepts/`), write directly to destination.
-   - If ambiguous $\rightarrow$ write to `BRAIN/inbox/slug.md`.
+   - Walk `BRAIN/RESOLVER.md`. If destination is unambiguous (e.g. idea `BRAIN/ideas/`, mental model `BRAIN/concepts/`), write directly to destination.
+   - If ambiguous write to `BRAIN/inbox/slug.md`.
 3. **Articles & Web Research**:
    - Extract core concepts into `BRAIN/concepts/` or ideas into `BRAIN/ideas/`.
    - Store raw reference snapshot in `BRAIN/sources/` if large/immutable.

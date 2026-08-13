@@ -9,9 +9,9 @@
 - Slug convention: `company-name.md` (lowercase, hyphens for spaces).
 
 ## 2. What Does NOT Go Here
-- Human founders or executives $\rightarrow$ [`people/`](../people/README.md)
-- Specific financial deals or rounds $\rightarrow$ [`deals/`](../deals/README.md)
-- Internal software projects $\rightarrow$ [`projects/`](../projects/README.md)
+- Human founders or executives [`people/`](../people/README.md)
+- Specific financial deals or rounds [`deals/`](../deals/README.md)
+- Internal software projects [`projects/`](../projects/README.md)
 
 ---
 

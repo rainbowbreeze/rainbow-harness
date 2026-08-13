@@ -42,8 +42,8 @@ Calibrate research depth to the entity's importance:
 
 ### Step 2: Check Brain State & Deduplicate
 - Search `aliases` across `BRAIN/people/*.md` or `BRAIN/companies/*.md` (or check `BRAIN/aliases.json`).
-- If an alias or slug matches $\rightarrow$ **UPDATE existing file**.
-- If no match $\rightarrow$ **CREATE new file** in `BRAIN/people/` or `BRAIN/companies/` using standard template.
+- If an alias or slug matches **UPDATE existing file**.
+- If no match **CREATE new file** in `BRAIN/people/` or `BRAIN/companies/` using standard template.
 
 ### Step 3: Extract Signal & Epistemic Attribution
 - Classify claims into:

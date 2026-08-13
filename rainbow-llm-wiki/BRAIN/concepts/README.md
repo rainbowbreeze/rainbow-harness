@@ -9,8 +9,8 @@
 - Slug convention: `concept-name.md`
 
 ## 2. What Does NOT Go Here
-- Things you could build as code $\rightarrow$ [`ideas/`](../ideas/README.md)
-- Long essays or narrative prose $\rightarrow$ [`writing/`](../writing/README.md)
+- Things you could build as code [`ideas/`](../ideas/README.md)
+- Long essays or narrative prose [`writing/`](../writing/README.md)
 
 ---
 

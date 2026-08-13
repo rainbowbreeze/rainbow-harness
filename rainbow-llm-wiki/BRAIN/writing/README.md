@@ -9,8 +9,8 @@
 - Slug convention: `topic-or-title.md`
 
 ## 2. What Does NOT Go Here
-- Short, distilled conceptual definitions $\rightarrow$ [`concepts/`](../concepts/README.md)
-- Product feature specs $\rightarrow$ [`projects/`](../projects/README.md)
+- Short, distilled conceptual definitions [`concepts/`](../concepts/README.md)
+- Product feature specs [`projects/`](../projects/README.md)
 
 ---
 
