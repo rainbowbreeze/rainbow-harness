@@ -1,0 +1,12 @@
+{
+  "name": "gbrain-markdown",
+  "version": "1.0.0",
+  "description": "Pure local Markdown knowledge management system",
+  "type": "module",
+  "scripts": {
+    "lint": "node scripts/lint.js",
+    "index": "node scripts/index.js",
+    "graph": "node scripts/graph.js",
+    "stats": "node scripts/stats.js"
+  }
+}

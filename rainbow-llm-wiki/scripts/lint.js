@@ -1,0 +1,168 @@
+#!/usr/bin/env node
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const brainDir = path.resolve(__dirname, '..', 'BRAIN');
+
+const MECE_DIRS = [
+  'people',
+  'companies',
+  'projects',
+  'ideas',
+  'concepts',
+  'meetings',
+  'deals',
+  'writing',
+  'sources',
+  'inbox',
+  'archive'
+];
+
+function parseFrontmatter(content) {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return null;
+  const yamlBlock = match[1];
+  const data = {};
+  
+  for (const line of yamlBlock.split('\n')) {
+    const colonIdx = line.indexOf(':');
+    if (colonIdx > 0 && !line.startsWith(' ') && !line.startsWith('-')) {
+      const key = line.slice(0, colonIdx).trim();
+      let value = line.slice(colonIdx + 1).trim();
+      
+      if (value.startsWith('[') && value.endsWith(']')) {
+        try {
+          value = JSON.parse(value.replace(/'/g, '"'));
+        } catch {
+          value = value.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
+        }
+      } else {
+        value = value.replace(/^["']|["']$/g, '');
+      }
+      data[key] = value;
+    }
+  }
+  return { frontmatter: data, rawYaml: yamlBlock, body: content.slice(match[0].length) };
+}
+
+function getAllMarkdownFiles(dir) {
+  let files = [];
+  if (!fs.existsSync(dir)) return files;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name !== '.raw' && entry.name !== 'node_modules' && entry.name !== '.git') {
+        files = files.concat(getAllMarkdownFiles(fullPath));
+      }
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+function runLint() {
+  console.log('🔍 Running Knowledge Base Linter in BRAIN/...\n');
+  let errors = [];
+  let warnings = [];
+
+  const aliasMap = new Map();
+  const idMap = new Map();
+  const allFiles = [];
+
+  for (const dirName of MECE_DIRS) {
+    const dirPath = path.join(brainDir, dirName);
+    const files = getAllMarkdownFiles(dirPath);
+    for (const file of files) {
+      allFiles.push(file);
+    }
+  }
+
+  for (const filePath of allFiles) {
+    const relPath = path.relative(brainDir, filePath);
+    const basename = path.basename(filePath);
+    if (basename === 'README.md') continue;
+
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const parsed = parseFrontmatter(content);
+
+    if (!parsed) {
+      errors.push(`[${relPath}] Missing or malformed YAML frontmatter.`);
+      continue;
+    }
+
+    const { frontmatter, body } = parsed;
+
+    // Check mandatory fields
+    const requiredFields = ['type', 'id', 'title'];
+    for (const field of requiredFields) {
+      if (!frontmatter[field]) {
+        errors.push(`[${relPath}] Missing required frontmatter field: "${field}"`);
+      }
+    }
+
+    // Check ID collisions
+    if (frontmatter.id) {
+      if (idMap.has(frontmatter.id)) {
+        errors.push(`[${relPath}] Duplicate ID "${frontmatter.id}" also in [${idMap.get(frontmatter.id)}]`);
+      } else {
+        idMap.set(frontmatter.id, relPath);
+      }
+    }
+
+    // Check Two-Layer separator
+    if (!body.includes('\n---') && !body.includes('\r\n---')) {
+      warnings.push(`[${relPath}] Missing two-layer divider (---) separating Compiled Truth from Timeline.`);
+    }
+
+    // Check Aliases collisions
+    if (frontmatter.aliases && Array.isArray(frontmatter.aliases)) {
+      for (const alias of frontmatter.aliases) {
+        const normAlias = alias.toLowerCase().trim();
+        if (aliasMap.has(normAlias)) {
+          warnings.push(`[${relPath}] Alias collision "${alias}" already defined in [${aliasMap.get(normAlias)}]`);
+        } else {
+          aliasMap.set(normAlias, relPath);
+        }
+      }
+    }
+
+    // Check Markdown Link Integrity
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    let linkMatch;
+    while ((linkMatch = linkRegex.exec(body)) !== null) {
+      const linkTarget = linkMatch[2];
+      if (linkTarget.startsWith('http://') || linkTarget.startsWith('https://') || linkTarget.startsWith('#') || linkTarget.startsWith('mailto:')) {
+        continue;
+      }
+      const targetClean = linkTarget.split('#')[0];
+      const targetAbs = path.resolve(path.dirname(filePath), targetClean);
+      if (!fs.existsSync(targetAbs)) {
+        errors.push(`[${relPath}] Broken relative link: "${linkTarget}"`);
+      }
+    }
+  }
+
+  console.log(`Scanned ${allFiles.length} markdown files in BRAIN/.`);
+  
+  if (warnings.length > 0) {
+    console.log(`\n⚠️  Warnings (${warnings.length}):`);
+    warnings.forEach(w => console.log(`   - ${w}`));
+  }
+
+  if (errors.length > 0) {
+    console.error(`\n❌ Errors (${errors.length}):`);
+    errors.forEach(e => console.error(`   - ${e}`));
+    console.error('\n❌ Lint check failed.');
+    process.exit(1);
+  } else {
+    console.log('\n✅ All lint checks passed successfully!');
+  }
+}
+
+runLint();
