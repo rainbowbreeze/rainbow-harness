@@ -4,7 +4,11 @@ id: mece-principle
 title: MECE Principle
 aliases: ["Mutually Exclusive Collectively Exhaustive", "MECE"]
 domain: Knowledge Architecture
+status: active
 tags: [mental-model, taxonomy, structuring]
+relations:
+  - target: "people/ada-lovelace"
+    type: "exemplar"
 updated_at: "2026-08-13"
 ---
 

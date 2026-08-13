@@ -5,31 +5,49 @@
 
 ---
 
+## Architectural Invariant: Execution Plane vs. Data Plane
+
+Before doing anything, understand this strict two-plane separation:
+
+1. **`$WORKSPACE_ROOT` (Agent Execution Plane)**:
+   - This is the main repository or workspace where the AI agent operates.
+   - Contains: `skills/`, `scripts/`, `package.json`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`.
+   - **CRITICAL:** The `skills/` directory MUST live in `$WORKSPACE_ROOT/skills/`. **NEVER create or copy `skills/` inside the brain data directory.**
+
+2. **`$BRAIN_PATH` (Knowledge Base Data Plane)**:
+   - This is where all knowledge notes, entity files, logs, and schemas live (default: `$WORKSPACE_ROOT/BRAIN` or `~/brain`).
+   - Contains: `RESOLVER.md`, `schema.md`, `index.md`, `log.md`, `graph.md`, `aliases.json`, and the MECE entity directories (`people/`, `companies/`, etc.).
+
+---
+
 ## Step 0: Initial Discovery & User Confirmation (DO NOT SKIP)
 
-Before creating any directories or writing files, **ask the operator**:
+Before creating directories or files, **ask the human operator**:
 
 1. **Brain Location**:
    > *"Where would you like to create your knowledge base? Default is `./BRAIN` inside this project, or `~/brain` for a standalone personal repository."*
 2. **Domain Customization**:
    > *"The standard domains are: `people`, `companies`, `projects`, `ideas`, `concepts`, `meetings`, `deals`, `writing`, `sources`, `inbox`, `archive`. Would you like to add any specialized domains (e.g. `personal`, `household`, `civic`, `hiring`)?"*
 
-Once the user confirms the target path (referred to below as `$BRAIN_PATH`), proceed with the steps below.
+Define:
+- `$WORKSPACE_ROOT` = current agent working directory.
+- `$BRAIN_PATH` = user-selected brain directory (default: `$WORKSPACE_ROOT/BRAIN`).
 
 ---
 
 ## Step 1: Scaffold Directory Structure
 
-Create the root `$BRAIN_PATH` directory along with all MECE subdirectories and `.raw/` sidecars:
+Create the `$BRAIN_PATH` directory structure and the `$WORKSPACE_ROOT` tooling directories:
 
 ```bash
+# 1. Create Brain Data Plane
 mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,projects,ideas,concepts,meetings,deals,writing,sources,inbox,archive}
-mkdir -p skills/{enrich,ingest,query,maintain,dedup-merge}
-mkdir -p scripts
-```
 
-Ensure `.gitkeep` files exist in empty directories (especially `.raw/` folders):
-```bash
+# 2. Create Workspace Execution Plane (in $WORKSPACE_ROOT, NOT in $BRAIN_PATH)
+mkdir -p "$WORKSPACE_ROOT"/skills/{enrich,ingest,query,maintain,dedup-merge}
+mkdir -p "$WORKSPACE_ROOT"/scripts
+
+# 3. Add placeholder .gitkeep files for .raw directories
 touch "$BRAIN_PATH"/people/.raw/.gitkeep
 touch "$BRAIN_PATH"/companies/.raw/.gitkeep
 ```
@@ -41,7 +59,7 @@ touch "$BRAIN_PATH"/companies/.raw/.gitkeep
 Copy or write the core governance files directly into `$BRAIN_PATH/`:
 
 1. **`$BRAIN_PATH/RESOLVER.md`**: Master decision tree for filing entities and notes. Walk this tree before writing any new file.
-2. **`$BRAIN_PATH/schema.md`**: Structural specifications, YAML frontmatter schemas for all entity types, Two-Layer rules (Compiled Truth above `---`, Timeline below `---`), and epistemic tags (`observed`, `self-described`, `inferred`).
+2. **`$BRAIN_PATH/schema.md`**: Structural specifications, Universal Base Frontmatter schema, Two-Layer rules (Compiled Truth above `---`, Timeline below `---`), and epistemic tags (`observed`, `self-described`, `inferred`).
 3. **`$BRAIN_PATH/log.md`**: Append-only event log starting with:
    ```markdown
    # Knowledge Base Event Log
@@ -56,51 +74,78 @@ Copy or write the core governance files directly into `$BRAIN_PATH/`:
 
 ## Step 3: Install Directory Resolvers (`README.md`)
 
-Every subdirectory in `$BRAIN_PATH/` must have a `README.md` defining:
-1. **What goes here** (inclusion criteria and slug convention).
-2. **What does NOT go here** (disambiguation from neighboring directories).
-3. **Page template** with YAML frontmatter, compiled truth sections, and timeline log.
+> [!IMPORTANT]
+> **DO NOT generate directory README resolvers from scratch.**
+> Always copy the canonical `README.md` resolver files from this repository or use the canonical 3-section template below.
 
-Ensure the following resolver files exist:
-- `$BRAIN_PATH/people/README.md` (Slug: `first-last.md`)
-- `$BRAIN_PATH/companies/README.md` (Slug: `company-name.md`)
-- `$BRAIN_PATH/projects/README.md` (Slug: `project-name.md`)
-- `$BRAIN_PATH/ideas/README.md` (Slug: `idea-name.md`)
-- `$BRAIN_PATH/concepts/README.md` (Slug: `concept-name.md`)
-- `$BRAIN_PATH/meetings/README.md` (Slug: `YYYY-MM-DD-title.md`)
-- `$BRAIN_PATH/deals/README.md` (Slug: `company-round-year.md`)
-- `$BRAIN_PATH/writing/README.md` (Slug: `topic-title.md`)
-- `$BRAIN_PATH/sources/README.md` (Bulk raw imports & snapshots)
-- `$BRAIN_PATH/inbox/README.md` (Temporary staging)
-- `$BRAIN_PATH/archive/README.md` (Retired entities)
+If installing from a local clone of this repository:
+```bash
+# Copy all canonical directory resolvers into $BRAIN_PATH
+for dir in people companies projects ideas concepts meetings deals writing sources inbox archive; do
+  cp "BRAIN/$dir/README.md" "$BRAIN_PATH/$dir/README.md"
+done
+```
+
+Every resolver `README.md` must adhere to this exact 3-section structure:
+1. **Section 1: What Goes Here** — Concrete inclusion criteria and slug convention.
+2. **Section 2: What Does NOT Go Here** — Clear disambiguation from neighboring directories.
+3. **Section 3: Entity Page Template** — Complete Markdown template adhering to the Universal Base Frontmatter Schema.
 
 ---
 
-## Step 4: Install Agent Skills Layer (`skills/`)
+## Step 3.5: Creating Custom User Domains (Universal Frontmatter Standard)
 
-Skills teach autonomous agents how to perform knowledge management tasks consistently.
+If the user requested custom domains (e.g., `personal`, `household`, `civic`, `hiring`), the agent MUST:
 
-1. **`skills/RESOLVER.md`**: Master skill dispatcher mapping prompts/triggers to skills.
-2. **`skills/enrich/SKILL.md`**: 7-step tiered enrichment protocol for people and companies.
-3. **`skills/ingest/SKILL.md`**: Multi-source ingestion protocol for meetings, transcripts, and notes.
-4. **`skills/query/SKILL.md`**: Pure Markdown search, alias resolution, and backlink traversal.
-5. **`skills/maintain/SKILL.md`**: Health audit, linting, dead link fixing, and inbox pruning protocol.
-6. **`skills/dedup-merge/SKILL.md`**: Entity deduplication, timeline merging, and cross-reference updating.
+1. Create the directory: `mkdir -p "$BRAIN_PATH/<custom_domain>"`
+2. Create `$BRAIN_PATH/<custom_domain>/README.md` with the 3 canonical sections.
+3. **MANDATORY**: Ensure the entity page template implements the **Universal Base Frontmatter Schema**:
+
+```yaml
+---
+type: "<domain_singular>"   # e.g., personal, hiring, household, book
+id: "<canonical-slug>"      # matches filename without .md (kebab-case)
+title: "<Human Readable Title>"
+aliases: ["<Variant 1>", "<Variant 2>"] # array of alternate names, handles, emails
+status: active              # active | draft | in-progress | on-hold | closed | archived
+tags: ["tag1", "tag2"]      # categorization tags
+relations:                  # typed bidirectional links to other entities
+  - target: "<directory>/<target-slug>"
+    type: "<relationship-type>"
+updated_at: "YYYY-MM-DD"    # ISO date of last modification
+# [Optional domain-specific fields added below this line]
+---
+```
+
+---
+
+## Step 4: Install Agent Skills Layer (`$WORKSPACE_ROOT/skills/`)
+
+> [!WARNING]
+> Skills MUST be placed in `$WORKSPACE_ROOT/skills/` (the workspace root), NEVER inside `$BRAIN_PATH/skills/`.
+
+Copy or write the skill files into `$WORKSPACE_ROOT/skills/`:
+- `$WORKSPACE_ROOT/skills/RESOLVER.md`: Master skill dispatcher mapping prompts/triggers to skills.
+- `$WORKSPACE_ROOT/skills/enrich/SKILL.md`: 7-step tiered enrichment protocol for people and companies.
+- `$WORKSPACE_ROOT/skills/ingest/SKILL.md`: Multi-source ingestion protocol for meetings, transcripts, and notes.
+- `$WORKSPACE_ROOT/skills/query/SKILL.md`: Pure Markdown search, alias resolution, and backlink traversal.
+- `$WORKSPACE_ROOT/skills/maintain/SKILL.md`: Health audit, linting, dead link fixing, and inbox pruning protocol.
+- `$WORKSPACE_ROOT/skills/dedup-merge/SKILL.md`: Entity deduplication, timeline merging, and cross-reference updating.
 
 ---
 
 ## Step 5: Configure Agent Protocol Files
 
-Ensure agent instruction files are installed in the workspace root:
+Ensure agent instruction files are installed in `$WORKSPACE_ROOT/`:
 
-1. **`AGENTS.md`**: Operational rules for Cursor, Hermes, OpenClaw, Codex, Gemini CLI.
-2. **`CLAUDE.md`**: Operational guidelines for Claude Code.
-3. **`GEMINI.md`**: Project memory and documentation sync file.
+1. **`$WORKSPACE_ROOT/AGENTS.md`**: Operational rules for Cursor, Hermes, OpenClaw, Codex, Gemini CLI.
+2. **`$WORKSPACE_ROOT/CLAUDE.md`**: Operational guidelines for Claude Code.
+3. **`$WORKSPACE_ROOT/GEMINI.md`**: Project memory and documentation sync file.
 
 ### Key Golden Rules to Enforce:
 - **Always read `$BRAIN_PATH/RESOLVER.md` before creating any file.**
-- **Check `aliases` in existing files before creating a person/company to prevent split-brain duplicates.**
-- **Maintain Two-Layer separation (`---`) between Compiled Truth and Timeline.**
+- **Check `aliases` in existing files or `$BRAIN_PATH/aliases.json` before creating a person/company to prevent split-brain duplicates.**
+- **Maintain Two-Layer separation (`---`) between Compiled Truth (above) and Timeline (below).**
 - **Tag subjective assertions with epistemic labels (`observed`, `self-described`, `inferred`) and confidence scores.**
 - **Do NOT execute `git commit` or `git push` unless explicitly requested by the user.**
 
@@ -108,19 +153,19 @@ Ensure agent instruction files are installed in the workspace root:
 
 ## Step 6: Install Zero-Dependency Validation & Indexing Scripts
 
-Install the standard Node/Bun automation scripts in `scripts/`:
+Install the standard Node/Bun automation scripts in `$WORKSPACE_ROOT/scripts/`:
 
-- **`scripts/lint.js`**: Validates YAML frontmatter, checks for broken relative markdown links, and flags duplicate aliases.
-- **`scripts/index.js`**: Rebuilds `$BRAIN_PATH/index.md` and `$BRAIN_PATH/aliases.json` across all files.
-- **`scripts/graph.js`**: Generates relationship cross-link matrices and Mermaid diagrams in `$BRAIN_PATH/graph.md`.
-- **`scripts/stats.js`**: Computes entity counts, link density, and backlog metrics.
-- **`package.json`**: Provides npm/bun scripts (`bun run lint`, `bun run index`, `bun run graph`, `bun run stats`).
+- **`$WORKSPACE_ROOT/scripts/lint.js`**: Validates Universal Base YAML frontmatter, checks for broken relative markdown links, and flags duplicate aliases in `$BRAIN_PATH`.
+- **`$WORKSPACE_ROOT/scripts/index.js`**: Rebuilds `$BRAIN_PATH/index.md` and `$BRAIN_PATH/aliases.json` across all files.
+- **`$WORKSPACE_ROOT/scripts/graph.js`**: Generates relationship cross-link matrices and Mermaid diagrams in `$BRAIN_PATH/graph.md`.
+- **`$WORKSPACE_ROOT/scripts/stats.js`**: Computes entity counts, link density, and backlog metrics in `$BRAIN_PATH`.
+- **`$WORKSPACE_ROOT/package.json`**: Provides npm/bun scripts (`bun run lint`, `bun run index`, `bun run graph`, `bun run stats`).
 
 ---
 
 ## Step 7: Verify the Installation
 
-Run the complete verification pipeline:
+Run the complete verification pipeline from `$WORKSPACE_ROOT`:
 
 ```bash
 # 1. Run Schema & Link Integrity Linter
@@ -150,8 +195,8 @@ When operating on this brain in future sessions:
 
 | Inbound Trigger | Action Required |
 |---|---|
-| New meeting transcript or notes | Run [`skills/ingest/SKILL.md`](skills/ingest/SKILL.md) extract entities run [`skills/enrich/SKILL.md`](skills/enrich/SKILL.md) |
-| Researching a person or company | Check `$BRAIN_PATH/aliases.json` read `$BRAIN_PATH/people/slug.md` enrich delta |
-| Answering knowledge questions | Search `$BRAIN_PATH/` inspect `## State` & `See Also` links synthesize answer |
-| User corrects a fact | Update Compiled Truth immediately add Timeline entry mark `confidence: high` |
-| Routine maintenance / cleanup | Run `node scripts/lint.js` prune `$BRAIN_PATH/inbox/` resolve stale open threads |
+| New meeting transcript or notes | Run [`skills/ingest/SKILL.md`](skills/ingest/SKILL.md) $\rightarrow$ extract entities $\rightarrow$ run [`skills/enrich/SKILL.md`](skills/enrich/SKILL.md) |
+| Researching a person or company | Check `$BRAIN_PATH/aliases.json` $\rightarrow$ read `$BRAIN_PATH/people/slug.md` $\rightarrow$ enrich delta |
+| Answering knowledge questions | Search `$BRAIN_PATH/` $\rightarrow$ inspect `## State` & `See Also` links $\rightarrow$ synthesize answer |
+| User corrects a fact | Update Compiled Truth immediately $\rightarrow$ add Timeline entry $\rightarrow$ mark `confidence: high` |
+| Routine maintenance / cleanup | Run `node scripts/lint.js` $\rightarrow$ prune `$BRAIN_PATH/inbox/` $\rightarrow$ resolve stale open threads |

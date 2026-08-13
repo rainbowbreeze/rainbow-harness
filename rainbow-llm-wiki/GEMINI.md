@@ -23,6 +23,27 @@ It implements an LLM-maintained, interlinked wiki structured around:
 - **Rule 6 (Slug Stability & Alias Search)**: Search `aliases` across all files prior to page creation to eliminate split-brain duplicates.
 - **Rule 7 (Continuous Enrichment)**: Enrich entities upon encountering any signal rather than deferring to batch jobs.
 - **Rule 8 (No Unprompted Git Commits)**: Never stage or commit changes unless explicitly instructed by the user.
+- **Rule 9 (Universal Base Schema)**: All entity files (standard and custom) must include `type`, `id`, `title`, `aliases`, `status`, `tags`, `relations`, and `updated_at`.
+- **Rule 10 (Execution Plane vs Data Plane)**: Agent tools/skills live in `$WORKSPACE_ROOT/skills/`, never inside `$BRAIN_PATH/skills/`.
+
+---
+
+## Universal Base Frontmatter Contract
+Every entity file in `BRAIN/` inherits:
+```yaml
+---
+type: "<domain_singular>"   # e.g., person, company, project, concept, idea, meeting, deal, writing, personal, hiring
+id: "<canonical-slug>"      # matches filename without .md (kebab-case)
+title: "<Human Readable Title>"
+aliases: ["<Variant 1>", "<Variant 2>"]
+status: active              # active | draft | in-progress | on-hold | closed | archived
+tags: ["tag1", "tag2"]
+relations:
+  - target: "<directory>/<target-slug>"
+    type: "<relationship-type>"
+updated_at: "YYYY-MM-DD"
+---
+```
 
 ---
 

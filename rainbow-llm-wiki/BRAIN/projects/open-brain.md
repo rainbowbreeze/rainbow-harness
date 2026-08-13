@@ -7,6 +7,11 @@ status: in-progress
 owner: "people/ada-lovelace"
 repo: "https://github.com/example/open-brain"
 tags: [knowledge-base, markdown, ai, memory]
+relations:
+  - target: "people/ada-lovelace"
+    type: "lead"
+  - target: "companies/analytical-engine-corp"
+    type: "sponsor"
 updated_at: "2026-08-13"
 ---
 

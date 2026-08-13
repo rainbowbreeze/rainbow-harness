@@ -6,21 +6,8 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const brainDir = path.resolve(__dirname, '..', 'BRAIN');
-
-const MECE_DIRS = [
-  'people',
-  'companies',
-  'projects',
-  'ideas',
-  'concepts',
-  'meetings',
-  'deals',
-  'writing',
-  'sources',
-  'inbox',
-  'archive'
-];
+const rootDir = path.resolve(__dirname, '..');
+const brainDir = path.join(rootDir, 'BRAIN');
 
 function parseFrontmatter(content) {
   const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -73,14 +60,16 @@ function runLint() {
 
   const aliasMap = new Map();
   const idMap = new Map();
-  const allFiles = [];
 
-  for (const dirName of MECE_DIRS) {
+  // Scan all directories inside BRAIN/
+  const subdirs = fs.readdirSync(brainDir, { withFileTypes: true })
+    .filter(d => d.isDirectory() && d.name !== '.raw' && d.name !== '.git')
+    .map(d => d.name);
+
+  const allFiles = [];
+  for (const dirName of subdirs) {
     const dirPath = path.join(brainDir, dirName);
-    const files = getAllMarkdownFiles(dirPath);
-    for (const file of files) {
-      allFiles.push(file);
-    }
+    allFiles.push(...getAllMarkdownFiles(dirPath));
   }
 
   for (const filePath of allFiles) {
@@ -98,21 +87,35 @@ function runLint() {
 
     const { frontmatter, body } = parsed;
 
-    // Check mandatory fields
-    const requiredFields = ['type', 'id', 'title'];
+    // Check Universal Base Schema Mandatory Fields
+    const requiredFields = ['type', 'id', 'title', 'updated_at'];
     for (const field of requiredFields) {
       if (!frontmatter[field]) {
-        errors.push(`[${relPath}] Missing required frontmatter field: "${field}"`);
+        errors.push(`[${relPath}] Missing mandatory Universal Base field: "${field}"`);
       }
+    }
+
+    // Check that ID matches the filename slug
+    const expectedId = path.basename(filePath, '.md');
+    if (frontmatter.id && frontmatter.id !== expectedId) {
+      warnings.push(`[${relPath}] ID "${frontmatter.id}" does not match filename slug "${expectedId}"`);
     }
 
     // Check ID collisions
     if (frontmatter.id) {
       if (idMap.has(frontmatter.id)) {
-        errors.push(`[${relPath}] Duplicate ID "${frontmatter.id}" also in [${idMap.get(frontmatter.id)}]`);
+        errors.push(`[${relPath}] Duplicate ID "${frontmatter.id}" also defined in [${idMap.get(frontmatter.id)}]`);
       } else {
         idMap.set(frontmatter.id, relPath);
       }
+    }
+
+    // Check Universal Base Recommended Fields
+    if (!frontmatter.status) {
+      warnings.push(`[${relPath}] Missing recommended field "status" (e.g. active, draft, in-progress).`);
+    }
+    if (!frontmatter.tags) {
+      warnings.push(`[${relPath}] Missing recommended field "tags".`);
     }
 
     // Check Two-Layer separator

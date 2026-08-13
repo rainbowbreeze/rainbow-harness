@@ -1,6 +1,6 @@
 # schema.md — Knowledge Base Schema & Conventions
 
-> **Version:** 1.0.0 (Pure Local Markdown Edition)  
+> **Version:** 1.1.0 (Pure Local Markdown Edition)  
 > This specification defines the structural conventions, frontmatter schemas, two-layer page architecture, and epistemic discipline for all knowledge files in the brain.
 
 ---
@@ -49,7 +49,39 @@ Every page in this knowledge base is split into two distinct structural layers b
 
 ---
 
-## 2. Epistemic Discipline Rules
+## 2. Universal Base Frontmatter Schema (MANDATORY)
+
+Every entity file in this knowledge base—whether a built-in standard domain or a newly created custom domain—**MUST** inherit and include these core fields:
+
+```yaml
+---
+type: "<domain_singular>"   # e.g., person, company, project, concept, idea, meeting, deal, writing, personal, household, hiring
+id: "<canonical-slug>"      # matches filename without .md (lowercase, kebab-case)
+title: "<Human Readable Title>"
+aliases: ["<Variant 1>", "<Variant 2>"] # array of alternate names, handles, emails, or abbreviations
+status: active              # active | draft | in-progress | on-hold | closed | archived
+tags: ["tag1", "tag2"]      # categorization tags
+relations:                  # typed bidirectional links to other entities
+  - target: "<directory>/<target-slug>"
+    type: "<relationship-type>" # e.g., founder, collaborator, investor, parent-project, depends-on
+updated_at: "YYYY-MM-DD"    # ISO date of last modification
+---
+```
+
+### Domain-Specific Fields (Extensions)
+Domain-specific fields are additive extensions on top of the Universal Base Schema:
+- **Person**: `role`, `company`
+- **Company**: `stage`, `industry`, `website`
+- **Project**: `owner`, `repo`
+- **Meeting**: `date`, `participants`
+- **Deal**: `company`, `stage`, `amount`, `lead_investor`
+- **Concept**: `domain`
+- **Idea**: `target_domain`
+- **Custom Domains** (e.g. `hiring`, `personal`, `household`): define domain-specific keys in addition to the base schema.
+
+---
+
+## 3. Epistemic Discipline Rules
 
 Contextual assertions and personality assessments are high-value but prone to hallucination or drift. Adhere strictly to these rules:
 
@@ -74,7 +106,7 @@ Example format:
 
 ---
 
-## 3. Canonical Slugs & Aliases
+## 4. Canonical Slugs & Aliases
 
 1. **Canonical Slugs**:
    - People: `first-last.md` (e.g., `ada-lovelace.md`, `alan-turing.md`)
@@ -86,7 +118,7 @@ Example format:
 
 ---
 
-## 4. Entity YAML Frontmatter Schemas
+## 5. Entity YAML Frontmatter Schemas
 
 ### Person (`people/first-last.md`)
 ```yaml
@@ -95,8 +127,6 @@ type: person
 id: ada-lovelace
 title: Ada Lovelace
 aliases: ["Augusta Ada King", "Countess of Lovelace", "ada@example.com", "@adalovelace"]
-role: Mathematician & Computing Pioneer
-company: Analytical Engine Project
 status: active # active | dormant | former
 tags: [computing, algorithm-design, pioneer]
 relations:
@@ -104,6 +134,8 @@ relations:
     type: "collaborator"
   - target: "people/charles-babbage"
     type: "close-collaborator"
+role: Mathematician & Computing Pioneer
+company: Analytical Engine Project
 updated_at: "2026-08-13"
 ---
 ```
@@ -115,14 +147,14 @@ type: company
 id: acme-corp
 title: Acme Corporation
 aliases: ["Acme Inc", "Acme Labs", "acme.com"]
-stage: Series A # Seed | Series A | Series B | Growth | Public | Non-profit
-industry: Developer Tools
-website: "https://acme.example.com"
 status: active # active | acquired | dead | evaluating
 tags: [devtools, infrastructure]
 relations:
   - target: "people/jane-doe"
     type: "founder"
+stage: Series A # Seed | Series A | Series B | Growth | Public | Non-profit
+industry: Developer Tools
+website: "https://acme.example.com"
 updated_at: "2026-08-13"
 ---
 ```
@@ -135,9 +167,10 @@ id: knowledge-engine
 title: Knowledge Engine
 aliases: ["kb-engine"]
 status: in-progress # planning | in-progress | on-hold | completed | archived
+tags: [knowledge-base, markdown, ai]
+relations: []
 owner: "people/first-last"
 repo: "https://github.com/org/repo"
-tags: [knowledge-base, markdown, ai]
 updated_at: "2026-08-13"
 ---
 ```
@@ -149,8 +182,10 @@ type: concept
 id: mece-principle
 title: MECE Principle
 aliases: ["Mutually Exclusive Collectively Exhaustive", "MECE"]
-domain: Knowledge Architecture
+status: active
 tags: [mental-model, taxonomy, structuring]
+relations: []
+domain: Knowledge Architecture
 updated_at: "2026-08-13"
 ---
 ```
@@ -161,9 +196,11 @@ updated_at: "2026-08-13"
 type: idea
 id: automated-backlink-linter
 title: Automated Backlink Linter
+aliases: []
 status: raw # raw | evaluating | validated | discarded | graduated
-target_domain: Developer Tools
 tags: [linter, graph, markdown]
+relations: []
+target_domain: Developer Tools
 updated_at: "2026-08-13"
 ---
 ```
@@ -174,10 +211,15 @@ updated_at: "2026-08-13"
 type: meeting
 id: 2026-08-13-architecture-review
 title: Knowledge Base Architecture Review
+aliases: []
+status: completed
+tags: [architecture, review]
+relations:
+  - target: "projects/knowledge-engine"
+    type: "review-target"
 date: "2026-08-13"
 participants:
   - "people/first-last"
-tags: [architecture, review]
 updated_at: "2026-08-13"
 ---
 ```
@@ -188,11 +230,16 @@ updated_at: "2026-08-13"
 type: deal
 id: acme-series-a-2026
 title: Acme Corp Series A
+aliases: []
+status: closed # evaluating | term-sheet | closed | passed
+tags: [venture-capital, series-a]
+relations:
+  - target: "companies/acme-corp"
+    type: "target-company"
 company: "companies/acme-corp"
 stage: Series A
 amount: "$15M"
 lead_investor: "people/investor-name"
-status: closed # evaluating | term-sheet | closed | passed
 updated_at: "2026-08-13"
 ---
 ```
@@ -203,8 +250,22 @@ updated_at: "2026-08-13"
 type: writing
 id: zero-database-knowledge-systems
 title: Zero-Database Knowledge Systems for AI Agents
+aliases: []
 status: draft # idea | outline | draft | published
 tags: [essays, architecture, ai-memory]
+relations: []
 updated_at: "2026-08-13"
 ---
 ```
+
+---
+
+## 6. Creating New Custom Domains
+
+When creating a new custom entity directory (e.g., `BRAIN/hiring/` or `BRAIN/personal/`):
+1. Create directory `BRAIN/<domain>/`.
+2. Create `BRAIN/<domain>/README.md` defining:
+   - Section 1: **What Goes Here**
+   - Section 2: **What Does NOT Go Here**
+   - Section 3: **Page Template** using the Universal Base Frontmatter Schema.
+3. Add the new domain to `MECE_DIRS` in `scripts/lint.js`, `scripts/index.js`, `scripts/graph.js`, `scripts/stats.js`.
