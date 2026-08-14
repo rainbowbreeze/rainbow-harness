@@ -3,7 +3,12 @@ name: manage-projects
 description: Manage BRAIN active and archived projects.
 version: 1.0.0
 author: Rainbowbreeze
+metadata:
+  hermes:
+    tags: [project-management]
+    category: rainbowskills
 ---
+
 # Manage Projects
 
 This skill handles the lifecycle of projects in the `/opt/data/BRAIN/projects/` directory.
