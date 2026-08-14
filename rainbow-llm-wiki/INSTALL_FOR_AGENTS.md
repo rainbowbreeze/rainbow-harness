@@ -34,12 +34,18 @@ Before creating directories or files, **ask the human operator**:
 ```bash
 WORKSPACE_ROOT="$(pwd)"
 
-# Mode A: In-Workspace Brain (Default & Recommended)
-# When the user says "here", "in this project", or accepts the default:
-BRAIN_PATH="$WORKSPACE_ROOT/BRAIN"
+# Precedence 1: Check existing environment variables ($BRAIN_PATH or $BRAIN_ROOT)
+if [ -n "${BRAIN_PATH:-}" ]; then
+  echo "Using existing BRAIN_PATH environment variable: $BRAIN_PATH"
+# Precedence 1: Check .brainpath file if present
+elif [ -f "$WORKSPACE_ROOT/.brainpath" ]; then
+  BRAIN_PATH="$(cat "$WORKSPACE_ROOT/.brainpath")"
+# Precedence 2: Mode A — In-Workspace Brain (Default & Recommended)
+else
+  BRAIN_PATH="$WORKSPACE_ROOT/BRAIN"
+fi
 
-# Mode B: External Standalone Brain (e.g. ~/brain or /custom/path)
-# When the user specifies an external location:
+# Mode B: External Standalone Brain (e.g. ~/brain or /custom/path requested explicitly)
 # BRAIN_PATH="$HOME/brain"
 # echo "$BRAIN_PATH" > "$WORKSPACE_ROOT/.brainpath"
 
@@ -67,19 +73,30 @@ Present this prompt to the user verbatim (substituting the resolved variables):
 
 ---
 
-## Step 1: Scaffold Directory Structure
+## Step 1: Scaffold Directory Structure & Download Upstream Release Tarball
 
-Create the `$BRAIN_PATH` directory structure and the `$WORKSPACE_ROOT` tooling directories:
+Create the `$BRAIN_PATH` directory structure and unpack the canonical GitHub framework release into a temporary staging folder (`/tmp/rainbow-llm-wiki-staging-$$`):
 
 ```bash
 # 1. Create Brain Data Plane
 mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive}
 
-# 2. Create Workspace Execution Plane (in $WORKSPACE_ROOT, NOT in $BRAIN_PATH)
-mkdir -p "$WORKSPACE_ROOT"/skills/{rainbowllmwiki-enrich,rainbowllmwiki-ingest,rainbowllmwiki-query,rainbowllmwiki-maintain,rainbowllmwiki-dedup-merge}
+# 2. Download latest upstream release tarball into staging directory
+STAGING_DIR="/tmp/rainbow-llm-wiki-staging-$$"
+mkdir -p "$STAGING_DIR"
+curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/main.tar.gz | \
+  tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
+
+# 3. Create Workspace Execution Plane (in $WORKSPACE_ROOT, NOT in $BRAIN_PATH)
+mkdir -p "$WORKSPACE_ROOT"/skills
 mkdir -p "$WORKSPACE_ROOT"/scripts
 
-# 3. Add placeholder .gitkeep files for .raw directories
+# 4. Copy Core Automation Scripts & Execution Plane Docs from Staging
+cp -r "$STAGING_DIR/scripts"/* "$WORKSPACE_ROOT/scripts/"
+cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
+cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/CLAUDE.md" "$STAGING_DIR/GEMINI.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
+
+# 5. Add placeholder .gitkeep files for .raw directories
 touch "$BRAIN_PATH"/people/.raw/.gitkeep
 touch "$BRAIN_PATH"/companies/.raw/.gitkeep
 ```
@@ -88,10 +105,10 @@ touch "$BRAIN_PATH"/companies/.raw/.gitkeep
 
 ## Step 2: Install Core Brain Governance Files
 
-Copy or write the core governance files directly into `$BRAIN_PATH/`:
+Copy the canonical core governance files from staging directly into `$BRAIN_PATH/`:
 
-1. **`$BRAIN_PATH/RESOLVER.md`**: Master decision tree for filing entities and notes. Walk this tree before writing any new file.
-2. **`$BRAIN_PATH/schema.md`**: Structural specifications, Universal Base Frontmatter schema, Two-Layer rules (Compiled Truth above `---`, Timeline below `---`), and epistemic tags (`observed`, `self-described`, `inferred`).
+1. **`$BRAIN_PATH/RESOLVER.md`**: Master decision tree copied from `$STAGING_DIR/BRAIN/RESOLVER.md`. Walk this tree before writing any new file.
+2. **`$BRAIN_PATH/schema.md`**: Structural specifications copied from `$STAGING_DIR/BRAIN/schema.md`.
 3. **`$BRAIN_PATH/log.md`**: Append-only event log starting with:
    ```markdown
    # Knowledge Base Event Log
@@ -108,14 +125,16 @@ Copy or write the core governance files directly into `$BRAIN_PATH/`:
 
 > [!IMPORTANT]
 > **DO NOT generate directory README resolvers from scratch.**
-> Always copy the canonical `README.md` resolver files from this repository or use the canonical 3-section template below.
+> Always copy the canonical `README.md` resolver files from the staging directory.
 
-If installing from a local clone of this repository:
 ```bash
-# Copy all canonical directory resolvers into $BRAIN_PATH
+# Copy all canonical directory resolvers from staging into $BRAIN_PATH
 for dir in people companies projects ideas concepts meetings events deals writing sources inbox archive; do
-  cp "BRAIN/$dir/README.md" "$BRAIN_PATH/$dir/README.md"
+  cp "$STAGING_DIR/BRAIN/$dir/README.md" "$BRAIN_PATH/$dir/README.md"
 done
+
+# Remove temporary staging directory
+rm -rf "$STAGING_DIR"
 ```
 
 Every resolver `README.md` must adhere to this exact 3-section structure:
@@ -171,8 +190,6 @@ Copy or write the skill files into `$WORKSPACE_ROOT/skills/`:
 Ensure agent instruction files are installed in `$WORKSPACE_ROOT/`:
 
 1. **`$WORKSPACE_ROOT/AGENTS.md`**: Operational rules for Cursor, Hermes, OpenClaw, Codex, Gemini CLI.
-2. **`$WORKSPACE_ROOT/CLAUDE.md`**: Operational guidelines for Claude Code.
-3. **`$WORKSPACE_ROOT/GEMINI.md`**: Project memory and documentation sync file.
 
 ### Key Golden Rules to Enforce:
 - **Always read `$BRAIN_PATH/RESOLVER.md` before creating any file.**
@@ -218,6 +235,51 @@ Verify that:
 - `$BRAIN_PATH/index.md` and `$BRAIN_PATH/aliases.json` are populated.
 - `$BRAIN_PATH/graph.md` is generated.
 - Initial log entry is recorded in `$BRAIN_PATH/log.md`.
+
+---
+
+## Step 8: Upgrading & Refreshing Framework from Upstream GitHub
+
+When requested to **"update llm-wiki"** or **"refresh framework from GitHub"**, the agent MUST refresh all execution plane scripts, skills, and base templates **without ever modifying or deleting user data files** (`people/`, `companies/`, `events/`, `.raw/`, `log.md`).
+
+Execute this selective tarball overlay script:
+
+```bash
+# 1. Download latest upstream release tarball into staging directory
+STAGING_DIR="/tmp/rainbow-llm-wiki-upgrade-$$"
+mkdir -p "$STAGING_DIR"
+curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/main.tar.gz | \
+  tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
+
+# 2. Update Core Execution Plane Tools & SOPs
+cp -r "$STAGING_DIR/scripts"/* "$WORKSPACE_ROOT/scripts/"
+cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
+cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/CLAUDE.md" "$STAGING_DIR/GEMINI.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
+
+# 3. Update Core Data Plane Taxonomy & Schema
+cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$BRAIN_PATH/RESOLVER.md"
+cp "$STAGING_DIR/BRAIN/schema.md" "$BRAIN_PATH/schema.md"
+
+# 4. Update Canonical Directory Resolvers (README.md only — NEVER entity files)
+for dir in people companies projects ideas concepts meetings events deals writing sources inbox archive; do
+  mkdir -p "$BRAIN_PATH/$dir"
+  cp "$STAGING_DIR/BRAIN/$dir/README.md" "$BRAIN_PATH/$dir/README.md"
+done
+
+# 5. Clean up temporary staging directory
+rm -rf "$STAGING_DIR"
+
+# 6. Re-run System Audit & Re-index to verify zero schema regressions
+node scripts/lint.js
+node scripts/index.js
+node scripts/graph.js
+node scripts/stats.js
+```
+
+After updating, record the upgrade event in `$BRAIN_PATH/log.md`:
+```markdown
+- **SYSTEM_UPGRADE** | Refreshed framework scripts, skills, and schema from upstream GitHub (YYYY-MM-DD).
+```
 
 ---
 
