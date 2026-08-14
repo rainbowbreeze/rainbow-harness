@@ -9,7 +9,7 @@ metadata:
     tags: [project-management]
     category: rainbowskills
 required_environment_variables:
-  - name: BRAIN_PROJECTS
+  - name: BRAIN_PROJECTS_PATH
     prompt: Projects folder in the BRAIN knowledge repository 
     help: Define where the projects folder should be, generally /opt/data/BRAIN/projects
     required_for: full functionality
@@ -17,14 +17,14 @@ required_environment_variables:
 
 # Manage Projects
 
-This skill handles the lifecycle of projects located at the path defined by the `$BRAIN_PROJECTS` environment variable.
+This skill handles the lifecycle of projects located at the path defined by the `$BRAIN_PROJECTS_PATH` environment variable.
 
 ## Capability Bootstrapping
-Before performing any operation, resolve the environment variable `$BRAIN_PROJECTS`. If `$BRAIN_PROJECTS` is not set or empty, explicitly ask the user for the path or to set `$BRAIN_PROJECTS` before continuing.
+Before performing any operation, resolve the environment variable `$BRAIN_PROJECTS_PATH`. If `$BRAIN_PROJECTS_PATH` is not set or empty, explicitly ask the user for the path or to set `$BRAIN_PROJECTS_PATH` before continuing.
 
-Once `$BRAIN_PROJECTS` is resolved, verify that the directory exists. If missing or uninitialized:
-- Create `$BRAIN_PROJECTS/` and `$BRAIN_PROJECTS/archive/`.
-- Initialize `$BRAIN_PROJECTS/AGENTS.md` with the following skeleton if it does not exist:
+Once `$BRAIN_PROJECTS_PATH` is resolved, verify that the directory exists. If missing or uninitialized:
+- Create `$BRAIN_PROJECTS_PATH/` and `$BRAIN_PROJECTS_PATH/archive/`.
+- Initialize `$BRAIN_PROJECTS_PATH/AGENTS.md` with the following skeleton if it does not exist:
   ```markdown
   # BRAIN Projects Index
 
@@ -36,8 +36,8 @@ Once `$BRAIN_PROJECTS` is resolved, verify that the directory exists. If missing
 ## Capabilities
 
 ### 1. List Active Projects
-- Scan `$BRAIN_PROJECTS/`, excluding the `archive/` directory.
-- Cross-reference folders with `$BRAIN_PROJECTS/AGENTS.md` to provide a clear, formatted summary (e.g., Markdown table showing Project Name, Folder, Status, Type, and Description).
+- Scan `$BRAIN_PROJECTS_PATH/`, excluding the `archive/` directory.
+- Cross-reference folders with `$BRAIN_PROJECTS_PATH/AGENTS.md` to provide a clear, formatted summary (e.g., Markdown table showing Project Name, Folder, Status, Type, and Description).
 - **Discrepancy Check:** Explicitly report any active project folders on disk that are missing from `AGENTS.md`, or stale entries in `AGENTS.md` that lack a corresponding folder.
 
 ### 2. Create a New Project
@@ -50,8 +50,8 @@ Once `$BRAIN_PROJECTS` is resolved, verify that the directory exists. If missing
 - If any information is missing, explicitly ask the user for the missing details and wait for their response. Do NOT create the project until all fields are collected.
 - **Slugification & Collision Check:**
   - Format the folder slug as `YYYYMM-project_slug` (lowercase, alphanumeric, spaces replaced with hyphens or underscores).
-  - Verify that `$BRAIN_PROJECTS/<folder_name>` does not already exist. If it exists, alert the user.
-- Create the directory: `$BRAIN_PROJECTS/<folder_name>`.
+  - Verify that `$BRAIN_PROJECTS_PATH/<folder_name>` does not already exist. If it exists, alert the user.
+- Create the directory: `$BRAIN_PROJECTS_PATH/<folder_name>`.
 - Create the main markdown file (`README.md`) inside the new project folder containing YAML frontmatter and default log sections:
   ```markdown
   ---
@@ -70,15 +70,15 @@ Once `$BRAIN_PROJECTS` is resolved, verify that the directory exists. If missing
 
   ## Execution Log
   ```
-- **CRITICAL:** Update `$BRAIN_PROJECTS/AGENTS.md` to register the new folder under the `## Contents` section using the format:
+- **CRITICAL:** Update `$BRAIN_PROJECTS_PATH/AGENTS.md` to register the new folder under the `## Contents` section using the format:
   ```markdown
   - [Project Name](./YYYYMM-project_slug/): Project Description
   ```
 
 ### 3. Archive a Project
-- Move the target project folder from `$BRAIN_PROJECTS/<folder_name>` to `$BRAIN_PROJECTS/archive/<folder_name>`.
+- Move the target project folder from `$BRAIN_PROJECTS_PATH/<folder_name>` to `$BRAIN_PROJECTS_PATH/archive/<folder_name>`.
 - Locate the project's `README.md` and update its YAML frontmatter to change `project_status` to `archived`.
-- **CRITICAL:** Update `$BRAIN_PROJECTS/AGENTS.md`:
+- **CRITICAL:** Update `$BRAIN_PROJECTS_PATH/AGENTS.md`:
   - Remove the project entry from the `## Contents` section.
   - Append the project entry under the `## Archived Projects` section (create the heading if it does not exist) using the format:
     ```markdown
@@ -86,7 +86,7 @@ Once `$BRAIN_PROJECTS` is resolved, verify that the directory exists. If missing
     ```
 
 ### 4. Update an Existing Project
-- Locate the target project folder in `$BRAIN_PROJECTS/`.
+- Locate the target project folder in `$BRAIN_PROJECTS_PATH/`.
 - Target the project's main markdown file (`README.md`).
 - Based on the user's request, append the information to the appropriate section, creating the header (`## Ideas` or `## Execution Log`) if it does not already exist:
   - For new ideas/concepts: Append as a bullet point under the `## Ideas` section.
