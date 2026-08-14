@@ -1,15 +1,11 @@
 ---
 name: rainbowllmwiki-maintain
 version: 1.0.0
-description: |
-  Knowledge base health, linting, dead link detection, and orphan audit protocol for BRAIN/.
-triggers:
-  - "maintain"
-  - "lint"
-  - "audit health"
-  - "fix broken links"
-  - "prune inbox"
-mutating: true
+description: Knowledge base health, linting, dead link detection, and audit protocol for BRAIN/
+metadata:
+  hermes:
+    category: rainbowskills
+    tags: [wiki, llm-wiki, maintain, lint, audit]
 ---
 
 # Knowledge Base Health & Maintenance Protocol

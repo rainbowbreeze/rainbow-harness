@@ -1,22 +1,11 @@
 ---
 name: rainbowllmwiki-ingest
 version: 1.0.0
-description: |
-  Ingest protocol for capturing notes, meeting transcripts, articles, and raw data
-  into appropriate MECE directories inside BRAIN/ or temporary inbox staging.
-triggers:
-  - "ingest"
-  - "capture"
-  - "meeting transcript"
-  - "save article"
-  - "quick note"
-mutating: true
-writes_to:
-  - BRAIN/meetings/
-  - BRAIN/inbox/
-  - BRAIN/sources/
-  - BRAIN/writing/
-  - BRAIN/ideas/
+description: Ingestion protocol for capturing notes, meetings, articles, and raw data into BRAIN/
+metadata:
+  hermes:
+    category: rainbowskills
+    tags: [wiki, llm-wiki, ingest, capture]
 ---
 
 # Ingestion Protocol

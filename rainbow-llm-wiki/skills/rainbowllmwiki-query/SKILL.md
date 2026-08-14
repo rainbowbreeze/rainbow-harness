@@ -1,15 +1,11 @@
 ---
 name: rainbowllmwiki-query
 version: 1.0.0
-description: |
-  Search, retrieval, and knowledge synthesis protocol across pure local Markdown files in BRAIN/.
-triggers:
-  - "query"
-  - "search"
-  - "what do we know about"
-  - "who is"
-  - "find connections"
-mutating: false
+description: Search, retrieval, and synthesis protocol across pure Markdown files in BRAIN/
+metadata:
+  hermes:
+    category: rainbowskills
+    tags: [wiki, llm-wiki, query, search, retrieval]
 ---
 
 # Pure-Markdown Query & Retrieval Protocol

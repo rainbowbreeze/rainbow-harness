@@ -1,15 +1,11 @@
 ---
 name: rainbowllmwiki-dedup-merge
 version: 1.0.0
-description: |
-  Protocol for resolving split-brain duplicate entities, consolidating timelines,
-  merging aliases, and updating all cross-references across the BRAIN/ knowledge base.
-triggers:
-  - "merge"
-  - "dedup"
-  - "duplicate person"
-  - "combine entities"
-mutating: true
+description: Protocol for resolving split-brain duplicate entities and merging timelines in BRAIN/
+metadata:
+  hermes:
+    category: rainbowskills
+    tags: [wiki, llm-wiki, deduplication, merge]
 ---
 
 # Entity Deduplication & Merge Protocol

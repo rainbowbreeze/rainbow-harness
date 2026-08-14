@@ -1,19 +1,11 @@
 ---
 name: rainbowllmwiki-enrich
 version: 1.0.0
-description: |
-  Tiered intelligence enrichment protocol for people and companies. Creates and updates
-  entity pages with compiled truth, timeline evidence, epistemic citations, and bidirectional links in BRAIN/.
-triggers:
-  - "enrich"
-  - "create person"
-  - "update company"
-  - "who is this person"
-  - "research company"
-mutating: true
-writes_to:
-  - BRAIN/people/
-  - BRAIN/companies/
+description: Tiered intelligence enrichment for people and companies in BRAIN/
+metadata:
+  hermes:
+    category: rainbowskills
+    tags: [wiki, llm-wiki, enrichment, intelligence]
 ---
 
 # Tiered Entity Enrichment Protocol
