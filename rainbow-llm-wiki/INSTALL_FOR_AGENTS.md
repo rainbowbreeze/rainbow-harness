@@ -11,12 +11,12 @@ Before doing anything, understand this strict two-plane separation:
 
 1. **`$WORKSPACE_ROOT` (Agent Execution Plane)**:
    - The root repository or workspace where the AI agent runs (`pwd`).
-   - Contains: `skills/`, `scripts/`, `package.json`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`.
+   - Contains: `skills/`, `package.json`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` (`.scripts/` live inside `$BRAIN_PATH`).
    - **CRITICAL RULE:** Skills MUST live in `$WORKSPACE_ROOT/skills/`. **NEVER create or copy `skills/` inside the brain data directory.**
 
 2. **`$BRAIN_PATH` (Knowledge Base Data Plane)**:
    - Where knowledge notes, entity files, logs, and schemas live.
-   - Contains: `RESOLVER.md`, `schema.md`, `index.md`, `log.md`, `graph.md`, `aliases.json`, and the MECE entity directories (`people/`, `companies/`, etc.).
+   - Contains: `RESOLVER.md`, `schema.md`, `index.md`, `log.md`, `graph.md`, `aliases.json`, `.scripts/`, and the MECE entity directories (`people/`, `companies/`, etc.).
    - **HARD INVARIANT:** `$BRAIN_PATH` **MUST NEVER EQUAL** `$WORKSPACE_ROOT`. Knowledge files must NEVER be dumped directly into the root workspace folder.
 
 ---
@@ -202,7 +202,7 @@ Ensure agent instruction files are installed in `$WORKSPACE_ROOT/`:
 
 ## Step 6: Install Zero-Dependency Validation & Indexing Scripts
 
-Automation scripts live inside `$BRAIN_PATH/.scripts/` (and mirrored in `$WORKSPACE_ROOT/scripts/`):
+Automation scripts live inside `$BRAIN_PATH/.scripts/`:
 
 - **`$BRAIN_PATH/.scripts/lint.js`**: Validates Universal Base YAML frontmatter, checks for broken relative markdown links, and flags duplicate aliases in `$BRAIN_PATH`.
 - **`$BRAIN_PATH/.scripts/index.js`**: Rebuilds `$BRAIN_PATH/index.md` and `$BRAIN_PATH/aliases.json` across all files.

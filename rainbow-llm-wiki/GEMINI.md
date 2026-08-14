@@ -62,12 +62,12 @@ updated_at: "YYYY-MM-DD"
 │   ├── rainbowllmwiki-query/    — Retrieval and backlink traversal protocol
 │   ├── rainbowllmwiki-maintain/ — Knowledge base health, linting, and audit protocol
 │   └── rainbowllmwiki-dedup-merge/ — Alias search and entity merge protocol
-├── scripts/             — Zero-dependency validation and indexing utilities (targets BRAIN/)
-│   ├── lint.js          — Validates frontmatter, broken links, and duplicate aliases
-│   ├── index.js         — Rebuilds BRAIN/index.md and BRAIN/aliases.json
-│   ├── graph.js         — Extracts relationship graph and backlink matrix
-│   └── stats.js         — Reports knowledge base size, link density, and metrics
 └── BRAIN/               — The Knowledge Base root folder
+    ├── .scripts/        — Zero-dependency validation and indexing utilities
+    │   ├── lint.js      — Validates frontmatter, broken links, and duplicate aliases
+    │   ├── index.js     — Rebuilds index.md and aliases.json
+    │   ├── graph.js     — Extracts relationship graph and backlink matrix
+    │   └── stats.js     — Reports knowledge base size, link density, and metrics
     ├── RESOLVER.md      — Master decision tree for routing notes and entities
     ├── schema.md        — Page formatting schemas, frontmatter specs, and epistemic rules
     ├── index.md         — Catalog of all entities grouped by category
