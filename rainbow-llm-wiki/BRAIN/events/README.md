@@ -9,9 +9,9 @@
 - Slug convention: `YYYY-MM-DD-event-name.md` (e.g. `2026-10-12-ai-developer-summit.md`).
 
 ## 2. What Does NOT Go Here
-- Specific 1:1 syncs, internal team meetings, or board calls $\rightarrow$ [`meetings/`](../meetings/README.md).
-- The ongoing software code or specification presented at the event $\rightarrow$ [`projects/`](../projects/README.md) (link the event to the project).
-- Commercial funding term sheets discussed at a demo day $\rightarrow$ [`deals/`](../deals/README.md).
+- Specific 1:1 syncs, internal team meetings, or board calls --> [`meetings/`](../meetings/README.md).
+- The ongoing software code or specification presented at the event --> [`projects/`](../projects/README.md) (link the event to the project).
+- Commercial funding term sheets discussed at a demo day --> [`deals/`](../deals/README.md).
 
 ---
 
