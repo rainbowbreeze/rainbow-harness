@@ -4,9 +4,9 @@
   "description": "Pure local Markdown knowledge management system",
   "type": "module",
   "scripts": {
-    "lint": "node scripts/lint.js",
-    "index": "node scripts/index.js",
-    "graph": "node scripts/graph.js",
-    "stats": "node scripts/stats.js"
+    "lint": "node BRAIN/.scripts/lint.js",
+    "index": "node BRAIN/.scripts/index.js",
+    "graph": "node BRAIN/.scripts/graph.js",
+    "stats": "node BRAIN/.scripts/stats.js"
   }
 }

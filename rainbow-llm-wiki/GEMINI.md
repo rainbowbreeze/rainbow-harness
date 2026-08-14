@@ -105,7 +105,7 @@ updated_at: "YYYY-MM-DD"
 ---
 
 ## Tooling & Maintenance Commands
-- `bun run lint` (or `node scripts/lint.js`): Run full schema and link integrity validation in `BRAIN/`.
-- `bun run index` (or `node scripts/index.js`): Rebuild `BRAIN/index.md` catalog and `BRAIN/aliases.json`.
-- `bun run graph` (or `node scripts/graph.js`): Re-generate relationship graph and backlink counts.
-- `bun run stats` (or `node scripts/stats.js`): Inspect knowledge base metrics and health.
+- `bun run lint` (or `node BRAIN/.scripts/lint.js`): Run full schema and link integrity validation in `BRAIN/`.
+- `bun run index` (or `node BRAIN/.scripts/index.js`): Rebuild `BRAIN/index.md` catalog and `BRAIN/aliases.json`.
+- `bun run graph` (or `node BRAIN/.scripts/graph.js`): Re-generate relationship graph and backlink counts.
+- `bun run stats` (or `node BRAIN/.scripts/stats.js`): Inspect knowledge base metrics and health.

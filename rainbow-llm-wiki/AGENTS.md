@@ -40,6 +40,6 @@ For detailed step-by-step instructions on specific tasks, read the corresponding
 ## 3. Pre-Flight Checklist for Agent Modifications
 
 Before finalizing any changes to the knowledge base:
-- [ ] Run `bun run lint` (or `node scripts/lint.js`) to ensure frontmatter validity and verify no broken internal links exist.
-- [ ] If new entities were added, run `bun run index` (or `node scripts/index.js`) to refresh `BRAIN/index.md` and `BRAIN/aliases.json`.
+- [ ] Run `bun run lint` (or `node BRAIN/.scripts/lint.js`) to ensure frontmatter validity and verify no broken internal links exist.
+- [ ] If new entities were added, run `bun run index` (or `node BRAIN/.scripts/index.js`) to refresh `BRAIN/index.md` and `BRAIN/aliases.json`.
 - [ ] Append a brief summary of what was ingested or updated to [`BRAIN/log.md`](BRAIN/log.md).

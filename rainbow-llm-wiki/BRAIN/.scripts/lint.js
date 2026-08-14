@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { getBrainDir, workspaceRoot } from './resolve-brain.js';
+import { getBrainDir } from './resolve-brain.js';
 
 const brainDir = getBrainDir();
 

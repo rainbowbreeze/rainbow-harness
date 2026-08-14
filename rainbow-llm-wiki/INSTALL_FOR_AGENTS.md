@@ -34,7 +34,7 @@ Before creating directories or files, **ask the human operator**:
 ```bash
 WORKSPACE_ROOT="$(pwd)"
 
-# Precedence 1: Check existing environment variables ($BRAIN_PATH or $BRAIN_ROOT)
+# Precedence 1: Check existing environment variable ($BRAIN_PATH)
 if [ -n "${BRAIN_PATH:-}" ]; then
   echo "Using existing BRAIN_PATH environment variable: $BRAIN_PATH"
 # Precedence 1: Check .brainpath file if present
@@ -87,12 +87,12 @@ mkdir -p "$STAGING_DIR"
 curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/main.tar.gz | \
   tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
 
-# 3. Create Workspace Execution Plane (in $WORKSPACE_ROOT, NOT in $BRAIN_PATH)
+# 3. Create Workspace Execution Plane & Data Plane Script Folder
 mkdir -p "$WORKSPACE_ROOT"/skills
-mkdir -p "$WORKSPACE_ROOT"/scripts
+mkdir -p "$BRAIN_PATH"/.scripts
 
 # 4. Copy Core Automation Scripts & Execution Plane Docs from Staging
-cp -r "$STAGING_DIR/scripts"/* "$WORKSPACE_ROOT/scripts/"
+cp -r "$STAGING_DIR/scripts"/* "$BRAIN_PATH/.scripts/"
 cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
 cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/CLAUDE.md" "$STAGING_DIR/GEMINI.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
 
@@ -202,36 +202,36 @@ Ensure agent instruction files are installed in `$WORKSPACE_ROOT/`:
 
 ## Step 6: Install Zero-Dependency Validation & Indexing Scripts
 
-Install the standard Node/Bun automation scripts in `$WORKSPACE_ROOT/scripts/`:
+Automation scripts live inside `$BRAIN_PATH/.scripts/` (and mirrored in `$WORKSPACE_ROOT/scripts/`):
 
-- **`$WORKSPACE_ROOT/scripts/lint.js`**: Validates Universal Base YAML frontmatter, checks for broken relative markdown links, and flags duplicate aliases in `$BRAIN_PATH`.
-- **`$WORKSPACE_ROOT/scripts/index.js`**: Rebuilds `$BRAIN_PATH/index.md` and `$BRAIN_PATH/aliases.json` across all files.
-- **`$WORKSPACE_ROOT/scripts/graph.js`**: Generates relationship cross-link matrices and Mermaid diagrams in `$BRAIN_PATH/graph.md`.
-- **`$WORKSPACE_ROOT/scripts/stats.js`**: Computes entity counts, link density, and backlog metrics in `$BRAIN_PATH`.
+- **`$BRAIN_PATH/.scripts/lint.js`**: Validates Universal Base YAML frontmatter, checks for broken relative markdown links, and flags duplicate aliases in `$BRAIN_PATH`.
+- **`$BRAIN_PATH/.scripts/index.js`**: Rebuilds `$BRAIN_PATH/index.md` and `$BRAIN_PATH/aliases.json` across all files.
+- **`$BRAIN_PATH/.scripts/graph.js`**: Generates relationship cross-link matrices and Mermaid diagrams in `$BRAIN_PATH/graph.md`.
+- **`$BRAIN_PATH/.scripts/stats.js`**: Computes entity counts, link density, and backlog metrics in `$BRAIN_PATH`.
 - **`$WORKSPACE_ROOT/package.json`**: Provides npm/bun scripts (`bun run lint`, `bun run index`, `bun run graph`, `bun run stats`).
 
 ---
 
 ## Step 7: Verify the Installation
 
-Run the complete verification pipeline from `$WORKSPACE_ROOT`:
+Run the complete verification pipeline:
 
 ```bash
 # 1. Run Schema & Link Integrity Linter
-node scripts/lint.js
+node "$BRAIN_PATH/.scripts/lint.js"
 
 # 2. Compile Index & Alias Lookup Table
-node scripts/index.js
+node "$BRAIN_PATH/.scripts/index.js"
 
 # 3. Build Relationship Graph
-node scripts/graph.js
+node "$BRAIN_PATH/.scripts/graph.js"
 
 # 4. Check Health Metrics
-node scripts/stats.js
+node "$BRAIN_PATH/.scripts/stats.js"
 ```
 
 Verify that:
-- `scripts/lint.js` reports **0 errors**.
+- `lint.js` reports **0 errors**.
 - `$BRAIN_PATH/index.md` and `$BRAIN_PATH/aliases.json` are populated.
 - `$BRAIN_PATH/graph.md` is generated.
 - Initial log entry is recorded in `$BRAIN_PATH/log.md`.
@@ -252,7 +252,7 @@ curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/m
   tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
 
 # 2. Update Core Execution Plane Tools & SOPs
-cp -r "$STAGING_DIR/scripts"/* "$WORKSPACE_ROOT/scripts/"
+mkdir -p "$BRAIN_PATH"/.scripts && cp -r "$STAGING_DIR/scripts"/* "$BRAIN_PATH/.scripts/"
 cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
 cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/CLAUDE.md" "$STAGING_DIR/GEMINI.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
 
@@ -270,10 +270,10 @@ done
 rm -rf "$STAGING_DIR"
 
 # 6. Re-run System Audit & Re-index to verify zero schema regressions
-node scripts/lint.js
-node scripts/index.js
-node scripts/graph.js
-node scripts/stats.js
+node "$BRAIN_PATH/.scripts/lint.js"
+node "$BRAIN_PATH/.scripts/index.js"
+node "$BRAIN_PATH/.scripts/graph.js"
+node "$BRAIN_PATH/.scripts/stats.js"
 ```
 
 After updating, record the upgrade event in `$BRAIN_PATH/log.md`:
@@ -293,4 +293,4 @@ When operating on this brain in future sessions:
 | Researching a person or company | Check `$BRAIN_PATH/aliases.json` read `$BRAIN_PATH/people/slug.md` enrich delta |
 | Answering knowledge questions | Search `$BRAIN_PATH/` inspect `## State` & `See Also` links synthesize answer |
 | User corrects a fact | Update Compiled Truth immediately add Timeline entry mark `confidence: high` |
-| Routine maintenance / cleanup | Run `node scripts/lint.js` prune `$BRAIN_PATH/inbox/` resolve stale open threads |
+| Routine maintenance / cleanup | Run `node "$BRAIN_PATH/.scripts/lint.js"` prune `$BRAIN_PATH/inbox/` resolve stale open threads |
