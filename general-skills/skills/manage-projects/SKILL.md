@@ -2,7 +2,7 @@
 name: manage-projects
 description: Manage BRAIN active and archived projects.
 version: 1.0.0
-trigger: Use when user wants to list, create, update, or archive a project.
+author: Rainbowbreeze
 ---
 # Manage Projects
 
