@@ -1,5 +1,5 @@
 ---
-name: ingest
+name: rainbowllmwiki-ingest
 version: 1.0.0
 description: |
   Ingest protocol for capturing notes, meeting transcripts, articles, and raw data
@@ -32,7 +32,7 @@ When receiving new content:
 1. **Meeting Transcripts**:
    - Save full transcript and synthesis into `BRAIN/meetings/YYYY-MM-DD-title.md`.
    - Extract action items and decisions.
-   - Trigger `skills/enrich/SKILL.md` for all meeting attendees.
+   - Trigger `skills/rainbowllmwiki-enrich/SKILL.md` for all meeting attendees.
 2. **Quick Notes & Fleeting Thoughts**:
    - Walk `BRAIN/RESOLVER.md`. If destination is unambiguous (e.g. idea `BRAIN/ideas/`, mental model `BRAIN/concepts/`), write directly to destination.
    - If ambiguous write to `BRAIN/inbox/slug.md`.

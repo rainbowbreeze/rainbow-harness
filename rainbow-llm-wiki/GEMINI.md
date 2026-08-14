@@ -56,12 +56,12 @@ updated_at: "YYYY-MM-DD"
 ├── CLAUDE.md            — Operational guidelines for Claude Code
 ├── package.json         — Convenience script runners (bun/node)
 ├── skills/              — Agent skill SOPs
-│   ├── RESOLVER.md      — Skill dispatcher
-│   ├── enrich/          — 7-step tiered entity enrichment protocol
-│   ├── ingest/          — Ingestion protocol for meetings, notes, articles
-│   ├── query/           — Retrieval and backlink traversal protocol
-│   ├── maintain/        — Knowledge base health, linting, and audit protocol
-│   └── dedup-merge/     — Alias search and entity merge protocol
+│   ├── RESOLVER.md              — Skill dispatcher
+│   ├── rainbowllmwiki-enrich/   — 7-step tiered entity enrichment protocol
+│   ├── rainbowllmwiki-ingest/   — Ingestion protocol for meetings, notes, articles
+│   ├── rainbowllmwiki-query/    — Retrieval and backlink traversal protocol
+│   ├── rainbowllmwiki-maintain/ — Knowledge base health, linting, and audit protocol
+│   └── rainbowllmwiki-dedup-merge/ — Alias search and entity merge protocol
 ├── scripts/             — Zero-dependency validation and indexing utilities (targets BRAIN/)
 │   ├── lint.js          — Validates frontmatter, broken links, and duplicate aliases
 │   ├── index.js         — Rebuilds BRAIN/index.md and BRAIN/aliases.json

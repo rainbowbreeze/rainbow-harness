@@ -1,5 +1,5 @@
 ---
-name: dedup-merge
+name: rainbowllmwiki-dedup-merge
 version: 1.0.0
 description: |
   Protocol for resolving split-brain duplicate entities, consolidating timelines,

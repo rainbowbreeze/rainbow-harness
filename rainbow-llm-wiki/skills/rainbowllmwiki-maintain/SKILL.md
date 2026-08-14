@@ -1,5 +1,5 @@
 ---
-name: maintain
+name: rainbowllmwiki-maintain
 version: 1.0.0
 description: |
   Knowledge base health, linting, dead link detection, and orphan audit protocol for BRAIN/.

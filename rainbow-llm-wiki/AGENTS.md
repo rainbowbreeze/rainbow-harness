@@ -29,11 +29,11 @@ For detailed step-by-step instructions on specific tasks, read the corresponding
 
 | Task / Trigger | Protocol Reference |
 |---|---|
-| Ingest meeting, email, article, or quick note | [`skills/ingest/SKILL.md`](skills/ingest/SKILL.md) |
-| Enrich a person or company with new context | [`skills/enrich/SKILL.md`](skills/enrich/SKILL.md) |
-| Search, retrieve, or query relationships | [`skills/query/SKILL.md`](skills/query/SKILL.md) |
-| Merge duplicate entities and fix backlinks | [`skills/dedup-merge/SKILL.md`](skills/dedup-merge/SKILL.md) |
-| Routine brain health, linting, and audit | [`skills/maintain/SKILL.md`](skills/maintain/SKILL.md) |
+| Ingest meeting, email, article, or quick note | [`skills/rainbowllmwiki-ingest/SKILL.md`](skills/rainbowllmwiki-ingest/SKILL.md) |
+| Enrich a person or company with new context | [`skills/rainbowllmwiki-enrich/SKILL.md`](skills/rainbowllmwiki-enrich/SKILL.md) |
+| Search, retrieve, or query relationships | [`skills/rainbowllmwiki-query/SKILL.md`](skills/rainbowllmwiki-query/SKILL.md) |
+| Merge duplicate entities and fix backlinks | [`skills/rainbowllmwiki-dedup-merge/SKILL.md`](skills/rainbowllmwiki-dedup-merge/SKILL.md) |
+| Routine brain health, linting, and audit | [`skills/rainbowllmwiki-maintain/SKILL.md`](skills/rainbowllmwiki-maintain/SKILL.md) |
 
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: query
+name: rainbowllmwiki-query
 version: 1.0.0
 description: |
   Search, retrieval, and knowledge synthesis protocol across pure local Markdown files in BRAIN/.

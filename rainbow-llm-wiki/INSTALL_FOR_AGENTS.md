@@ -76,7 +76,7 @@ Create the `$BRAIN_PATH` directory structure and the `$WORKSPACE_ROOT` tooling d
 mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,projects,ideas,concepts,meetings,deals,writing,sources,inbox,archive}
 
 # 2. Create Workspace Execution Plane (in $WORKSPACE_ROOT, NOT in $BRAIN_PATH)
-mkdir -p "$WORKSPACE_ROOT"/skills/{enrich,ingest,query,maintain,dedup-merge}
+mkdir -p "$WORKSPACE_ROOT"/skills/{rainbowllmwiki-enrich,rainbowllmwiki-ingest,rainbowllmwiki-query,rainbowllmwiki-maintain,rainbowllmwiki-dedup-merge}
 mkdir -p "$WORKSPACE_ROOT"/scripts
 
 # 3. Add placeholder .gitkeep files for .raw directories
@@ -158,11 +158,11 @@ updated_at: "YYYY-MM-DD"    # ISO date of last modification
 
 Copy or write the skill files into `$WORKSPACE_ROOT/skills/`:
 - `$WORKSPACE_ROOT/skills/RESOLVER.md`: Master skill dispatcher mapping prompts/triggers to skills.
-- `$WORKSPACE_ROOT/skills/enrich/SKILL.md`: 7-step tiered enrichment protocol for people and companies.
-- `$WORKSPACE_ROOT/skills/ingest/SKILL.md`: Multi-source ingestion protocol for meetings, transcripts, and notes.
-- `$WORKSPACE_ROOT/skills/query/SKILL.md`: Pure Markdown search, alias resolution, and backlink traversal.
-- `$WORKSPACE_ROOT/skills/maintain/SKILL.md`: Health audit, linting, dead link fixing, and inbox pruning protocol.
-- `$WORKSPACE_ROOT/skills/dedup-merge/SKILL.md`: Entity deduplication, timeline merging, and cross-reference updating.
+- `$WORKSPACE_ROOT/skills/rainbowllmwiki-enrich/SKILL.md`: 7-step tiered enrichment protocol for people and companies.
+- `$WORKSPACE_ROOT/skills/rainbowllmwiki-ingest/SKILL.md`: Multi-source ingestion protocol for meetings, transcripts, and notes.
+- `$WORKSPACE_ROOT/skills/rainbowllmwiki-query/SKILL.md`: Pure Markdown search, alias resolution, and backlink traversal.
+- `$WORKSPACE_ROOT/skills/rainbowllmwiki-maintain/SKILL.md`: Health audit, linting, dead link fixing, and inbox pruning protocol.
+- `$WORKSPACE_ROOT/skills/rainbowllmwiki-dedup-merge/SKILL.md`: Entity deduplication, timeline merging, and cross-reference updating.
 
 ---
 
@@ -227,8 +227,8 @@ When operating on this brain in future sessions:
 
 | Inbound Trigger | Action Required |
 |---|---|
-| New meeting transcript or notes | Run [`skills/ingest/SKILL.md`](skills/ingest/SKILL.md) $\rightarrow$ extract entities $\rightarrow$ run [`skills/enrich/SKILL.md`](skills/enrich/SKILL.md) |
-| Researching a person or company | Check `$BRAIN_PATH/aliases.json` $\rightarrow$ read `$BRAIN_PATH/people/slug.md` $\rightarrow$ enrich delta |
-| Answering knowledge questions | Search `$BRAIN_PATH/` $\rightarrow$ inspect `## State` & `See Also` links $\rightarrow$ synthesize answer |
-| User corrects a fact | Update Compiled Truth immediately $\rightarrow$ add Timeline entry $\rightarrow$ mark `confidence: high` |
-| Routine maintenance / cleanup | Run `node scripts/lint.js` $\rightarrow$ prune `$BRAIN_PATH/inbox/` $\rightarrow$ resolve stale open threads |
+| New meeting transcript or notes | Run [`skills/rainbowllmwiki-ingest/SKILL.md`](skills/rainbowllmwiki-ingest/SKILL.md) extract entities run [`skills/rainbowllmwiki-enrich/SKILL.md`](skills/rainbowllmwiki-enrich/SKILL.md) |
+| Researching a person or company | Check `$BRAIN_PATH/aliases.json` read `$BRAIN_PATH/people/slug.md` enrich delta |
+| Answering knowledge questions | Search `$BRAIN_PATH/` inspect `## State` & `See Also` links synthesize answer |
+| User corrects a fact | Update Compiled Truth immediately add Timeline entry mark `confidence: high` |
+| Routine maintenance / cleanup | Run `node scripts/lint.js` prune `$BRAIN_PATH/inbox/` resolve stale open threads |

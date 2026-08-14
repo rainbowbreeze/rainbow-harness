@@ -19,8 +19,8 @@ This repository contains a 100% local, zero-database knowledge base organized al
 
 ## Skills Reference
 - Master Dispatcher: [`skills/RESOLVER.md`](skills/RESOLVER.md)
-- Ingestion: [`skills/ingest/SKILL.md`](skills/ingest/SKILL.md)
-- Tiered Enrichment: [`skills/enrich/SKILL.md`](skills/enrich/SKILL.md)
-- Query & Backlinks: [`skills/query/SKILL.md`](skills/query/SKILL.md)
-- Deduplication & Merging: [`skills/dedup-merge/SKILL.md`](skills/dedup-merge/SKILL.md)
-- Health & Maintenance: [`skills/maintain/SKILL.md`](skills/maintain/SKILL.md)
+- Ingestion: [`skills/rainbowllmwiki-ingest/SKILL.md`](skills/rainbowllmwiki-ingest/SKILL.md)
+- Tiered Enrichment: [`skills/rainbowllmwiki-enrich/SKILL.md`](skills/rainbowllmwiki-enrich/SKILL.md)
+- Query & Backlinks: [`skills/rainbowllmwiki-query/SKILL.md`](skills/rainbowllmwiki-query/SKILL.md)
+- Deduplication & Merging: [`skills/rainbowllmwiki-dedup-merge/SKILL.md`](skills/rainbowllmwiki-dedup-merge/SKILL.md)
+- Health & Maintenance: [`skills/rainbowllmwiki-maintain/SKILL.md`](skills/rainbowllmwiki-maintain/SKILL.md)

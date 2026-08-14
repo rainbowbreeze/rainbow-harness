@@ -1,7 +1,7 @@
 # Knowledge Base Index
 
 > Automatically generated via `bun run index` / `node scripts/index.js`.
-> Last updated: 2026-08-13
+> Last updated: 2026-08-14
 
 ---
 

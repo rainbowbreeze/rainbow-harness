@@ -1,5 +1,5 @@
 ---
-name: enrich
+name: rainbowllmwiki-enrich
 version: 1.0.0
 description: |
   Tiered intelligence enrichment protocol for people and companies. Creates and updates
