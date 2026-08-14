@@ -50,6 +50,21 @@ if [ "$BRAIN_PATH" = "$WORKSPACE_ROOT" ]; then
 fi
 ```
 
+### Step 0.5: Final Pre-Flight Confirmation (DO NOT SKIP)
+
+Before executing any `mkdir`, file creation, or file copy commands, **you MUST present the exact resolved paths to the user and wait for their confirmation**.
+
+Present this prompt to the user verbatim (substituting the resolved variables):
+
+> **Please confirm the installation paths before proceeding:**
+> - **Execution Plane (`WORKSPACE_ROOT`):** `$WORKSPACE_ROOT` *(where skills, scripts, and agent SOPs live)*
+> - **Data Plane (`BRAIN_PATH`):** `$BRAIN_PATH` *(where all markdown knowledge notes and entities live)*
+> - **Custom Domains:** `[List custom domains if requested, or "None"]`
+>
+> Shall I proceed with scaffolding these directories and installing the knowledge base?
+
+**Stop and wait for user approval before moving to Step 1.**
+
 ---
 
 ## Step 1: Scaffold Directory Structure
