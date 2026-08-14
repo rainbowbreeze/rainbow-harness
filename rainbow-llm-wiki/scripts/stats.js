@@ -2,11 +2,9 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { getBrainDir } from './resolve-brain.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const brainDir = path.resolve(__dirname, '..', 'BRAIN');
+const brainDir = getBrainDir();
 
 const MECE_DIRS = [
   'people',
@@ -40,7 +38,7 @@ function getAllMarkdownFiles(dir) {
 }
 
 function runStats() {
-  console.log('📊 Computing Knowledge Base Metrics for BRAIN/...\n');
+  console.log(`📊 Computing Knowledge Base Metrics for: ${brainDir}\n`);
 
   let totalEntities = 0;
   let totalTimelineEntries = 0;
@@ -77,7 +75,7 @@ function runStats() {
     }
   }
 
-  console.log('📂 Entities by Domain in BRAIN/:');
+  console.log('📂 Entities by Domain:');
   for (const [dir, count] of Object.entries(countsByDir)) {
     console.log(`   - ${dir.padEnd(12)} : ${count}`);
   }

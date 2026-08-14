@@ -10,13 +10,14 @@
 Before doing anything, understand this strict two-plane separation:
 
 1. **`$WORKSPACE_ROOT` (Agent Execution Plane)**:
-   - This is the main repository or workspace where the AI agent operates.
+   - The root repository or workspace where the AI agent runs (`pwd`).
    - Contains: `skills/`, `scripts/`, `package.json`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`.
-   - **CRITICAL:** The `skills/` directory MUST live in `$WORKSPACE_ROOT/skills/`. **NEVER create or copy `skills/` inside the brain data directory.**
+   - **CRITICAL RULE:** Skills MUST live in `$WORKSPACE_ROOT/skills/`. **NEVER create or copy `skills/` inside the brain data directory.**
 
 2. **`$BRAIN_PATH` (Knowledge Base Data Plane)**:
-   - This is where all knowledge notes, entity files, logs, and schemas live (default: `$WORKSPACE_ROOT/BRAIN` or `~/brain`).
+   - Where knowledge notes, entity files, logs, and schemas live.
    - Contains: `RESOLVER.md`, `schema.md`, `index.md`, `log.md`, `graph.md`, `aliases.json`, and the MECE entity directories (`people/`, `companies/`, etc.).
+   - **HARD INVARIANT:** `$BRAIN_PATH` **MUST NEVER EQUAL** `$WORKSPACE_ROOT`. Knowledge files must NEVER be dumped directly into the root workspace folder.
 
 ---
 
@@ -29,9 +30,25 @@ Before creating directories or files, **ask the human operator**:
 2. **Domain Customization**:
    > *"The standard domains are: `people`, `companies`, `projects`, `ideas`, `concepts`, `meetings`, `deals`, `writing`, `sources`, `inbox`, `archive`. Would you like to add any specialized domains (e.g. `personal`, `household`, `civic`, `hiring`)?"*
 
-Define:
-- `$WORKSPACE_ROOT` = current agent working directory.
-- `$BRAIN_PATH` = user-selected brain directory (default: `$WORKSPACE_ROOT/BRAIN`).
+### Path Assignment Logic (Execute strictly):
+```bash
+WORKSPACE_ROOT="$(pwd)"
+
+# Mode A: In-Workspace Brain (Default & Recommended)
+# When the user says "here", "in this project", or accepts the default:
+BRAIN_PATH="$WORKSPACE_ROOT/BRAIN"
+
+# Mode B: External Standalone Brain (e.g. ~/brain or /custom/path)
+# When the user specifies an external location:
+# BRAIN_PATH="$HOME/brain"
+# echo "$BRAIN_PATH" > "$WORKSPACE_ROOT/.brainpath"
+
+# Invariant Guard Check:
+if [ "$BRAIN_PATH" = "$WORKSPACE_ROOT" ]; then
+  echo "Error: BRAIN_PATH cannot equal WORKSPACE_ROOT. Defaulting to $WORKSPACE_ROOT/BRAIN"
+  BRAIN_PATH="$WORKSPACE_ROOT/BRAIN"
+fi
+```
 
 ---
 

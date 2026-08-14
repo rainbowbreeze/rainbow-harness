@@ -2,11 +2,9 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { getBrainDir } from './resolve-brain.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const brainDir = path.resolve(__dirname, '..', 'BRAIN');
+const brainDir = getBrainDir();
 
 const MECE_DIRS = [
   'people',
@@ -40,7 +38,7 @@ function getAllMarkdownFiles(dir) {
 }
 
 function buildGraph() {
-  console.log('🕸️  Extracting Relationship Graph & Backlinks from BRAIN/...\n');
+  console.log(`🕸️  Extracting Relationship Graph & Backlinks from: ${brainDir}\n`);
 
   const nodes = new Map();
   const edges = [];
@@ -110,7 +108,7 @@ function buildGraph() {
   mermaid += '```\n';
 
   fs.writeFileSync(path.join(brainDir, 'graph.md'), `# Relationship Graph\n\n> Auto-generated relationship graph.\n\n${edges.length > 0 ? mermaid : '*No cross-links present yet.*'}\n`, 'utf-8');
-  console.log(`\n✅ Generated BRAIN/graph.md`);
+  console.log(`\n✅ Generated graph.md in ${brainDir}`);
 }
 
 buildGraph();

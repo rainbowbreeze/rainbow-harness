@@ -2,11 +2,9 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { getBrainDir } from './resolve-brain.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const brainDir = path.resolve(__dirname, '..', 'BRAIN');
+const brainDir = getBrainDir();
 
 const MECE_DIRS = [
   { dir: 'people', title: 'People (`people/`)' },
@@ -72,7 +70,7 @@ function getAllMarkdownFiles(dir) {
 }
 
 function buildIndex() {
-  console.log('📚 Rebuilding Knowledge Base Index & Alias Map in BRAIN/...\n');
+  console.log(`📚 Rebuilding Knowledge Base Index & Alias Map in: ${brainDir}\n`);
 
   const aliasesMap = {};
   let indexContent = `# Knowledge Base Index\n\n> Automatically generated via \`bun run index\` / \`node scripts/index.js\`.\n> Last updated: ${new Date().toISOString().split('T')[0]}\n\n---\n\n`;
@@ -116,13 +114,13 @@ function buildIndex() {
     indexContent += `\n`;
   }
 
-  // Write index.md to BRAIN/index.md
+  // Write index.md
   fs.writeFileSync(path.join(brainDir, 'index.md'), indexContent, 'utf-8');
-  console.log(`✅ Generated BRAIN/index.md with ${totalCount} indexed entities.`);
+  console.log(`✅ Generated index.md with ${totalCount} indexed entities.`);
 
-  // Write aliases.json to BRAIN/aliases.json
+  // Write aliases.json
   fs.writeFileSync(path.join(brainDir, 'aliases.json'), JSON.stringify(aliasesMap, null, 2), 'utf-8');
-  console.log(`✅ Generated BRAIN/aliases.json with ${Object.keys(aliasesMap).length} alias entries.`);
+  console.log(`✅ Generated aliases.json with ${Object.keys(aliasesMap).length} alias entries.`);
 }
 
 buildIndex();

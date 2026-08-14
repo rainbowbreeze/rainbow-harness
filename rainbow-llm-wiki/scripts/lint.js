@@ -2,12 +2,9 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { getBrainDir, workspaceRoot } from './resolve-brain.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
-const brainDir = path.join(rootDir, 'BRAIN');
+const brainDir = getBrainDir();
 
 function parseFrontmatter(content) {
   const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -54,14 +51,14 @@ function getAllMarkdownFiles(dir) {
 }
 
 function runLint() {
-  console.log('🔍 Running Knowledge Base Linter in BRAIN/...\n');
+  console.log(`🔍 Running Knowledge Base Linter targeting: ${brainDir}\n`);
   let errors = [];
   let warnings = [];
 
   const aliasMap = new Map();
   const idMap = new Map();
 
-  // Scan all directories inside BRAIN/
+  // Scan all subdirectories inside brainDir
   const subdirs = fs.readdirSync(brainDir, { withFileTypes: true })
     .filter(d => d.isDirectory() && d.name !== '.raw' && d.name !== '.git')
     .map(d => d.name);
@@ -151,7 +148,7 @@ function runLint() {
     }
   }
 
-  console.log(`Scanned ${allFiles.length} markdown files in BRAIN/.`);
+  console.log(`Scanned ${allFiles.length} markdown files in brain directory.`);
   
   if (warnings.length > 0) {
     console.log(`\n⚠️  Warnings (${warnings.length}):`);
