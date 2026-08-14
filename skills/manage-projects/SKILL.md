@@ -1,7 +1,7 @@
 ---
 name: manage-projects
 description: >-
-  Use this skill when the user asks to list active projects, create a new project, archive an existing project, or append ideas or execution log entries to a project in BRAIN.
+  Use this skill when the user asks to list active projects, create a new project, archive an existing project, or append ideas or execution log entries to a project.
 version: 1.1.0
 author: Rainbowbreeze
 metadata:
