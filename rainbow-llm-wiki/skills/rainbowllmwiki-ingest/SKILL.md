@@ -30,6 +30,9 @@ When receiving new content:
    - Store raw reference snapshot in `BRAIN/sources/` if large/immutable.
 4. **Per-Entity Raw Dumps**:
    - Store per-person or per-company API dumps in `BRAIN/people/.raw/` or `BRAIN/companies/.raw/`.
+5. **Conferences, Summits & Events**:
+   - Save event overview, agenda highlights, connections made, and takeaways into `BRAIN/events/YYYY-MM-DD-event-name.md`.
+   - Trigger `skills/rainbowllmwiki-enrich/SKILL.md` for speakers, organizers, and contacts met.
 
 ---
 

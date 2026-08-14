@@ -23,6 +23,9 @@
 ## Meetings (`meetings/`)
 *No active entries.*
 
+## Events (`events/`)
+- [AI Developer Summit 2026](events/2026-10-12-ai-developer-summit.md) — Premier annual gathering for AI infrastructure architects, developer tooling builders, and autonomous agent researchers.
+
 ## Deals (`deals/`)
 *No active entries.*
 

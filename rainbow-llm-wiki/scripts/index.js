@@ -13,6 +13,7 @@ const MECE_DIRS = [
   { dir: 'concepts', title: 'Concepts (`concepts/`)' },
   { dir: 'ideas', title: 'Ideas (`ideas/`)' },
   { dir: 'meetings', title: 'Meetings (`meetings/`)' },
+  { dir: 'events', title: 'Events (`events/`)' },
   { dir: 'deals', title: 'Deals (`deals/`)' },
   { dir: 'writing', title: 'Writing (`writing/`)' },
   { dir: 'sources', title: 'Sources (`sources/`)' },

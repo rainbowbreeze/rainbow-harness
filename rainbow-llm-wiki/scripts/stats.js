@@ -13,6 +13,7 @@ const MECE_DIRS = [
   'ideas',
   'concepts',
   'meetings',
+  'events',
   'deals',
   'writing',
   'sources',

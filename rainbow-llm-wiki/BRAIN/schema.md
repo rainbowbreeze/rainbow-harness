@@ -74,6 +74,7 @@ Domain-specific fields are additive extensions on top of the Universal Base Sche
 - **Company**: `stage`, `industry`, `website`
 - **Project**: `owner`, `repo`
 - **Meeting**: `date`, `participants`
+- **Event**: `start_date`, `end_date`, `location`, `url`
 - **Deal**: `company`, `stage`, `amount`, `lead_investor`
 - **Concept**: `domain`
 - **Idea**: `target_domain`
@@ -221,6 +222,28 @@ date: "2026-08-13"
 participants:
   - "people/first-last"
 updated_at: "2026-08-13"
+---
+```
+
+### Event (`events/YYYY-MM-DD-event-name.md`)
+```yaml
+---
+type: event
+id: 2026-10-12-ai-developer-summit
+title: AI Developer Summit 2026
+aliases: ["AI Dev Summit", "#AIDev2026"]
+status: upcoming # upcoming | attending | speaking | completed | cancelled
+tags: [conference, ai, devtools]
+relations:
+  - target: "companies/organizer-slug"
+    type: "organizer"
+  - target: "people/speaker-slug"
+    type: "speaker"
+start_date: "2026-10-12"
+end_date: "2026-10-14"
+location: "San Francisco, CA" # or "Virtual"
+url: "https://example.com/event"
+updated_at: "2026-08-14"
 ---
 ```
 

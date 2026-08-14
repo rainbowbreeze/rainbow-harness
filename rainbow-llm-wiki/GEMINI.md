@@ -32,7 +32,7 @@ It implements an LLM-maintained, interlinked wiki structured around:
 Every entity file in `BRAIN/` inherits:
 ```yaml
 ---
-type: "<domain_singular>"   # e.g., person, company, project, concept, idea, meeting, deal, writing, personal, hiring
+type: "<domain_singular>"   # e.g., person, company, project, concept, idea, meeting, event, deal, writing, personal, hiring
 id: "<canonical-slug>"      # matches filename without .md (kebab-case)
 title: "<Human Readable Title>"
 aliases: ["<Variant 1>", "<Variant 2>"]
@@ -87,6 +87,8 @@ updated_at: "YYYY-MM-DD"
     ├── concepts/        — Frameworks, mental models, and reusable knowledge patterns
     │   └── README.md
     ├── meetings/        — Analysis, decisions, and transcripts of meetings
+    │   └── README.md
+    ├── events/          — Conferences, summits, hackathons, demo days, meetups
     │   └── README.md
     ├── deals/           — Financial transactions, terms, investments, partnerships
     │   └── README.md

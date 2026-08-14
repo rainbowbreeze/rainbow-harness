@@ -73,7 +73,7 @@ Create the `$BRAIN_PATH` directory structure and the `$WORKSPACE_ROOT` tooling d
 
 ```bash
 # 1. Create Brain Data Plane
-mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,projects,ideas,concepts,meetings,deals,writing,sources,inbox,archive}
+mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive}
 
 # 2. Create Workspace Execution Plane (in $WORKSPACE_ROOT, NOT in $BRAIN_PATH)
 mkdir -p "$WORKSPACE_ROOT"/skills/{rainbowllmwiki-enrich,rainbowllmwiki-ingest,rainbowllmwiki-query,rainbowllmwiki-maintain,rainbowllmwiki-dedup-merge}
@@ -113,7 +113,7 @@ Copy or write the core governance files directly into `$BRAIN_PATH/`:
 If installing from a local clone of this repository:
 ```bash
 # Copy all canonical directory resolvers into $BRAIN_PATH
-for dir in people companies projects ideas concepts meetings deals writing sources inbox archive; do
+for dir in people companies projects ideas concepts meetings events deals writing sources inbox archive; do
   cp "BRAIN/$dir/README.md" "$BRAIN_PATH/$dir/README.md"
 done
 ```

@@ -13,5 +13,8 @@ graph TD
     open_brain --> analytical_engine_corp
     open_brain --> mece_principle
     mece_principle --> ada_lovelace
+    2026_10_12_ai_developer_summit --> analytical_engine_corp
+    2026_10_12_ai_developer_summit --> ada_lovelace
+    2026_10_12_ai_developer_summit --> open_brain
 ```
 
