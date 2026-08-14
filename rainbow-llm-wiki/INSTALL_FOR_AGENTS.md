@@ -94,7 +94,7 @@ mkdir -p "$BRAIN_PATH"/.scripts
 # 4. Copy Core Automation Scripts & Execution Plane Docs from Staging
 cp -r "$STAGING_DIR/scripts"/* "$BRAIN_PATH/.scripts/"
 cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
-cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/CLAUDE.md" "$STAGING_DIR/GEMINI.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
+cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
 
 # 5. Add placeholder .gitkeep files for .raw directories
 touch "$BRAIN_PATH"/people/.raw/.gitkeep
@@ -189,7 +189,8 @@ Copy or write the skill files into `$WORKSPACE_ROOT/skills/`:
 
 Ensure agent instruction files are installed in `$WORKSPACE_ROOT/`:
 
-1. **`$WORKSPACE_ROOT/AGENTS.md`**: Operational rules for Cursor, Hermes, OpenClaw, Codex, Gemini CLI.
+1. **`$WORKSPACE_ROOT/AGENTS.md`**: Universal agent operational protocol and rules for all autonomous AI assistants.
+2. **Project-Local Memory (Optional)**: If operating inside a persistent project workspace, create or preserve `GEMINI.md` / `CLAUDE.md` to store project-specific context and memory.
 
 ### Key Golden Rules to Enforce:
 - **Always read `$BRAIN_PATH/RESOLVER.md` before creating any file.**
@@ -254,7 +255,7 @@ curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/m
 # 2. Update Core Execution Plane Tools & SOPs
 mkdir -p "$BRAIN_PATH"/.scripts && cp -r "$STAGING_DIR/scripts"/* "$BRAIN_PATH/.scripts/"
 cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
-cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/CLAUDE.md" "$STAGING_DIR/GEMINI.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
+cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
 
 # 3. Update Core Data Plane Taxonomy & Schema
 cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$BRAIN_PATH/RESOLVER.md"
