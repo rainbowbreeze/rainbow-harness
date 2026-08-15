@@ -11,4 +11,6 @@
 - **SCRIPTS** | Configured zero-dependency Node/Bun linting, indexing, graph generation, and metrics tools.
 
 ## 2026-08-15
+- **SCHEMA** | Enhanced `person` entity schema with multi-value `emails: []`, `phones: []`, `location`, `website`, and standardized `## Contact & Personal Info` section.
+- **SKILLS** | Updated `rainbowllmwiki-enrich` and `rainbowllmwiki-ingest` to extract and preserve multiple email addresses, phone numbers, location, and social handles into frontmatter, aliases, and compiled truth.
 - **SCHEMA** | Registered new MECE entity domain `schools/` (describing school complexes, cities, addresses, class levels, principal/digital animator/contact relations, project collaborations, and Patti Digitali Pavesi subscription status). Updated resolver, schema specifications, automated scripts (`index.js`, `lint.js`, `graph.js`, `stats.js`), and agent installation documentation (`INSTALL_FOR_AGENTS.md`).

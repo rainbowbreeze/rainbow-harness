@@ -22,9 +22,13 @@
 type: person
 id: first-last
 title: First Last
-aliases: ["Nickname", "first@example.com", "@handle"]
+aliases: ["Nickname", "first@example.com", "first.last@personal.com", "+1-555-0199", "+1-555-0100", "@handle"]
 role: Current Role
 company: Current Company
+emails: ["first@example.com", "first.last@personal.com"]
+phones: ["+1 555-0199", "+1 555-0100"]
+location: "City, Country"
+website: "https://example.com"
 status: active
 tags: [tag1, tag2]
 relations:
@@ -56,9 +60,16 @@ updated_at: "YYYY-MM-DD"
 ## Communication Style
 - How they communicate, handle disagreement, and what energizes them.
 
-## Contact & Network
-- **Email:** email@example.com
-- **Handles:** @handle
+## Contact & Personal Info
+- **Emails:**
+  - `first@example.com` (Primary / Work)
+  - `first.last@personal.com` (Personal)
+- **Phone Numbers:**
+  - `+1 555-0199` (Mobile)
+  - `+1 555-0100` (Office)
+- **Location:** City, Country (Timezone)
+- **Website:** https://example.com
+- **Socials / Handles:** [@handle](https://x.com/handle), [LinkedIn](https://linkedin.com/in/handle), [GitHub](https://github.com/handle)
 - **Close to:** [Related Person](../people/related-person.md)
 
 ## Open Threads

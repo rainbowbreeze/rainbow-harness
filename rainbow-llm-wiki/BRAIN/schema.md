@@ -70,7 +70,7 @@ updated_at: "YYYY-MM-DD"    # ISO date of last modification
 
 ### Domain-Specific Fields (Extensions)
 Domain-specific fields are additive extensions on top of the Universal Base Schema:
-- **Person**: `role`, `company`
+- **Person**: `role`, `company`, `emails`, `phones`, `location`, `website`
 - **Company**: `stage`, `industry`, `website`
 - **School**: `city`, `addresses`, `class_levels`, `principal`, `digital_animator`, `contacts`, `patti_digitali_pavesi`
 - **Project**: `owner`, `repo`
@@ -115,7 +115,8 @@ Example format:
    - Companies: `company-name.md` (e.g., `acme-corp.md`, `openai.md`)
    - Collision resolution: If two entities share a name, disambiguate with domain or company: `john-smith-acme.md`, `john-smith-venture.md`.
 2. **Aliases Array in Frontmatter**:
-   - Every variant name, email address, Twitter/X handle, nickname, or misspelling must be listed in `aliases`.
+   - Every variant name, email address, phone number, Twitter/X handle, nickname, or misspelling must be listed in `aliases`.
+   - All entries in `emails` and `phones` must also be included in `aliases` to ensure cross-reference indexability.
    - Before creating any new entity, the agent must check all existing `aliases` to prevent duplicate creation.
 
 ---
@@ -128,7 +129,7 @@ Example format:
 type: person
 id: ada-lovelace
 title: Ada Lovelace
-aliases: ["Augusta Ada King", "Countess of Lovelace", "ada@example.com", "@adalovelace"]
+aliases: ["Augusta Ada King", "Countess of Lovelace", "ada@example.com", "ada.lovelace@analytical.org", "+44 20 7946 0991", "@adalovelace"]
 status: active # active | dormant | former
 tags: [computing, algorithm-design, pioneer]
 relations:
@@ -138,6 +139,10 @@ relations:
     type: "close-collaborator"
 role: Mathematician & Computing Pioneer
 company: Analytical Engine Project
+emails: ["ada@example.com", "ada.lovelace@analytical.org"]
+phones: ["+44 20 7946 0991"]
+location: "London, UK"
+website: "https://example.com/ada"
 updated_at: "2026-08-13"
 ---
 ```
