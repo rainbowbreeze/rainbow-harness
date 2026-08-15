@@ -1,11 +1,11 @@
 ---
 name: health-records
-description: "Gestione del fascicolo sanitario nel BRAIN per i membri della famiglia: quadro clinico, cronologia medica e referti."
+description: "Management of the health record for family members: clinical picture, medical history, and reports."
 version: 1.1.0
 author: Rainbowbreeze
 metadata:
   hermes:
-    tags: [health, medical, tracker, referti]
+    tags: [health, medical, tracker, health reports, symptoms]
     category: health
     config:
       - key: BRAIN_HEALTHRECORDS_PATH
@@ -14,36 +14,36 @@ metadata:
         prompt: "Where can I store the medical health records of your family?"
 ---
 
-# Gestione Fascicolo Sanitario
+# Health Records Management
 
-## Quando attivare questa skill
-Usa questa skill quando l'utente fornisce informazioni mediche, referti di analisi, referti fotografici, sintomi, terapie o aggiornamenti sullo stato di salute per sé o per un membro della famiglia.
+## When to activate this skill
+Use this skill when the user provides medical information, lab reports (*referti di analisi*), photographic reports (*referti fotografici*), symptoms (*sintomi*), therapies (*terapie*), or health status updates (*salute*) for themselves or a family member.
 
-## Struttura del progetto BRAIN
-Il fascicolo sanitario è situato in `$BRAIN_HEALTHRECORDS_PATH/<nome-cognome>/`.
-Ogni cartella contiene:
-- `quadro_clinico.md`: Fotografia attuale dello stato di salute (aggiornato con le ultime novità).
-- `cronologia.md`: Diario clinico sequenziale (ordine cronologico inverso).
-- `referti/`: Cartella contenente i documenti medici salvati e le immagini.
+## BRAIN Project Structure
+The health record is located in `$BRAIN_HEALTHRECORDS_PATH/<first-last-name>/` (`<nome-cognome>`).
+Each folder contains:
+- `quadro_clinico.md`: Current snapshot of the health status (updated with the latest developments).
+- `cronologia.md`: Sequential clinical diary (in reverse chronological order).
+- `referti/`: Folder containing saved medical documents and images.
 
-## Procedura Operativa
+## Operative Procedure
 
-1. **Salvataggio Referti (se presenti):**
-   - Se l'utente fornisce un documento o un'immagine, salvala fisicamente nella cartella `referti/` del membro interessato.
-   - Nomenclatura: `YYYYMMDD-nomereferto.ext` (es. `20260715-emocromo.pdf`).
-   - *Nota bene:* La data `YYYYMMDD` deve corrispondere alla data dell'evento/esame (leggi la data dal referto, o dall'EXIF se indicato), non necessariamente quella dell'inserimento.
+1. **Saving Reports (if present):**
+   - If the user provides a document or image, physically save it in the `referti/` folder of the relevant family member.
+   - Naming convention: `YYYYMMDD-reportname.ext` (e.g., `20260715-emocromo.pdf`).
+   - *Note:* The date `YYYYMMDD` must correspond to the date of the event/exam (read the date from the report, or EXIF metadata if indicated), not necessarily the date of entry.
 
-2. **Aggiornamento Cronologia (`cronologia.md`):**
-   - Aggiungi una voce in cima alla lista degli eventi.
-   - Usa questo formato:
+2. **Updating Chronology (`cronologia.md`):**
+   - Add an entry at the top of the event list.
+   - Use this format:
      ```markdown
-     ### DD Mese YYYY - [Titolo Evento/Esame]
-     - **Sintesi:** [Riassunto dei risultati o del sintomo]
-     - **Referto:** [Se applicabile, inserisci il link relativo: `[Nome Referto](referti/YYYYMMDD-nome.ext)`]
-     - **Azione:** [Se ha richiesto variazioni terapeutiche o aggiornamenti del quadro clinico]
+     ### DD Month YYYY - [Event/Exam Title]
+     - **Summary:** [Summary of results or symptom]
+     - **Report:** [If applicable, insert relative link: `[Report Name](referti/YYYYMMDD-name.ext)`]
+     - **Action:** [If therapeutic changes or updates to the clinical picture were required]
      ```
 
-3. **Aggiornamento Quadro Clinico (`quadro_clinico.md`):**
-   - Valuta se le nuove informazioni modificano il quadro clinico generale (es. allergie scoperte, condizioni croniche, parametri vitali come colesterolo/pressione/peso, o nuove terapie).
-   - Se c'è una variazione, modifica direttamente il file `quadro_clinico.md` sovrascrivendo i dati vecchi e mantenendo i valori più recenti.
-   - Aggiungi sempre un link testuale Markdown al referto che giustifica il dato aggiornato.
+3. **Updating Clinical Snapshot (`quadro_clinico.md`):**
+   - Evaluate whether the new information modifies the overall clinical picture (e.g., newly discovered allergies, chronic conditions, vital parameters like cholesterol/blood pressure/weight, or new therapies).
+   - If there is a change, directly edit the `quadro_clinico.md` file, overwriting older data while preserving the most recent values.
+   - Always add a Markdown text link to the report that justifies the updated value.
