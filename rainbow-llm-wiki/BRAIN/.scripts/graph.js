@@ -9,6 +9,7 @@ const brainDir = getBrainDir();
 const MECE_DIRS = [
   'people',
   'companies',
+  'schools',
   'projects',
   'ideas',
   'concepts',

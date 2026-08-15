@@ -9,6 +9,7 @@ const brainDir = getBrainDir();
 const MECE_DIRS = [
   { dir: 'people', title: 'People (`people/`)' },
   { dir: 'companies', title: 'Companies (`companies/`)' },
+  { dir: 'schools', title: 'Schools (`schools/`)' },
   { dir: 'projects', title: 'Projects (`projects/`)' },
   { dir: 'concepts', title: 'Concepts (`concepts/`)' },
   { dir: 'ideas', title: 'Ideas (`ideas/`)' },

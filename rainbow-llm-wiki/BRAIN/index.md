@@ -1,7 +1,7 @@
 # Knowledge Base Index
 
 > Automatically generated via `bun run index` / `node scripts/index.js`.
-> Last updated: 2026-08-14
+> Last updated: 2026-08-15
 
 ---
 
@@ -10,6 +10,9 @@
 
 ## Companies (`companies/`)
 - [Analytical Engine Corp](companies/analytical-engine-corp.md) — Pioneer organization developing mechanical general-purpose computing architectures.
+
+## Schools (`schools/`)
+*No active entries.*
 
 ## Projects (`projects/`)
 - [Open Brain](projects/open-brain.md) — A zero-database, pure Markdown personal intelligence system maintained by AI agents.

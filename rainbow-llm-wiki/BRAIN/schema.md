@@ -72,6 +72,7 @@ updated_at: "YYYY-MM-DD"    # ISO date of last modification
 Domain-specific fields are additive extensions on top of the Universal Base Schema:
 - **Person**: `role`, `company`
 - **Company**: `stage`, `industry`, `website`
+- **School**: `city`, `addresses`, `class_levels`, `principal`, `digital_animator`, `contacts`, `patti_digitali_pavesi`
 - **Project**: `owner`, `repo`
 - **Meeting**: `date`, `participants`
 - **Event**: `start_date`, `end_date`, `location`, `url`
@@ -157,6 +158,40 @@ stage: Series A # Seed | Series A | Series B | Growth | Public | Non-profit
 industry: Developer Tools
 website: "https://acme.example.com"
 updated_at: "2026-08-13"
+---
+```
+
+### School (`schools/school-name-city.md`)
+```yaml
+---
+type: school
+id: ic-corso-cavour-pavia
+title: Istituto Comprensivo Corso Cavour
+aliases: ["IC Cavour", "Scuola Media Cavour", "PVIC82600E"]
+status: active
+tags: [school, pavia, elementary, middle-school]
+city: "Pavia"
+addresses:
+  - "Via Corso Cavour 25, Pavia"
+  - "Piazza Leonardo da Vinci 1, Pavia"
+class_levels:
+  - infant
+  - elementary
+  - middle
+principal: "people/mario-rossi"
+digital_animator: "people/anna-bianchi"
+contacts:
+  - "people/claudio-verdi"
+patti_digitali_pavesi: true
+patti_digitali_subscribed_at: "2024-10-15"
+relations:
+  - target: "people/mario-rossi"
+    type: "principal"
+  - target: "people/anna-bianchi"
+    type: "digital-animator"
+  - target: "concepts/patti-digitali-pavesi"
+    type: "manifesto-subscriber"
+updated_at: "2026-08-15"
 ---
 ```
 

@@ -17,7 +17,9 @@ graph TD
     Q1 -- Yes --> People[people/]
     Q1 -- No --> Q2{Is it an organization, fund, startup, or company?}
     Q2 -- Yes --> Companies[companies/]
-    Q2 -- No --> Q3{Is it a financial deal, term sheet, or transaction?}
+    Q2 -- No --> Q2b{Is it an educational institution or school complex?}
+    Q2b -- Yes --> Schools[schools/]
+    Q2b -- No --> Q3{Is it a financial deal, term sheet, or transaction?}
     Q3 -- Yes --> Deals[deals/]
     Q3 -- No --> Q4{Is it a conference, summit, hackathon, or meetup?}
     Q4 -- Yes --> Events[events/]
@@ -47,34 +49,37 @@ graph TD
 2. **Is it an organization, company, institution, VC fund, or brand?**
    --> `companies/` (Slug: `company-name.md`)
 
-3. **Is it a specific financial transaction, term sheet, investment, or acquisition?**
+3. **Is it an educational institution or school complex?**
+   --> `schools/` (Slug: `school-name-city.md`)
+
+4. **Is it a specific financial transaction, term sheet, investment, or acquisition?**
    --> `deals/` (Slug: `entity-round-year.md` or `company-partner-deal.md`)
 
-4. **Is it an industry conference, developer summit, hackathon, demo day, workshop, or meetup?**
+5. **Is it an industry conference, developer summit, hackathon, demo day, workshop, or meetup?**
    --> `events/` (Slug: `YYYY-MM-DD-event-name.md`)
 
-5. **Is it a record, summary, action items, or transcript of a specific meeting/call?**
+6. **Is it a record, summary, action items, or transcript of a specific meeting/call?**
    --> `meetings/` (Slug: `YYYY-MM-DD-topic-or-participants.md`)
 
-6. **Is it an active initiative with a repository, specification, assigned owner, or active build?**
+7. **Is it an active initiative with a repository, specification, assigned owner, or active build?**
    --> `projects/` (Slug: `project-name.md`)
 
-7. **Is it a raw possibility or product feature that could be built, but has no active work?**
+8. **Is it a raw possibility or product feature that could be built, but has no active work?**
    --> `ideas/` (Slug: `idea-name.md`)
 
-8. **Is it a reusable mental model, design pattern, framework, or concept you could teach?**
+9. **Is it a reusable mental model, design pattern, framework, or concept you could teach?**
    --> `concepts/` (Slug: `concept-name.md`)
 
-9. **Is it developed prose, essay, article, or narrative writing?**
-   --> `writing/` (Slug: `title-or-topic.md`)
+10. **Is it developed prose, essay, article, or narrative writing?**
+    --> `writing/` (Slug: `title-or-topic.md`)
 
-10. **Is it a bulk export, large dataset snapshot, or immutable external archive?**
+11. **Is it a bulk export, large dataset snapshot, or immutable external archive?**
     --> `sources/` (Slug: `source-name-YYYY-MM-DD.md`)
 
-11. **Is it a retired, dead, or superseded note preserved solely for history?**
+12. **Is it a retired, dead, or superseded note preserved solely for history?**
     --> `archive/`
 
-12. **Ambiguous / Unclassified / Quick Capture?**
+13. **Ambiguous / Unclassified / Quick Capture?**
     --> `inbox/` (Temporary staging. Flagged for categorization during linting).
 
 ---
@@ -83,6 +88,9 @@ graph TD
 
 When an entity or idea sits on the boundary between two directories:
 
+- **School vs. Company / Organization:**
+  - An educational institution or school complex offering academic classes (`elementary`, `middle`, etc.) with specialized roles (`principal`, `digital_animator`) --> `schools/`
+  - A commercial company, VC fund, SaaS org, or private corporation --> `companies/`
 - **Event vs. Meeting:**
   - A multi-person public or industry gathering, summit, hackathon, or conference with dates, venue/URL, speakers, and broader themes --> `events/`
   - A focused 1:1, internal team sync, board meeting, or customer interview call with specific attendees, transcripts, and immediate action items --> `meetings/`
@@ -100,13 +108,13 @@ When an entity or idea sits on the boundary between two directories:
 - **Concept vs. Writing:**
   - A concept page is concise, structured compiled truth ($\sim$200–500 words). --> `concepts/`
   - A writing page is long-form prose, narrative, or developed argumentation. --> `writing/`
-- **Person vs. Company:**
+- **Person vs. Company / School:**
   - Focuses on the human, their career arc, beliefs, and interactions. --> `people/`
-  - Focuses on the organization, metrics, market position, and products. --> `companies/`
+  - Focuses on the organization, metrics, market position, or campus. --> `companies/` or `schools/`
   - *Rule:* Create both pages and cross-link them with typed relationships.
 - **Meeting vs. Project / Person:**
   - A meeting file captures the chronological event, raw transcript, and specific action items. --> `meetings/`
-  - Action items and insights from meetings must be extracted to enrich the relevant `people/`, `companies/`, or `projects/` pages.
+  - Action items and insights from meetings must be extracted to enrich the relevant `people/`, `companies/`, `schools/`, or `projects/` pages.
 - **Sources vs. `.raw/` sidecars:**
   - Data specific to a single person or company (API payload, LinkedIn scrape) --> `people/.raw/slug-date.json` or `companies/.raw/slug-date.json`
   - Multi-entity bulk datasets, chat exports, or book PDFs --> `sources/`
@@ -119,6 +127,7 @@ When an entity or idea sits on the boundary between two directories:
 |---|---|---|---|
 | [`people/`](people/README.md) | Individual human beings | Person | `first-last.md` |
 | [`companies/`](companies/README.md) | Organizations, startups, VC funds, institutions | Company / Org | `company-name.md` |
+| [`schools/`](schools/README.md) | Educational institutions, school complexes | School | `school-name-city.md` |
 | [`deals/`](deals/README.md) | Financial rounds, investments, term sheets | Deal | `company-round-year.md` |
 | [`events/`](events/README.md) | Conferences, summits, hackathons, demo days, meetups | Event | `YYYY-MM-DD-event-name.md` |
 | [`meetings/`](meetings/README.md) | Records, transcripts, and action items of calls | Meeting | `YYYY-MM-DD-title.md` |

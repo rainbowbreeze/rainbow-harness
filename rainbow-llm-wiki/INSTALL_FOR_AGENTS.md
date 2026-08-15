@@ -78,7 +78,7 @@ curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/m
   tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
 
 # 2. Scaffold Core Data Plane Directories (harmless if existing)
-mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive,.scripts}
+mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,schools,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive,.scripts}
 
 # 3. Scaffold & Update Workspace Execution Plane Skills
 mkdir -p "$WORKSPACE_ROOT"/skills
@@ -93,7 +93,7 @@ cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$BRAIN_PATH/RESOLVER.md"
 cp "$STAGING_DIR/BRAIN/schema.md" "$BRAIN_PATH/schema.md"
 
 # 6. Copy / Update Canonical Directory Resolvers (README.md only — NEVER entity files)
-for dir in people companies projects ideas concepts meetings events deals writing sources inbox archive; do
+for dir in people companies schools projects ideas concepts meetings events deals writing sources inbox archive; do
   cp "$STAGING_DIR/BRAIN/$dir/README.md" "$BRAIN_PATH/$dir/README.md"
 done
 ```
