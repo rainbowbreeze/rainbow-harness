@@ -1,4 +1,4 @@
-# INSTALL_FOR_AGENTS.md — Installation, Setup & Upgrade Guide for AI Agents
+# INSTALL_FOR_AGENTS.md — Installation, Setup and Upgrade Guide for AI Agents
 
 > **Target Audience:** Autonomous AI agents (Hermes, OpenClaw, Claude Code, Cursor, Codex, Gemini CLI, Aider) tasked with initializing or upgrading a pure local Markdown knowledge base.
 > **Design Philosophy:** 100% local, zero-database, zero-cloud-lock-in, Git-native Markdown wiki.
@@ -21,11 +21,11 @@ Before doing anything, understand this strict two-plane separation:
 
 ---
 
-## Phase 1: Initial Discovery & Pre-Flight Confirmation (DO NOT SKIP)
+## Phase 1: Initial Discovery and Pre-Flight Confirmation (DO NOT SKIP)
 
 Whether performing an **initial installation** or a **framework upgrade**, first discover the paths and ask the human operator for explicit confirmation.
 
-### Step 1.1: Determine Target Paths & Mode
+### Step 1.1: Determine Target Paths and Mode
 Ask the operator:
 > *"Are we performing a **First Installation** of the LLM-Wiki knowledge base, or an **Upgrade / Refresh** from upstream GitHub?"*
 > *"Where should the brain data live? (Default is `./BRAIN` inside this project)."*
@@ -66,7 +66,7 @@ Present this prompt verbatim to the user (substituting resolved variables):
 
 ---
 
-## Phase 2: Upstream Staging & Shared Core Overlay
+## Phase 2: Upstream Staging and Shared Core Overlay
 
 This core sequence runs for BOTH First Installation and Framework Upgrade:
 
@@ -80,7 +80,7 @@ curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/m
 # 2. Scaffold Core Data Plane Directories (harmless if existing)
 mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,schools,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive,.scripts}
 
-# 3. Scaffold & Update Workspace Execution Plane Skills
+# 3. Scaffold and Update Workspace Execution Plane Skills
 mkdir -p "$WORKSPACE_ROOT"/skills
 cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
 cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
@@ -88,7 +88,7 @@ cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/p
 # 4. Copy Zero-Dependency Automation Utilities into Data Plane (.scripts/)
 cp -r "$STAGING_DIR/scripts"/* "$BRAIN_PATH/.scripts/"
 
-# 5. Update Core Data Plane Taxonomy & Schema
+# 5. Update Core Data Plane Taxonomy and Schema
 cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$BRAIN_PATH/RESOLVER.md"
 cp "$STAGING_DIR/BRAIN/schema.md" "$BRAIN_PATH/schema.md"
 
@@ -148,7 +148,7 @@ If upgrading an existing brain:
 
 ---
 
-## Phase 4: Verification Pipeline & Cleanup
+## Phase 4: Verification Pipeline and Cleanup
 
 Run the complete validation and indexing suite from `$WORKSPACE_ROOT`:
 
@@ -156,16 +156,16 @@ Run the complete validation and indexing suite from `$WORKSPACE_ROOT`:
 # 1. Clean up temporary staging directory
 rm -rf "$STAGING_DIR"
 
-# 2. Run Schema & Link Integrity Linter
+# 2. Run Schema and Link Integrity Linter
 node "$BRAIN_PATH/.scripts/lint.js"
 
-# 3. Recompile Index & Alias Lookup Table
+# 3. Recompile Index and Alias Lookup Table
 node "$BRAIN_PATH/.scripts/index.js"
 
 # 4. Rebuild Relationship Graph
 node "$BRAIN_PATH/.scripts/graph.js"
 
-# 5. Compute System Stats & Health Metrics
+# 5. Compute System Stats and Health Metrics
 node "$BRAIN_PATH/.scripts/stats.js"
 ```
 
@@ -183,6 +183,6 @@ When operating on this brain in future sessions:
 |---|---|
 | New meeting transcript or notes | Run [`skills/rainbowllmwiki-ingest/SKILL.md`](skills/rainbowllmwiki-ingest/SKILL.md) --> extract entities --> run [`skills/rainbowllmwiki-enrich/SKILL.md`](skills/rainbowllmwiki-enrich/SKILL.md) |
 | Researching a person or company | Check `$BRAIN_PATH/aliases.json` --> read `$BRAIN_PATH/people/slug.md` --> enrich delta |
-| Answering knowledge questions | Search `$BRAIN_PATH/` --> inspect `## State` & `See Also` links --> synthesize answer |
+| Answering knowledge questions | Search `$BRAIN_PATH/` --> inspect `## State` and `See Also` links --> synthesize answer |
 | User corrects a fact | Update Compiled Truth immediately --> add Timeline entry --> mark `confidence: high` |
 | Routine maintenance / cleanup | Run `node "$BRAIN_PATH/.scripts/lint.js"` --> prune `$BRAIN_PATH/inbox/` --> resolve stale open threads |
