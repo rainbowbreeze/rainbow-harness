@@ -1,0 +1,7 @@
+edit_id = patch-searxng
+filename = .env
+
+```
+# Web_search tool via SearXNG
+SEARXNG_URL=http://searxng:8080
+```
