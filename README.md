@@ -13,10 +13,20 @@ A configuration utility to safely apply patches and edit configuration files to 
 ### `rainbow-llm-wiki`
 The core blueprints and installation scripts for an agent knowledge base management tool, following the llm-wiki approach.
 
+To install, tell the agent
+```
+Read and execute the instructions at https://github.com/rainbowbreeze/rainbow-harness/raw/refs/heads/main/rainbow-llm-wiki/INSTALL_FOR_AGENTS.md to install, or update, the wiki 
+```
+
 ### `skills`
 A collection of skills for my personal workflows, in AgentSkills.io format.
 Designed to be used as [Hermes tap skill repo](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills#publishing-a-custom-skill-tap).
 The file `skills.sh.json` is a catalog file following the [skill.sh schema](https://skills.sh/schemas/skills.sh.schema.json). 
 
+To install:
+```bash
+hermes skills tap add rainbowbreeze/rainbow-harness
+hermes skills install --category rainbowskills rainbowbreeze/rainbow-harness/collect-links
+```
 
 Mostly for personal usage, but is there is something good for you, feel free to grab and reuse!
