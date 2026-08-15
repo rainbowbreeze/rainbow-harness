@@ -12,6 +12,7 @@ This repository contains a 100% local, zero-database knowledge base organized al
 6. Never run `git commit` or stage changes unless explicitly instructed by the user.
 
 ## Common Agent Commands
+- Check version and update status: `bun run version` (or `node BRAIN/.scripts/version.js`)
 - Lint and check link integrity: `bun run lint` (or `node BRAIN/.scripts/lint.js`)
 - Rebuild index and alias catalog: `bun run index` (or `node BRAIN/.scripts/index.js`)
 - Generate relationship graph: `bun run graph` (or `node BRAIN/.scripts/graph.js`)

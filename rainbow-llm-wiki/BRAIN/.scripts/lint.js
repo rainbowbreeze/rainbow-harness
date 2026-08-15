@@ -58,6 +58,22 @@ function runLint() {
   const aliasMap = new Map();
   const idMap = new Map();
 
+  // Validate BRAIN/.version metadata file if present
+  const versionFilePath = path.join(brainDir, '.version');
+  if (fs.existsSync(versionFilePath)) {
+    try {
+      const versionContent = fs.readFileSync(versionFilePath, 'utf-8');
+      const versionData = JSON.parse(versionContent);
+      if (!versionData.version) {
+        errors.push(`[.version] Missing mandatory field "version" in ${versionFilePath}`);
+      }
+    } catch (err) {
+      errors.push(`[.version] Malformed JSON in ${versionFilePath}: ${err.message}`);
+    }
+  } else {
+    warnings.push(`[.version] Version file missing at ${versionFilePath}. Consider running a framework update.`);
+  }
+
   // Scan all subdirectories inside brainDir
   const subdirs = fs.readdirSync(brainDir, { withFileTypes: true })
     .filter(d => d.isDirectory() && d.name !== '.raw' && d.name !== '.git')

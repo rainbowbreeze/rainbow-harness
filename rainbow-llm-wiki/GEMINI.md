@@ -107,6 +107,7 @@ updated_at: "YYYY-MM-DD"
 ---
 
 ## Tooling & Maintenance Commands
+- `bun run version` (or `node BRAIN/.scripts/version.js`): Check installed version and inspect upstream GitHub for newer releases.
 - `bun run lint` (or `node BRAIN/.scripts/lint.js`): Run full schema and link integrity validation in `BRAIN/`.
 - `bun run index` (or `node BRAIN/.scripts/index.js`): Rebuild `BRAIN/index.md` catalog and `BRAIN/aliases.json`.
 - `bun run graph` (or `node BRAIN/.scripts/graph.js`): Re-generate relationship graph and backlink counts.
