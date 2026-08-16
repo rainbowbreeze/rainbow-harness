@@ -1,0 +1,7 @@
+edit_id = patch-brain_mainfolder
+filename = .env
+
+```
+# Web_search tool via SearXNG
+$BRAIN_MAIN_PATH=/opt/data/BRAIN
+```

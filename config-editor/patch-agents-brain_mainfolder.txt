@@ -4,40 +4,41 @@ filename = AGENTS.md
 ```
 ## BRAIN Knowledge Repository
 
-All documentation, notes, documents, and project files are stored in the `BRAIN` directory (`/opt/data/BRAIN/`). 
+All documentation, notes, documents, and domain files are stored in the knowledge directory defined by the environment variable `$BRAIN_MAIN_PATH`.
 
 **CRITICAL LAZY LOADING RULE:** 
-Before you read, write, create, or modify *anything* related to knowledge, documentation, or notes, you MUST go to the `BRAIN` directory and read `BRAIN/README.md` to understand the structural rules and routing. **Do not guess the structure and do not create files outside of the defined subfolders.**
+Before you read, write, create, or modify *anything* related to knowledge, documentation, or notes, you MUST navigate to `$BRAIN_MAIN_PATH` and read `README.md` to understand the structural rules and routing. **Do not guess the structure and do not create files outside of the defined subfolders.**
 
 ### Global Invariants
 1. **Naming:** All files and folders must use `kebab-case`.
-2. **One subfolder per project**: Each project resides in its own subfolder under `BRAIN` folder and MUST contain its own `AGENTS.md`.
-3. `BRAIN/README.md` is the registry of all projects, and contains the list of project folders, and a brief description for each one of them. 
+2. **One subfolder per knowledge domain:** Each knowledge domain resides in its own subfolder under `$BRAIN_MAIN_PATH` and MUST contain its own `AGENTS.md`.
+3. **Master Registry:** `README.md` at `$BRAIN_MAIN_PATH` is the registry of all knowledge domains, containing the list of domain folders and a brief description for each.
 
 ### Navigation & Routing
-Do not place files at the root of the `BRAIN` folder. You must route information to the appropriate subfolder below. 
+Do not place files at the root of `$BRAIN_MAIN_PATH`. You must route information to the appropriate subfolder. 
 **Before writing to a subfolder, you MUST read its specific `AGENTS.md` file.**
 
-### How to Add a New Project (Subfolder)
-If you determine that a new category/project folder is required, you MUST execute the following 3 steps exactly. Failure to do so will break the repository.
+### How to Add a New Knowledge Domain (Subfolder)
+If you determine that a new knowledge domain folder is required, you MUST execute the following 3 steps exactly:
 
-1. **Initialize:** Create the new folder (e.g., `BRAIN/new-project/`).
-2. **Bootstrap:** Create `BRAIN/new-project/AGENTS.md` to define its specific rules. **This file MUST include a `## Contents` section that lists and briefly describes all direct children (files and subfolders).** Create at least one content file and add it to this list (no empty folders allowed).
-3. **Register (CRITICAL):** You must immediately edit the file `BRAIN/README.md` and add the new folder, and a brief description of the project, keeping the list in alphabetical order. Create a new list item in the format `| Folder | Project Description |` 
+1. **Initialize:** Create the new folder (e.g., `$BRAIN_MAIN_PATH/new-domain/`).
+2. **Bootstrap:** Create `$BRAIN_MAIN_PATH/new-domain/AGENTS.md` to define its specific rules. This file MUST include a `## Contents` section detailing all direct children. Create at least one content file and add it to this list (no empty folders allowed).
+3. **Register (CRITICAL):** Immediately edit `README.md` at `$BRAIN_MAIN_PATH` and add the new folder and its description, keeping the list in alphabetical order using a table row:
+   `| [new-domain](new-domain/) | Description of the knowledge domain purpose and scope |`
 
-### Update the projects (Subfolder)
-You must maintain coherency between the list of project folders, and the list of projects in `BRAIN/README.md`
+### Maintaining Knowledge Domains (Subfolders)
+Maintain strict synchronization between domain folders on disk and entries in `README.md`:
+1. If a knowledge domain is deleted, delete its corresponding entry from `README.md`.
+2. If a knowledge domain folder is renamed, update both the directory name and its entry in `README.md`.
 
-1. If a project is deleted, also its entry in `BRAIN/README.md` is deleted.
-2. If a project name is updated, rename the folder of the project, and update its entry in `BRAIN/README.md`.
-
-### File Management within a Project
-Whenever you add, rename, move, or delete a file or folder inside a project:
-1. You MUST immediately update the `## Contents` section of that project's `AGENTS.md` file to reflect the change.
-2. Include a brief (1-2 sentence) description explaining the purpose of the new file/folder.
+### File Management within a Knowledge Domain
+Whenever you add, rename, move, or delete a file or folder inside a knowledge domain:
+1. You MUST immediately update the `## Contents` section of that domain's `AGENTS.md` file using the following format:
+   - `[domain-slug](domain-slug/)`: Brief 1-2 sentence description explaining the purpose of the knowledge domain.
+2. Maintain `AGENTS.md` exclusively at the root of each knowledge domain folder. Do not create nested `AGENTS.md` files inside subfolders.
 
 ### Agent Self-Check before ending turn:
-- If you created or moved a project folder inside the `BRAIN` directory, did you remember to update `BRAIN/README.md` to reflect the new structure?
-- If you added, removed, or renamed files within a project, did you update that project's `AGENTS.md` `## Contents` section?
-If not, do it now.
+- If you created or moved a knowledge domain folder inside `$BRAIN_MAIN_PATH`, did you update `README.md` to reflect the new structure?
+- If you added, removed, or renamed files within a knowledge domain, did you update that domain's `AGENTS.md` `## Contents` section?
+If not, do it now before concluding your response.
 ```
