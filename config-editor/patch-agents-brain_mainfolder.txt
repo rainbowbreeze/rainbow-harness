@@ -4,26 +4,26 @@ filename = AGENTS.md
 ```
 ## BRAIN Knowledge Repository
 
-All documentation, notes, documents, and domain files are stored in the knowledge directory defined by the environment variable `$BRAIN_MAIN_PATH`.
+All documentation, notes, documents, and domain files are stored in the knowledge directory defined by the environment variable `$BRAIN_ROOT_PATH`.
 
 **CRITICAL LAZY LOADING RULE:** 
-Before you read, write, create, or modify *anything* related to knowledge, documentation, or notes, you MUST navigate to `$BRAIN_MAIN_PATH` and read `README.md` to understand the structural rules and routing. **Do not guess the structure and do not create files outside of the defined subfolders.**
+Before you read, write, create, or modify *anything* related to knowledge, documentation, or notes, you MUST navigate to `$BRAIN_ROOT_PATH` and read `README.md` to understand the structural rules and routing. **Do not guess the structure and do not create files outside of the defined subfolders.**
 
 ### Global Invariants
 1. **Naming:** All files and folders must use `kebab-case`.
-2. **One subfolder per knowledge domain:** Each knowledge domain resides in its own subfolder under `$BRAIN_MAIN_PATH` and MUST contain its own `AGENTS.md`.
-3. **Master Registry:** `README.md` at `$BRAIN_MAIN_PATH` is the registry of all knowledge domains, containing the list of domain folders and a brief description for each.
+2. **One subfolder per knowledge domain:** Each knowledge domain resides in its own subfolder under `$BRAIN_ROOT_PATH` and MUST contain its own `AGENTS.md`.
+3. **Master Registry:** `README.md` at `$BRAIN_ROOT_PATH` is the registry of all knowledge domains, containing the list of domain folders and a brief description for each.
 
 ### Navigation & Routing
-Do not place files at the root of `$BRAIN_MAIN_PATH`. You must route information to the appropriate subfolder. 
+Do not place files at the root of `$BRAIN_ROOT_PATH`. You must route information to the appropriate subfolder. 
 **Before writing to a subfolder, you MUST read its specific `AGENTS.md` file.**
 
 ### How to Add a New Knowledge Domain (Subfolder)
 If you determine that a new knowledge domain folder is required, you MUST execute the following 3 steps exactly:
 
-1. **Initialize:** Create the new folder (e.g., `$BRAIN_MAIN_PATH/new-domain/`).
-2. **Bootstrap:** Create `$BRAIN_MAIN_PATH/new-domain/AGENTS.md` to define its specific rules. This file MUST include a `## Contents` section detailing all direct children. Create at least one content file and add it to this list (no empty folders allowed).
-3. **Register (CRITICAL):** Immediately edit `README.md` at `$BRAIN_MAIN_PATH` and add the new folder and its description, keeping the list in alphabetical order using a table row:
+1. **Initialize:** Create the new folder (e.g., `$BRAIN_ROOT_PATH/new-domain/`).
+2. **Bootstrap:** Create `$BRAIN_ROOT_PATH/new-domain/AGENTS.md` to define its specific rules. This file MUST include a `## Contents` section detailing all direct children. Create at least one content file and add it to this list (no empty folders allowed).
+3. **Register (CRITICAL):** Immediately edit `README.md` at `$BRAIN_ROOT_PATH` and add the new folder and its description, keeping the list in alphabetical order using a table row:
    `| [new-domain](new-domain/) | Description of the knowledge domain purpose and scope |`
 
 ### Maintaining Knowledge Domains (Subfolders)
@@ -38,7 +38,7 @@ Whenever you add, rename, move, or delete a file or folder inside a knowledge do
 2. Maintain `AGENTS.md` exclusively at the root of each knowledge domain folder. Do not create nested `AGENTS.md` files inside subfolders.
 
 ### Agent Self-Check before ending turn:
-- If you created or moved a knowledge domain folder inside `$BRAIN_MAIN_PATH`, did you update `README.md` to reflect the new structure?
+- If you created or moved a knowledge domain folder inside `$BRAIN_ROOT_PATH`, did you update `README.md` to reflect the new structure?
 - If you added, removed, or renamed files within a knowledge domain, did you update that domain's `AGENTS.md` `## Contents` section?
 If not, do it now before concluding your response.
 ```

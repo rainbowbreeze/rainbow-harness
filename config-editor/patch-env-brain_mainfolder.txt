@@ -3,5 +3,5 @@ filename = .env
 
 ```
 # Web_search tool via SearXNG
-$BRAIN_MAIN_PATH=/opt/data/BRAIN
+BRAIN_ROOT_PATH=/opt/data/BRAIN
 ```
