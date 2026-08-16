@@ -2,6 +2,6 @@ edit_id = patch-brain_mainfolder
 filename = .env
 
 ```
-# Web_search tool via SearXNG
+# BRAIN Knowledge repository (Use together with its own AGENTS.md)
 BRAIN_ROOT_PATH=/opt/data/BRAIN
 ```
