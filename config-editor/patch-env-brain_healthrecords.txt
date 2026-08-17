@@ -1,0 +1,7 @@
+edit_id = patch-env-brain_healthrecords
+filename = .env
+
+```
+# BRAIN Knowledge repository for health records
+BRAIN_HEALTHRECORDS_PATH=/opt/data/BRAIN/fascicolo-sanitario
+```

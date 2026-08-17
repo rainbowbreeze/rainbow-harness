@@ -1,0 +1,7 @@
+edit_id = patch-env-brain_links
+filename = .env
+
+```
+# BRAIN Knowledge repository for collect-links skill
+BRAIN_LINKS_PATH=/opt/data/BRAIN/links
+```

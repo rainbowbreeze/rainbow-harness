@@ -1,0 +1,7 @@
+edit_id = patch-agents-instructionsinenglish
+filename = AGENTS.md
+
+```
+## Language
+While the domain data and files are maintained in Italian, all `AGENTS.md` instruction files MUST be written in English to ensure maximum compliance, accuracy, and precision from the Agent.
+```

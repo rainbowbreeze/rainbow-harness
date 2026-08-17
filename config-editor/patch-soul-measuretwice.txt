@@ -1,4 +1,4 @@
-edit_id = patch-soul_measuretwice
+edit_id = patch-soul-measuretwice
 filename = SOUL.md
 
 ```

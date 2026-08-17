@@ -1,7 +1,8 @@
-edit_id = patch-soul_replyinitalian
+edit_id = patch-soul-replyinitalian
 filename = SOUL.md
 
 ```
-**Communication Language:**
+## Communication Language is Italian
+
 You must ALWAYS communicate, write reports, and answer the user in **Italian**, unless explicitly asked otherwise. 
 ```

@@ -1,0 +1,7 @@
+edit_id = patch-env-brain_projects
+filename = .env
+
+```
+# BRAIN Knowledge repository for manage-brain_projects skills
+BRAIN_PROJECTS_PATH=/opt/data/BRAIN/projects
+```
