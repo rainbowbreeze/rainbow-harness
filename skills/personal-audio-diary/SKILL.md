@@ -11,7 +11,7 @@ metadata:
 required_environment_variables:
   - name: BRAIN_PERSONALDIARY_PATH
     prompt: Personal Diary folder in the BRAIN knowledge repository 
-    help: Define where the personal dairy notes folder should be, generally /opt/data/BRAIN/personal-diary
+    help: Define where the personal diary notes folder should be, generally /opt/data/BRAIN/personal-diary
     required_for: full functionality
 
 ---
@@ -29,9 +29,6 @@ This skill guides the processing of Alfredo's personal diary, which is primarily
 
 ## Workflow & Guidelines
 
-- **Verification of Raw Transcription**: ...
-- **Gateway Transcription Errors**: If voice notes fail to reach the agent, check `logs/gateway.log` for "unpack" errors. See [references/gateway-log-recovery.md](references/gateway-log-recovery.md) and [references/gateway-transcription-error-unpack.md](references/gateway-transcription-error-unpack.md).
-
 ### 1. Verification of Raw Transcription
 - Always include the raw transcript of the voice note exactly as received at the very beginning of your response for the user's verification.
 - Format the raw transcript inside blockquotes, like this:
@@ -46,9 +43,10 @@ This skill guides the processing of Alfredo's personal diary, which is primarily
 
 ### 3. State Recovery (Handling catch-up requests)
 If the user asks to "process these notes" but no new notes are in the immediate turn:
-- **Check Gateway Logs**: Run `strings logs/gateway.log | grep "inbound message"` to identify recent timestamps of received messages.
+- **Check Gateway Logs**: Run `strings $HERMES_HOME/logs/gateway.log | grep "inbound message"` to identify recent timestamps of received messages.
 - **Search Sessions**: Use `session_search()` with recent queries or date-based terms to find transcribed voice notes that might have been received but not yet written to the logs (often due to mid-turn interruptions).
-- **Verify Files**: Cross-reference the found notes with the latest entries in `logs/YYYY-MM.md` to ensure you don't create duplicates.
+- **Verify Files**: Cross-reference the found notes with the latest entries in `$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md` to ensure you don't create duplicates.
+- **Gateway Errors**: If voice notes fail to reach the agent, check `$HERMES_HOME/logs/gateway.log` for "unpack" errors. See [references/gateway-log-recovery.md](references/gateway-log-recovery.md) and [references/gateway-transcription-error-unpack.md](references/gateway-transcription-error-unpack.md).
 
 ### 4. Phonetic Decoding of STT Anomalies
 Local STT transcription models frequently produce phonetic misspellings of names, places, and cultural references in Italian. You must actively cross-reference these anomalies:
@@ -79,52 +77,77 @@ Local STT transcription models frequently produce phonetic misspellings of names
   - "pur et pork" -> "pulled pork"
 - **Verification Rule:** Always ask or check facts (using local search tools or past session context) if a transcription segment sounds nonsensical or out of context.
 
-### 4. Local Transcription Fallback (Plan B)
+### 5. Local Transcription Fallback (Plan B)
 If the gateway logs show "The user sent a message with no text content" or if no transcription is found in `session_search()` for a recent voice note:
-1. **Locate the Audio**: Check `audio_cache/` for the most recent `.ogg` file (`ls -ltr audio_cache/ | tail`).
+1. **Locate the Audio**: Check `$HERMES_HOME/audio_cache/` for the most recent `.ogg` file (`ls -ltr $HERMES_HOME/audio_cache/ | tail`).
 2. **Local Inference**: Use `execute_code` to run `faster_whisper` (which is installed in the environment) on the file. Use `model_size="base"` for a balance of speed and accuracy.
 3. **Merge & Process**: Once the transcript is obtained, proceed with the standard polishing and logging workflow.
 
-### 3. File Updates and Structure
+### 6. File Updates and Structure
 The personal diary lives in `$BRAIN_PERSONALDIARY_PATH/`. Every new entry requires:
-- **Monthly Log (`logs/YYYY-MM.md`):** Append the entry under the correct date.
-  - **Date Resolution Rule**: The date of the logged event must match reality, not just the time of transcription. Before writing to the log, you must determine the correct date:
-    1. **Midnight Boundary / Night Shift**: If the system time is between 00:00 and 04:00 AM, and the user says "oggi" (today) or "stasera" (tonight), you MUST assume they are referring to the *previous* calendar day (the day that just ended).
-    2. **Infer from text**: Search the raw transcript for explicit temporal markers (e.g., "ieri", "martedì scorso", "il 5 ottobre", "stamattina").
-    3. **Batch / Catch-up Safeguard**: When processing voice notes in a deferred batch (i.e. the user asks to process notes sent earlier), NEVER use the current system date to resolve "ieri" or "oggi". Stop and ask the user: "A quale giorno si riferiscono esattamente queste note?" before writing anything to the logs.
-    4. **Infer from context**: If the note continues a thought from a previous entry or refers to an event logged recently, use `session_search` to align the date with that context.
-    5. **Ask the user**: If the note discusses an event but the exact date is missing, ambiguous, or seemingly in the past, **stop and ask the user directly** for the correct date *before* saving the entry.
-    6. Once the real date is established, place the entry under that specific day in the monthly log. System time should only be used for the exact "recorded at" timestamp.
-  - Each entry should include:
-    - Exact Timestamp
-    - Raw transcription
-    - Polished Italian interpretation
-    - Context and reflection
-    - Markdown image references (if any images are attached)
-- **Image Attachments (`images/`):** If the user uploaded/attached an image, save it completely unmodified (no AI processing, no visual edits):
-  - Inquire/extract the current date: `YYYYMMDD`.
-  - Infer a short, hyphenated, descriptive name in Italian (e.g., `visita-reggia-di-venaria`, `cena-famiglia`) strictly from the accompanying transcription/text notes of that session—never use AI vision models on the image itself.
-  - Rename and copy/move the image to `$BRAIN_PERSONALDIARY_PATH/images/YYYY/YYYYMMDD-nome-breve.ext` (where `YYYY` is the current year, maintaining the original extension).
-  - Add a standard markdown link to the image in the monthly log under the entry (e.g., `![[Descrizione breve]](../images/YYYY/YYYYMMDD-nome-breve.ext)`).
-- **Life Facts (life_facts.md):** Check if any *durable, long-term facts* emerged. Extract and append them using the following structure (Note: When adding facts here or to logs, **never** add anything to the LLM Wiki; they must remain strictly separate):
-  - `## 📋 Informazioni Personali e Abitudini`: Routine, tools (e.g., iMovie vs OpenShot), health, and tech setups (e.g., Proxmox/Ollama).
-  - `## 👥 Persone e Relazioni`: Key people, their family details (e.g., Emanuele's kids), and roles.
-  - `## 🎯 Obiettivi e Decisioni`: Major life or parenting commitments (e.g., "Consapevolezza Genitoriale").
-  - `## 📈 Cronologia dei Cambiamenti di Stato`: A bulleted list of significant daily milestones with dates.
 
-### 4. Privacy & Test Session Cleanup (Hygiene)
+#### Monthly Log (`logs/YYYY-MM.md`)
+Append the entry under the correct date. 
+
+**Date Resolution Fallback Hierarchy:**
+1. **Explicit Dates**: Use explicit dates mentioned in the text (e.g., "ieri", "il 5 ottobre").
+2. **Context**: Use context from previous related notes via `session_search()`.
+3. **Midnight Boundary**: If system time is 00:00 - 04:00 AM, treat "oggi" or "stasera" as yesterday.
+4. **Ask User**: If ambiguity remains, stop and explicitly ask the user for the correct date *before* writing.
+
+**Standard Template for Log Entries (`$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md`):**
+```markdown
+## [YYYY-MM-DD] [Optional Day of Week]
+
+**[HH:MM]** 
+> «[Raw Transcription Text]»
+*(Interpretazione corretta: «[Polished Italian Text]»)*
+
+[Context, reflection, or summary of the entry]
+
+![[Optional Image Description]](../images/YYYY/YYYYMMDD-nome-breve.ext)
+```
+
+#### Image Attachments (`images/`)
+If the user uploaded/attached an image, save it completely unmodified (no AI processing, no visual edits):
+- Inquire/extract the current date: `YYYYMMDD`.
+- Infer a short, hyphenated, descriptive name in Italian (e.g., `visita-reggia-di-venaria`, `cena-famiglia`) strictly from the accompanying transcription/text notes of that session—never use AI vision models on the image itself.
+- Rename and copy/move the image to `$BRAIN_PERSONALDIARY_PATH/images/YYYY/YYYYMMDD-nome-breve.ext` (where `YYYY` is the current year, maintaining the original extension).
+- Add a standard markdown link to the image in the monthly log under the entry (e.g., `![[Descrizione breve]](../images/YYYY/YYYYMMDD-nome-breve.ext)`).
+
+#### Life Facts (`life_facts.md`)
+Check if any *durable, long-term facts* emerged. Extract and append them. (Note: When adding facts here or to logs, **never** add anything to the LLM Wiki; they must remain strictly separate).
+
+**Standard Template for `$BRAIN_PERSONALDIARY_PATH/life_facts.md`:**
+```markdown
+# Personal Life Facts
+
+## 📋 Informazioni Personali e Abitudini
+- [YYYY-MM-DD] [Fact details, e.g., Uses Proxmox/Ollama for local AI]
+
+## 👥 Persone e Relazioni
+- [YYYY-MM-DD] [Fact details, e.g., Emanuele has two kids]
+
+## 🎯 Obiettivi e Decisioni
+- [YYYY-MM-DD] [Fact details, e.g., Started focusing on 'Consapevolezza Genitoriale']
+
+## 📈 Cronologia dei Cambiamenti di Stato
+- [YYYY-MM-DD] [Significant daily milestone]
+```
+
+### 7. Privacy & Test Session Cleanup (Hygiene)
 When Alfredo runs voice tests or requests a privacy-based cleanup of a session or test messages ("cancella le memorie", "non lasciare tracce", etc.), execute a thorough purge of all transient traces:
-- **Audio Cache:** Scan `./audio_cache/` for any recently created `.ogg` files (e.g. within the hour or linked to the session) and delete them.
-- **Log Files:** Scan `./logs/agent.log`, `./logs/gateway.log`, and `./logs/errors.log`. Replace any lines containing the active test `session_id` or exact transcript substrings of test messages with `[LOG ENTRY REDACTED FOR PRIVACY]`.
-- **Database Messages:** Open `state.db` using Python's `sqlite3` module. Locate the messages for the test session in the `messages` table and delete them (FTS search indexes will be automatically updated by SQLite triggers).
+- **Audio Cache:** Scan `$HERMES_HOME/audio_cache/` for any recently created `.ogg` files (e.g. within the hour or linked to the session) and delete them.
+- **Log Files:** Scan `$HERMES_HOME/logs/agent.log`, `$HERMES_HOME/logs/gateway.log`, and `$HERMES_HOME/logs/errors.log`. Replace any lines containing the active test `session_id` or exact transcript substrings of test messages with `[LOG ENTRY REDACTED FOR PRIVACY]`.
+- **Database Messages:** Open `$HERMES_HOME/state.db` using Python's `sqlite3` module. Locate the messages for the test session in the `messages` table and delete them (FTS search indexes will be automatically updated by SQLite triggers).
 
-### 5. Whisper Hallucinations (Silent/Low Audio)
+### 8. Whisper Hallucinations (Silent/Low Audio)
 When the voice message is silent, contains only sighs, breathing, or background noise, the local Whisper model frequently hallucinates specific fixed Italian phrases:
 - *«Sottotitoli e revisione a cura di QTSS»*
 - *«Sottotitoli creati dalla comunità Amara.org»*
 - **Handling:** If the transcription matches these phrases exactly, do NOT treat them as actual spoken text. Address them humorously and politely as a known Whisper hallucination due to silence or background noise, ask the user if they'd like to repeat, and log the event as a system/silent test rather than an actual diary entry.
 
-### 6. Accidental / Ultra-short Voice Notes (Discord Errors) & Fragment Merging
+### 9. Accidental / Ultra-short Voice Notes (Discord Errors) & Fragment Merging
 Sometimes Alfredo might accidentally record a voice note on Discord, such as pressing the record button but lifting his finger immediately before the recording actually starts or finishes. 
 - **Rule for Accidental Notes**: If the transcript of the voice note has **no more than 6 words** (ultra-short) and contains no clear narrative fragment or incomplete thought (e.g. just a greeting or silent noise), it must be considered an accidental Discord recording error.
 - **Handling of Accidental Notes**: Ignore these notes completely. Do not write them to the monthly logs, do not update `life_facts.md`, and do not save any associated files. Simply ignore the entry, and if appropriate, politely and briefly acknowledge that the recording was likely too short or accidental.
@@ -134,11 +157,11 @@ Sometimes Alfredo might accidentally record a voice note on Discord, such as pre
 ## Common Pitfalls
 1. **Failing to include the raw transcript:** The user needs to verify the raw transcript to spot any misunderstanding. Always supply it.
 2. **Accepting nonsensical transcriptions literally:** Always attempt to phonetically decode and offer a corrected interpretation of distorted Italian words.
-3. **Blindly trusting system time:** Do not automatically log entries under today's date. Always apply the Date Resolution Rule (infer from text, infer from past notes, or ask the user) to ensure the entry is placed on the actual day the events occurred.
+3. **Blindly trusting system time:** Do not automatically log entries under today's date. Always apply the Date Resolution Fallback Hierarchy to ensure the entry is placed on the actual day the events occurred.
 4. **Writing too much narration:** Keep the conversation concise, warm, emotionally intelligent, but focused. Alfredo prefers a direct and professional tone.
 
 ## Verification Checklist
 - [ ] Raw transcription included at the start of the response.
 - [ ] Polished Italian interpretation supplied.
-- [ ] Log entry appended to the correct `$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md` file.
-- [ ] Durable facts extracted to `$BRAIN_PERSONALDIARY_PATH/life_facts.md` (if applicable).
+- [ ] Log entry appended to the correct `$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md` file following the template.
+- [ ] Durable facts extracted to `$BRAIN_PERSONALDIARY_PATH/life_facts.md` following the template (if applicable).

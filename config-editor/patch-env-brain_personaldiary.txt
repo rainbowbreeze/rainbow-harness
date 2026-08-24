@@ -1,0 +1,7 @@
+edit_id = patch-env-brain_personaldiary
+filename = .env
+
+```
+# BRAIN Knowledge repository for manage-brain_projects skills
+BRAIN_PERSONALDIARY_PATH=/opt/data/BRAIN/personal-diary
+```
