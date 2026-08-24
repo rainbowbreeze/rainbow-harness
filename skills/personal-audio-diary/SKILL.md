@@ -30,8 +30,9 @@ This skill guides the processing of Alfredo's personal diary, which is primarily
 ## Workflow & Guidelines
 
 ### 1. Verification of Raw Transcription
-- Always include the raw transcript of the voice note exactly as received at the very beginning of your response for the user's verification.
-- Format the raw transcript inside blockquotes, like this:
+- Always include the resolved date and the raw transcript of the voice note exactly as received at the very beginning of your response for the user's verification.
+- Format the date and the raw transcript like this:
+  **Data Rilevata:** [YYYY-MM-DD] (e.g. "Mercoledì, 24 Agosto 2026")
   > «[Raw Transcription Text]»
 - Below the raw transcription, provide a polished and grammatically correct Italian interpretation of what the user actually said. Example:
   *(Interpretazione corretta: «Ieri siamo stati a Torino...»)*
@@ -161,7 +162,7 @@ Sometimes Alfredo might accidentally record a voice note on Discord, such as pre
 4. **Writing too much narration:** Keep the conversation concise, warm, emotionally intelligent, but focused. Alfredo prefers a direct and professional tone.
 
 ## Verification Checklist
-- [ ] Raw transcription included at the start of the response.
+- [ ] Resolved date and raw transcription included at the start of the response.
 - [ ] Polished Italian interpretation supplied.
 - [ ] Log entry appended to the correct `$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md` file following the template.
 - [ ] Durable facts extracted to `$BRAIN_PERSONALDIARY_PATH/life_facts.md` following the template (if applicable).
