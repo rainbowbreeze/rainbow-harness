@@ -1,0 +1,10 @@
+edit_id = patch-env-camofoxbrowser
+filename = .env
+
+```
+# Camofox browser access - remember to configure also config.yaml
+CAMOFOX_URL=http://camofox-browser:9377
+# Needed to use camofox to access locally hosted services (on the same host machine)
+CAMOFOX_REWRITE_LOOPBACK_URLS=true
+CAMOFOX_LOOPBACK_HOST_ALIAS=host.docker.internal
+```
