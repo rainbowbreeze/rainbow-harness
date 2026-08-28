@@ -1,7 +1,12 @@
 ---
 name: youtube-creators-summary
 description: "Use this skill when the user asks to generate a daily intelligence report of new YouTube videos from a specific list of technical and financial creators."
-tags: [youtube, monitoring, rss, research, intelligence]
+version: 1.1.0
+author: Rainbowbreeze
+metadata:
+  hermes:
+    tags: [youtube, monitoring, rss, research, intelligence]
+    category: rainbowskills
 ---
 
 # YouTube Creators Summary
