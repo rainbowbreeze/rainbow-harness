@@ -1,0 +1,27 @@
+[
+  {
+    "name": "La Provincia Pavese",
+    "url": "https://laprovinciapavese.gelocal.it/pavia/",
+    "rss": "https://laprovinciapavese.gelocal.it/pavia/rss"
+  },
+  {
+    "name": "Prima Pavia",
+    "url": "https://primapavia.it/",
+    "rss": "https://primapavia.it/feed/"
+  },
+  {
+    "name": "Il Giorno Pavia",
+    "url": "https://www.ilgiorno.it/pavia",
+    "rss": "https://www.ilgiorno.it/pavia/feed"
+  },
+  {
+    "name": "Comune di Pavia - Novità",
+    "url": "https://www.comune.pavia.it/novita",
+    "rss": null
+  },
+  {
+    "name": "Comune di Pavia - Notizie",
+    "url": "https://www.comune.pavia.it/novita/notizie",
+    "rss": null
+  }
+]
