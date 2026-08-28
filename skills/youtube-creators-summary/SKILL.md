@@ -6,33 +6,36 @@ tags: [youtube, monitoring, rss, research, intelligence]
 
 # YouTube Creators Summary
 
-This skill monitors a curated list of YouTube channels and generates a structured intelligence report for videos published in the last 24 hours. It categorizes creators into "Basic Info" (Group A) and "AI Summary" (Group B).
-
-## Scheduling & Delivery
-- **Target Discord Channel:** `1485386401242677491` (#hermes-youtube-createtors-report)
-- **Character Limit:** 5,000 characters per message.
-- **Sectioning:** The "Upcoming Events" section (if present) must be sent in a separate message from the main summary.
+This skill monitors a curated list of YouTube channels and generates a structured intelligence report for videos published in the last 24 hours. It categorizes creators into "Quick Summary" and "Deep Dive" tiers.
 
 ## Workflow
-1. **Fetch Data:** Execute `scripts/fetch_latest_videos.py`. This script queries YouTube RSS feeds for ~50 channels and returns a JSON of new videos.
+1. **Fetch Data:** Execute `scripts/fetch_latest_videos.py` passing the creators list `assets/creators.json` as an argument. This script queries YouTube RSS feeds and returns a JSON of new videos.
 2. **Filter Content:** **Exclude YouTube Shorts** from the report.
-3. **Analyze Group B:** For Group B creators, perform a deep dive using `web_extract` on the video URL or search for content summaries to provide a "actual content" summary rather than just the description.
-4. **Format for Intelligence:** Use the `investigative-correspondent` persona style (Headline, Lead, Key Facts, Chronology, Sources).
-5. **URL Suppression:** Wrap ALL URLs in `<>` (e.g., `<https://youtube.com/...>`) to suppress Discord link previews.
-6. **Delivery Logic:**
-   - **Manual/Scheduled Run:** Use the `send_message` tool for the target Discord channel.
-   - **Individual Delivery:** For each video or logical group (e.g., all of Group A), call `send_message` immediately. **Do NOT aggregate multiple videos into a single giant message** to avoid rate limits and length issues.
-   - **Cron Context:** If the job prompt explicitly says "do NOT use send_message," produce the final report as the tool output.
+3. **Analyze Deep Dive Tier:** For "Deep Dive" creators, delegate the video content summarization to a subagent. Instruct the subagent to use the specialized YouTube video summarization skill on the video URL, and to format its output strictly according to the "Deep Dive Format" defined below. Wait for the subagent to return the pre-formatted results before proceeding.
+4. **Format for Intelligence:** Strictly use the following standard formats for the two groups:
+   - **Quick Summary Format:**
+     - **Title:** `Video Title`
+     - **Creator:** `@CreatorName`
+     - **Link:** `<URL>`
+     - **Tags:** [e.g., #Hardware, #Networking]
+     - **Summary:** A single-sentence summary based on the title and description.
+   - **Deep Dive Format:**
+     - **Title & Creator:** `Video Title` by `@CreatorName`
+     - **Link:** `<URL>`
+     - **Headline:** Catchy, high-level summary of the video's premise.
+     - **The Lead:** 2-3 sentences explaining what the video covers and why it matters.
+     - **Key Facts:** Exactly 5 bullet points of the most critical arguments, data points, or evidence.
+5. **URL Suppression:** Wrap ALL URLs in `<>` (e.g., `<https://youtube.com/...>`) to suppress automatic link previews.
+6. **Delivery Logic:** Produce the final report directly as the tool output.
+7. **Validation:** Verify that the report is accurately formatted and successfully generated without truncation.
 
 ## Creators List
-- **Group A (Basic Info):** Includes technical channels like @ETAPRIME, @JeffGeerling, @mr_rip, @PietroMichelangeli, and @home_assistant.
-- **Group B (AI Summary):** Includes high-impact creators like @NetworkChuck, @mkbhd, @CiaoElsa, and @thebull_finance.
+The full list of monitored creators is maintained in `assets/creators.json`. They are categorized into `GROUP_A` (Quick Summary) and `GROUP_B` (Deep Dive).
 
 ## Support Files
 - `scripts/fetch_latest_videos.py`: Main data extraction script.
-- `scripts/discord_notifier.py`: Standalone notifier using standard libraries for cron environments.
+- `assets/creators.json`: JSON file containing the monitored creators.
 
 ## Pitfalls
-- **Aggregation Failure:** Sending too many videos in one message will exceed the 5000-character limit and trigger Discord's block. Always split by video or category.
-- **Preview Spam:** Forgetting the `<>` wrappers around links will fill the channel with enormous video previews, making the report unreadable.
+- **Preview Spam:** Forgetting the `<>` wrappers around links can cause enormous video previews in some chat clients, making the report unreadable.
 - **Shorts Noise:** RSS feeds often include Shorts; these must be filtered out manually by checking for `/shorts/` in the URL.
