@@ -1,7 +1,7 @@
 ---
 name: news-report-pavia
 description: Generates a structured daily report in Italian about Pavia city and its province using specific sources.
-version: 1.1.0
+version: 1.2.0
 author: Rainbowbreeze
 metadata:
   hermes:
@@ -21,7 +21,7 @@ This skill automates the generation of a daily report in Italian covering local 
 ## Core Execution Workflow
 
 1. **Information Gathering - News (Last 24h)**:
-   - **Primary Method**: Run the included Python script `scripts/parse_rss.py` via the terminal. This script automatically parses the RSS feeds listed in `assets/news-sources.json` and outputs articles from the last 24 hours in JSON format. **Use this script only for sources that have an RSS feed defined in the JSON file.** For sources without an RSS feed, directly use web scraping (`web_extract` or `web_search`).
+   - **Primary Method**: Run the included Python script `scripts/parse_rss.py` via the terminal. This script will automatically process all RSS-enabled sources from `assets/news-sources.json` and output articles from the last 24 hours in JSON format. For the remaining sources in the JSON file that do *not* have an RSS feed, you must directly use web scraping (`web_extract` or `web_search`).
    - **Primary Focus**: Pavia city.
    - **Volume Limits**: Minimum 10 news items. Maximum 3 items related to the wider province.
    - **Exclusions**: Do NOT include commercial, advertising, crime news, or sports news.
@@ -29,6 +29,7 @@ This skill automates the generation of a daily report in Italian covering local 
 2. **Output Structure & Tone (STRICTLY ITALIAN)**:
    - **Language**: Strictly Italian.
    - **Tone**: Professional and journalistic. Focus on clarity, objectivity, and precision.
+   - **Link Previews**: Wrap all URLs in angle brackets (e.g., `<https://.../>`) to prevent Discord from showing link previews.
    - **Format Template**: You MUST exactly match this Markdown template structure:
      ```markdown
      # Notiziario di Pavia: [YYYY-MM-DD]
@@ -40,10 +41,10 @@ This skill automates the generation of a daily report in Italian covering local 
 
      ## Ultime Notizie
      * **[Titolo della Notizia]** - [YYYY-MM-DD]
-       - **URL**: [Link]
+       - **URL**: <[Link]>
        - **Descrizione**: [Breve riassunto]
      * **[Titolo della Notizia]** - [YYYY-MM-DD]
-       - **URL**: [Link]
+       - **URL**: <[Link]>
        - **Descrizione**: [Breve riassunto]
      ```
 
