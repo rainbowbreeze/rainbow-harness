@@ -1,0 +1,33 @@
+[
+  {
+    "name": "Visit Pavia",
+    "url": "https://www.visitpavia.com/it/eventi",
+    "rss": null
+  },
+  {
+    "name": "Quatarob Pavia",
+    "url": "https://www.quatarobpavia.it/eventi-mercatini-sagre-pavia-provincia/",
+    "rss": null
+  },
+  {
+    "name": "Virgilio Pavia Eventi",
+    "url": "https://www.virgilio.it/italia/pavia/eventi/",
+    "rss": null
+  },
+  {
+    "name": "MilanoToday Eventi",
+    "url": "https://www.milanotoday.it/eventi/",
+    "rss": "https://www.milanotoday.it/rss",
+    "notes": "filter items by link containing '/eventi/'"
+  },
+  {
+    "name": "Virgilio Milano Eventi",
+    "url": "https://www.virgilio.it/italia/milano/eventi/",
+    "rss": null
+  },
+  {
+    "name": "YesMilano Eventi",
+    "url": "https://www.yesmilano.it/eventi/tutti-gli-eventi",
+    "rss": null
+  }
+]
