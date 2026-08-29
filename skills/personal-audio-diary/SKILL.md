@@ -13,7 +13,6 @@ required_environment_variables:
     prompt: Personal Diary folder in the BRAIN knowledge repository 
     help: Define where the personal diary notes folder should be, generally /opt/data/BRAIN/personal-diary
     required_for: full functionality
-
 ---
 
 # Audio Diary Processing & Management
