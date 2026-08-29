@@ -29,10 +29,10 @@ This skill automates the generation of a daily report in Italian covering upcomi
 2. **Phase 1: Search and Store New Events**:
    - Search in the event platforms listed in `assets/event-sources.json` for events occurring in the Province of Pavia and the Metropolitan City of Milan over the next 30 days.
    - Extract: Live URL, Event Name, Precise Location, Date/Time, Description, and Additional Info.
-   - **MANDATORY**: Use the `events-manager` skill to add *every* newly discovered event into the database. The manager handles deduplication and updates.
+   - **MANDATORY**: Use the `events-manager` skill to add *every* newly discovered event into the database. The manager handles deduplication and updates. Call it with these parameters: `operation_mode="add"`, `event_category="social"`, `title`, `start_date`, `end_date`, `description`, `url`, and `location`.
 
 3. **Phase 2: Gather Upcoming Agenda**:
-   - Query the `events-manager` to retrieve **ALL** recorded events scheduled to happen in the next 15 days.
+   - Query the `events-manager` to retrieve **ALL** recorded events scheduled to happen in the next 15 days. Call it with these parameters: `operation_mode="query"`, `event_category="social"`, `start_date` (today), and `end_date` (15 days from today).
    - This phase ensures the final report contains a comprehensive look at the upcoming schedule, not just the events found today.
 
 4. **Output Structure & Tone (STRICTLY ITALIAN)**:
