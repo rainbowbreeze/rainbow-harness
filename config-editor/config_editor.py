@@ -43,7 +43,7 @@ def process_file(filepath, edit_id, config_content):
             content = f.read()
     except Exception as e:
         # Insert error handling block as requested by user rule.
-        print(f"Error reading file {filepath}: {e}")
+        print(f"- Error reading file {filepath}: {e}")
         return False
 
     escaped_begin = re.escape(begin_marker)
@@ -53,10 +53,10 @@ def process_file(filepath, edit_id, config_content):
     pattern = re.compile(rf"{escaped_begin}.*?{escaped_end}", re.DOTALL)
     
     if pattern.search(content):
-        print(f"Updating existing block in: {filepath}")
+        print(f"- Updating existing block in: {filepath}")
         new_content = pattern.sub(core_block, content)
     else:
-        print(f"Appending new block to: {filepath}")
+        print(f"- Appending new block to: {filepath}")
         if content:
             if not content.endswith('\n'):
                 content += '\n\n'
@@ -74,7 +74,7 @@ def process_file(filepath, edit_id, config_content):
         return True
     except Exception as e:
         # Insert error handling block
-        print(f"Error writing to file {filepath}: {e}")
+        print(f"- Error writing to file {filepath}: {e}")
         return False
 
 def main():
@@ -134,7 +134,6 @@ def main():
     print(f"Target filename: {target_filename}")
     print(f"Edit ID: {edit_id}")
     print(f"Starting search in: {search_dir}")
-    print("-" * 40)
 
     files_modified = 0
     # Walk through the directory
@@ -149,8 +148,8 @@ def main():
         if not args.recursive:
             dirs.clear()
 
-    print("-" * 40)
     print(f"Process complete. Modified {files_modified} file(s).")
+    print()
 
 if __name__ == "__main__":
     main()
