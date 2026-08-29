@@ -15,8 +15,8 @@ class TestEventsManager(unittest.TestCase):
         
         # Path to the target manager script
         self.script_path = os.path.join(os.path.dirname(__file__), "events_manager.py")
-        self.category = "test_events"
-        self.db_path = os.path.join(self.test_dir.name, self.category, "events.json")
+        self.category = "TEST_EVENTS"
+        self.db_path = os.path.join(self.test_dir.name, "test_events", "events.json")
 
     def tearDown(self):
         self.test_dir.cleanup()

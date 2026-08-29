@@ -81,6 +81,7 @@ def get_db_path(category: str) -> str:
     # Fallback to default if category is somehow empty
     if not category:
         category = "default"
+    category = category.lower()
         
     return os.path.join(base_path, category, "events.json")
 
