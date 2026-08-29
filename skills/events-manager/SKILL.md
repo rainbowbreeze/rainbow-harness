@@ -1,7 +1,7 @@
 ---
 name: events-manager
 description: Add, remove and query a list of events across different categories, like concerts, sports, social events, etc.
-version: 1.2.0
+version: 1.3.0
 author: Rainbowbreeze
 license: MIT
 metadata:

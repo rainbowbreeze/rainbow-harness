@@ -152,5 +152,23 @@ class TestEventsManager(unittest.TestCase):
         self.assertIn("the following arguments are required", res_query_missing.stderr)
         self.assertIn("--end-date", res_query_missing.stderr)
 
+    def test_query_sort_order(self):
+        # Add events out of chronological order
+        self.run_manager("add", "--title", "Middle Event", "--start-date", "2026-10-03", "--end-date", "2026-10-04", "--url", "http://mid", "--location", "Here", "--description", "Desc")
+        self.run_manager("add", "--title", "Oldest Event", "--start-date", "2026-10-01", "--end-date", "2026-10-02", "--url", "http://old", "--location", "Here", "--description", "Desc")
+        self.run_manager("add", "--title", "Newest Event", "--start-date", "2026-10-05", "--end-date", "2026-10-06", "--url", "http://new", "--location", "Here", "--description", "Desc")
+
+        # Query all of them
+        res_query = self.run_manager("query", "--start-date", "2026-09-30", "--end-date", "2026-10-10")
+        self.assertEqual(res_query.returncode, 0)
+        
+        query_data = json.loads(res_query.stdout)
+        self.assertEqual(len(query_data), 3)
+        
+        # Verify ascending order (soonest first, farthest in future last)
+        self.assertEqual(query_data[0]["titolo"], "Oldest Event")
+        self.assertEqual(query_data[1]["titolo"], "Middle Event")
+        self.assertEqual(query_data[2]["titolo"], "Newest Event")
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

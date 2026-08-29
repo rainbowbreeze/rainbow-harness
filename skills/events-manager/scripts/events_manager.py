@@ -194,6 +194,9 @@ def cmd_query(args):
         if ev_start <= query_end and ev_end >= query_start:
             matching_events.append(event)
             
+    # Sort matching events from most recent (soonest) to farthest in the future based on data_inizio
+    matching_events.sort(key=lambda e: e.get("data_inizio", ""))
+    
     # Output JSON directly to stdout
     print(json.dumps(matching_events, indent=2, ensure_ascii=False))
 
