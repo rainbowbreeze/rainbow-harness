@@ -2,6 +2,6 @@ edit_id = patch-env-brain_aphorisms
 filename = .env
 
 ```
-# BRAIN Knowledge repository for aphorisms-tracker skills
+# BRAIN Knowledge repository for aphorisms-tracker skill
 BRAIN_APHORISMS_PATH=/opt/data/BRAIN/aphorisms
 ```
