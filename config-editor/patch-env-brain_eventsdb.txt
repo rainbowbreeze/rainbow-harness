@@ -1,0 +1,7 @@
+edit_id = patch-env-brain_eventsdb
+filename = .env
+
+```
+# BRAIN Knowledge repository for events-manager skill
+BRAIN_EVENTSDB_PATH=/opt/data/BRAIN/events-db
+```
