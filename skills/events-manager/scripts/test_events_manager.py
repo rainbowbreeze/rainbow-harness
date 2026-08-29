@@ -47,7 +47,7 @@ class TestEventsManager(unittest.TestCase):
             data = json.load(f)
             self.assertEqual(len(data), 1)
             self.assertEqual(data[0]["titolo"], "Test Concert")
-            self.assertEqual(data[0]["slug"], "test-concert-2026-10-01")
+            self.assertEqual(data[0]["slug"], "20261001-test-concert")
 
         # 2. ADD duplicate event (should trigger linter / duplicate check and fail)
         res_add_dup = self.run_manager(
@@ -71,7 +71,7 @@ class TestEventsManager(unittest.TestCase):
         self.assertEqual(res_query.returncode, 0, f"Query failed: {res_query.stderr}")
         query_data = json.loads(res_query.stdout)
         self.assertEqual(len(query_data), 1)
-        self.assertEqual(query_data[0]["slug"], "test-concert-2026-10-01")
+        self.assertEqual(query_data[0]["slug"], "20261001-test-concert")
         
         # 4. QUERY outside range (should return empty list)
         res_query_out = self.run_manager(
@@ -110,19 +110,19 @@ class TestEventsManager(unittest.TestCase):
         with open(self.db_path, "r", encoding="utf-8") as f:
             data_active = json.load(f)
             self.assertEqual(len(data_active), 1)
-            self.assertEqual(data_active[0]["slug"], "future-event-2027-01-01")
+            self.assertEqual(data_active[0]["slug"], "20270101-future-event")
             
         # Verify archive contains only past
         archive_path = self.db_path.replace("events.json", "events_archive.json")
         with open(archive_path, "r", encoding="utf-8") as f:
             data_archive = json.load(f)
             self.assertEqual(len(data_archive), 1)
-            self.assertEqual(data_archive[0]["slug"], "past-event-2025-01-01")
+            self.assertEqual(data_archive[0]["slug"], "20250101-past-event")
 
         # 7. REMOVE non-existent event (should fail safely)
         res_remove_fail = self.run_manager(
             "remove",
-            "--slug", "test-concert-2026-10-01"
+            "--slug", "20261001-test-concert"
         )
         self.assertNotEqual(res_remove_fail.returncode, 0)
         self.assertIn("could not be found", res_remove_fail.stderr)

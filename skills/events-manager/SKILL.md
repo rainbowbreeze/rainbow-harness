@@ -1,7 +1,7 @@
 ---
 name: events-manager
 description: Add, remove and query a list of events across different categories, like concerts, sports, social events, etc.
-version: 1.1.0
+version: 1.2.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -106,7 +106,7 @@ All events are stored as JSON datasets relative to the `${BRAIN_EVENTSDB_PATH}` 
 ```json
 [
   {
-    "slug": "event-title-2026-08-29",
+    "slug": "20260829-event-title",
     "titolo": "Event Title",
     "data_inizio": "YYYY-MM-DD",
     "data_fine": "YYYY-MM-DD",

@@ -8,10 +8,10 @@ from datetime import datetime
 import db_linter
 
 def generate_slug(title: str, start_date: str) -> str:
-    """Generate a kebab-case slug from title and start date."""
-    raw = f"{title}-{start_date}"
-    # Replace non-alphanumeric characters with hyphens, lowercase, and strip trailing hyphens
-    slug = re.sub(r'[^a-z0-9]+', '-', raw.lower()).strip('-')
+    """Generate a kebab-case slug from start date (YYYYMMDD) and title."""
+    date_formatted = start_date.replace("-", "")
+    title_slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
+    slug = f"{date_formatted}-{title_slug}"
     return slug
 
 def get_db_path(category: str) -> str:
