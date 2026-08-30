@@ -1,7 +1,7 @@
 ---
 name: todos-manager
 description: Manage a shared to-do list for the Yellow Family. Use this skill when the user asks to add, remove, update, or query to-dos.
-version: 1.0.0
+version: 1.1.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -9,9 +9,9 @@ metadata:
     tags: [productivity, task-management]
     category: rainbowskills
     config:
-      - key: BRAIN_TODOS_PATH
+      - key: BRAIN_TODOSDB_PATH
         description: "Path to store the to-do list files"
-        default: "/opt/data/BRAIN/todo-db"
+        default: "/opt/data/BRAIN/todos-db"
         prompt: "Where can I store the list of to-dos?"
 ---
 
@@ -85,9 +85,9 @@ ${SCRIPT_PATH} query --source "user-command"
 
 ## Supported Format
 
-All to-dos are stored as a JSON array relative to the `${BRAIN_TODOS_PATH}` environment variable.
+All to-dos are stored as a JSON array relative to the `${BRAIN_TODOSDB_PATH}` environment variable.
 
-- **Active File Pattern**: `${BRAIN_TODOS_PATH}/todos.json`
+- **Active File Pattern**: `${BRAIN_TODOSDB_PATH}/todos.json`
 - **Format**: JSON Array of Objects managed entirely by `scripts/todos_manager.py`.
 ```json
 [
