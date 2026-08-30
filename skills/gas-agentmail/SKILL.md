@@ -33,7 +33,7 @@ The `agentmail` Python SDK has specific attribute naming conventions (e.g., `fro
 ### Lettura Email
 Per visualizzare le ultime email ricevute:
 ```bash
-uv run --with agentmail scripts/mail_manager.py list --limit 10
+uv run --with agentmail scripts/mail_manager.py --api-key "${AGENTMAIL_GASTRONAUTI_API_KEY}" list --limit 10
 ```
 > [!IMPORTANT]
 > Il comando `list` restituisce solo un'anteprima (snippet) del testo. Per estrarre IBAN, tabelle prezzi o dettagli di eventi, usa SEMPRE `get-message` con l'ID specifico.
@@ -41,19 +41,19 @@ uv run --with agentmail scripts/mail_manager.py list --limit 10
 ### Lettura Singolo Messaggio
 Per visualizzare il contenuto completo di un messaggio (necessario per estrarre IBAN o tabelle):
 ```bash
-uv run --with agentmail scripts/mail_manager.py get-message --message_id "<ID_MESSAGGIO>"
+uv run --with agentmail scripts/mail_manager.py --api-key "${AGENTMAIL_GASTRONAUTI_API_KEY}" get-message --message_id "<ID_MESSAGGIO>"
 ```
 
 ### Invio Email
 Per inviare una nuova email a un fornitore o referente:
 ```bash
-uv run --with agentmail scripts/mail_manager.py send --to "email@esempio.com" --subject "Oggetto" --text "Corpo del messaggio"
+uv run --with agentmail scripts/mail_manager.py --api-key "${AGENTMAIL_GASTRONAUTI_API_KEY}" send --to "email@esempio.com" --subject "Oggetto" --text "Corpo del messaggio"
 ```
 
 ### Cancellazione Thread
 Per rimuovere un thread di email dopo che è stato processato:
 ```bash
-uv run --with agentmail scripts/mail_manager.py delete --thread_id "TH_..."
+uv run --with agentmail scripts/mail_manager.py --api-key "${AGENTMAIL_GASTRONAUTI_API_KEY}" delete --thread_id "TH_..."
 ```
 > [!NOTE]
 > Se `list` mostra più messaggi con lo stesso `thread_id` (una conversazione con più risposte), basta eseguire `delete` una sola volta su quel `thread_id` per eliminare l'intero scambio.

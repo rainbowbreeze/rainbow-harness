@@ -3,15 +3,14 @@ import sys
 import json
 from agentmail import AgentMail
 
-def get_client():
-    api_key = os.getenv("AGENTMAIL_GASTRONAUTI_API_KEY")
+def get_client(api_key):
     if not api_key:
-        print("Error: AGENTMAIL_GASTRONAUTI_API_KEY not found in environment.")
+        print("Error: API Key not provided.")
         sys.exit(1)
     return AgentMail(api_key=api_key)
 
-def list_messages(limit=10):
-    client = get_client()
+def list_messages(api_key, limit=10):
+    client = get_client(api_key)
     # Get the first inbox
     inboxes = client.inboxes.list().inboxes
     if not inboxes:
@@ -33,8 +32,8 @@ def list_messages(limit=10):
         })
     print(json.dumps(output, indent=2))
 
-def get_message(message_id):
-    client = get_client()
+def get_message(api_key, message_id):
+    client = get_client(api_key)
     inboxes = client.inboxes.list().inboxes
     if not inboxes:
         print("No inboxes found.")
@@ -51,8 +50,8 @@ def get_message(message_id):
     }
     print(json.dumps(output, indent=2))
 
-def send_message(to, subject, text):
-    client = get_client()
+def send_message(api_key, to, subject, text):
+    client = get_client(api_key)
     inboxes = client.inboxes.list().inboxes
     if not inboxes:
         print("No inboxes found.")
@@ -67,8 +66,8 @@ def send_message(to, subject, text):
     )
     print(f"Message sent. ID: {res.message_id}")
 
-def delete_thread(thread_id):
-    client = get_client()
+def delete_thread(api_key, thread_id):
+    client = get_client(api_key)
     inboxes = client.inboxes.list().inboxes
     if not inboxes:
         return
@@ -83,8 +82,8 @@ def delete_thread(thread_id):
     except Exception as e:
         print(f"Delete failed: {e}")
 
-def delete_message(message_id):
-    client = get_client()
+def delete_message(api_key, message_id):
+    client = get_client(api_key)
     inboxes = client.inboxes.list().inboxes
     if not inboxes:
         return
@@ -98,6 +97,7 @@ def delete_message(message_id):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
+    parser.add_argument("--api-key", required=True, help="AgentMail API Key")
     subparsers = parser.add_subparsers(dest="command")
     
     subparsers.add_parser("list").add_argument("--limit", type=int, default=10)
@@ -119,12 +119,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.command == "list":
-        list_messages(args.limit)
+        list_messages(args.api_key, args.limit)
     elif args.command == "get-message":
-        get_message(args.message_id)
+        get_message(args.api_key, args.message_id)
     elif args.command == "send":
-        send_message(args.to, args.subject, args.text)
+        send_message(args.api_key, args.to, args.subject, args.text)
     elif args.command == "delete":
-        delete_thread(args.thread_id)
+        delete_thread(args.api_key, args.thread_id)
     elif args.command == "delete-message":
-        delete_message(args.message_id)
+        delete_message(args.api_key, args.message_id)
