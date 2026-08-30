@@ -59,5 +59,25 @@ When drafting the `SKILL.md` file instructions:
 - **Explicit Trigger Conditions:** Every `SKILL.md` must have a `## Trigger` or `## When to use` section clearly defining the exact phrasing or context in which the LLM should invoke the skill.
 - **Step-by-Step Determinism:** Complex operations must be broken down into numbered lists (e.g., 1. Check Duplicates, 2. Fetch Data, 3. Write File). Agents perform much more reliably when instructions are numbered rather than written as paragraphs.
 
-## 8. How to Add New Rules in the Future
+## 8. Domain Consistency & Grouping
+When creating or modifying multiple skills that belong to the same logical domain, they must adhere to the registered categories, shared variables, and assets below:
+
+### Registered Categories
+Skills could be assigned to one of these valid categories in their frontmatter:
+- **`GAS`**: Skills managing the Gruppo Acquisto Solidale (`gas-agentmail`, `gas-process-updates`).
+
+### Common Environment Variables
+Skills within a specific group must tap into these registered environment variables:
+- **`GAS`**:
+  - `${BRAIN_ROOT_PATH}`: Root of the BRAIN knowledge base.
+  - `${AGENTMAIL_GASTRONAUTI_API_KEY}`: API key for the GAS mailbox.
+
+### Shared Assets & References
+Skills must reference the existing central assets for their group instead of creating redundant definitions:
+- **`GAS`** (Stored centrally in the `gas-process-updates` skill folder):
+  - `assets/template-fornitore.md` and `assets/template-membro.md`: Templates for entities.
+  - `references/brain-structure.md`: Detailed map of the GAS knowledge base.
+  - `${BRAIN_ROOT_PATH}/bulletin/`: Folder containing the daily bulletins.
+
+## 9. How to Add New Rules in the Future
 To add new rules that apply globally to all skills in this folder, simply edit this `AGENTS.md` file and append the new rule in the most appropriate section.
