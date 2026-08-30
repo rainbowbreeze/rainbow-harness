@@ -5,7 +5,7 @@ version: 1.2.0
 author: Rainbowbreeze
 metadata:
   hermes:
-    tags: [health, medical, tracker, reports, symptoms, referti, salute, analisi, sintomi, terapie, followups, medications]
+    tags: [health, medical, tracker, reports, symptoms, medications]
     category: health
     config:
       - key: BRAIN_HEALTHRECORDS_PATH
