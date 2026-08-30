@@ -1,0 +1,7 @@
+edit_id = patch-env-brain_todosdb
+filename = .env
+
+```
+# BRAIN Knowledge repository for todos-manager skill
+BRAIN_TODOSDB_PATH=/opt/data/BRAIN/todos-db
+```
