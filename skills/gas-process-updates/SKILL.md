@@ -1,7 +1,7 @@
 ---
 name: gas-process-updates
 description: Processa i nuovi aggiornamenti del GAS dalle email, aggiorna il BRAIN, elimina le email elaborate e genera un riepilogo. Usa questa skill per gestire comunicazioni e ordini del GAS.
-version: 1.1.2
+version: 1.2.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -82,7 +82,11 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
     - **CRITICO**: Controlla le scadenze usando `python3 scripts/order_manager.py check`. Prima di generare il report, esegui sempre l'archiviazione degli ordini passati con `python3 scripts/order_manager.py archive`. 
     - **NOTA**: Lo script `archive` sposta solo gli ordini con `Data Consegna` strettamente minore della data odierna. Se un'email conferma la consegna avvenuta **oggi**, devi spostare manualmente l'ordine da `correnti.json` a `storico.json` e aggiornare la scheda fornitore per riflettere lo stato nel report.
     - Se ci sono scadenze **OGGI**, mettile **in cima** al messaggio con emoji vistose (es. 🚨, 📅).
-    - Usa una **tabella Markdown** per riepilogare lo "Stato Ordini Correnti" (Fornitore, Stato, Referente, Scadenza).
+    - Non usare tabelle per lo "Stato Ordini Correnti". Usa invece **elenchi puntati raggruppati per stato**, mettendo PRIMA gli ordini aperti e POI quelli in attesa di consegna. Esempio:
+      🛒 **Aperti**
+      - Avicola (Luigi) - Scadenza: 05/09
+      📦 **In Attesa di Consegna**
+      - IRIS (Mario) - Scadenza: 01/09
 - **Contenuto**:
     - Riepilogo delle email processate ed eliminate.
     - Elenco delle modifiche effettuate ai file nel `BRAIN`. Usa `find ${BRAIN_ROOT_PATH} -mmin -[minuti_sessione]` per identificare rapidamente i file toccati.
