@@ -1,7 +1,7 @@
 ---
 name: gas-send-daily-updates
 description: Legge il bollettino giornaliero dal BRAIN e lo invia ai membri del GAS. Usa questa skill per distribuire le comunicazioni e le scadenze.
-version: 1.1.0
+version: 1.2.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -33,6 +33,7 @@ Usa questa skill durante il giorno (es. tramite cron job) per inviare il riepilo
    - **Destinatario**: `info@rainbowbreeze.it`
    - **Oggetto**: "Aggiornamenti GAS del [giorno] [Mese]" (es. "Aggiornamenti GAS del 20 Agosto").
    - **Corpo del messaggio**: Il contenuto del bollettino convertito in formato HTML.
+   - **Gestione Errori**: Se la skill `gas-agentmail` restituisce un errore durante l'invio, interrompi l'esecuzione e mostra un messaggio di errore esplicito.
 
 3. **Post-Invio**:
    - Lascia il file del bollettino inalterato nella sua posizione originale. Non cancellarlo o spostarlo.
