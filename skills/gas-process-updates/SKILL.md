@@ -105,7 +105,6 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
 - **Dettagli Email**: Il comando `list` di `mail_manager.py` fornisce solo snippet. Per estrarre informazioni precise (date, nomi, IBAN), usa sempre `get-message` con l'ID del messaggio.
 - **Email Informative**: Non ignorare le email di calendario o riunioni; estrai le date e inseriscile come "Promemoria" o "Scadenze" nel report finale prima di eliminare il thread.
 - **Python Path**: Use `python3` for execution of internal scripts (e.g. `order_manager.py`). For scripts with external dependencies like `agentmail`, use `uv run --with <package>` if they are missing from the venv.
-- **Environment Variables**: The `AGENTMAIL_GASTRONAUTI_API_KEY` must be exported before running the scripts (e.g. `export $(grep -v '^#' /opt/data/.env | xargs)`).
 - **Thread Deletion**: Ensure the `delete` command is used with the explicit flag `--thread_id <id>` (it is not a positional argument). Note that the current `mail_manager.py` wrapper handles permanent deletion without requiring an extra flag.
 - **Absolute Paths**: Utilize `${BRAIN_ROOT_PATH}/` for all file operations to ensure reliability.
 - **Tracking Modifiche**: Per riportare le modifiche al BRAIN, confronta lo stato attuale con quello all'inizio della sessione o usa `find ${BRAIN_ROOT_PATH} -mmin -[minuti_sessione]` come euristica.
