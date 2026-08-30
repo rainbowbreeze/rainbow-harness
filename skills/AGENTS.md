@@ -11,11 +11,14 @@ These controls must be done **only when explicitly requested by the user to "aud
 
 ## 2. Mandatory Frontmatter Metadata
 In addition to the standard format requirements, every skill created or validated in this directory MUST contain the following fields in its `SKILL.md` YAML frontmatter. These are strictly enforced and should not be altered during creation:
-- **`name`**: Name of the skill, a slug in camel-case with the same name of the directory which contains the SKILL.md file.
+- **`name`**: Name of the skill, a slug in kebab-case with the same name of the directory which contains the SKILL.md file.
 - **`description`**: A brief description of the capability, and when to use it (a clear trigger condition (e.g. "Use this skill when the user asks to add, query, or remove a social event").
 - **`author`**: Must be set to `Rainbowbreeze`.
 - **`license`**: Must be set to `MIT`.
-- **`version`**: The initial version of a skill must be explicitly set to `1.0.0`.
+- **`version`**: The initial version of a skill must be explicitly set to `1.0.0`. Subsequent updates must follow semantic versioning:
+  - **Patch Version (e.g., 1.1.0 -> 1.1.1)**: Increment the last number for minor textual updates or typo fixes in the skill instructions.
+  - **Minor Version (e.g., 1.1.0 -> 1.2.0)**: Increment the middle number when there is a change in the logic, workflow, or behavior of the skill.
+  - **Major Version (e.g., 1.2.0 -> 2.0.0)**: ONLY the user can decide to increment the major version (e.g., during a major refactor or complete logic overhaul). The agent must not increment the major version on its own.
 
 ## 3. New Skill Creation Process
 When a user asks to create a new skill, you must follow this process:
@@ -44,7 +47,7 @@ When writing or maintaining Python or shell scripts within the `scripts/` folder
 - **Dependency Management First:** All Python scripts must be executable using `uv run --with <package>` to ensure they run in isolated environments without requiring global dependency installation. Do not assume packages are globally available.
 - **Absolute Path Resolution:** Scripts must never use hardcoded absolute paths or rely on relative `../` paths for data storage. They must always read the storage location dynamically from the Environment Variables defined in the `SKILL.md` frontmatter (e.g., `os.environ.get("BRAIN_ROOT_PATH")`).
 - **Graceful Error Handling:** Scripts should never fail silently. If a script encounters an error (e.g., missing file, network timeout), it must print a clear, human-readable error message to `stderr` so the agent can read the error and explain the problem to the user.
-- **Standardized CLI Arguments:** All Python scripts should use a standard library like `argparse` with clear `--help` descriptions. Positional arguments should be avoided in favor of explicit flags (e.g., `--title`, `--url`) to prevent the LLM from passing arguments in the wrong order.
+- **Standardized CLI Arguments:** All Python scripts must use the standard library `argparse` with clear `--help` descriptions. Positional arguments should be avoided in favor of explicit flags (e.g., `--title`, `--url`) to prevent the LLM from passing arguments in the wrong order.
 
 ## 6. Screen Formatting & Output Rules
 When generating responses and interacting with the user on the screen:

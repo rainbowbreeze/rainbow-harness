@@ -1,7 +1,7 @@
 ---
 name: health-records
 description: "Management of the health record for family members: clinical picture, medical history, reports, medication reconciliation, and follow-ups."
-version: 1.2.0
+version: 1.2.1
 author: Rainbowbreeze
 metadata:
   hermes:
@@ -20,7 +20,7 @@ metadata:
 > [!IMPORTANT]
 > **Preserve Input & Document Language:**
 > Despite this `SKILL.md` file being written in English for system compatibility, **the content must be managed in the language of the user's input or the uploaded document**.
-> Specifically, if a document or report is in Italian, **all notes, headings, table summaries, and modifications to the files inside the `$BRAIN_HEALTHRECORDS_PATH` folder must be written in Italian** (e.g., *Quadro Clinico*, *Cronologia*, *Referto*, *Sintesi*, *Azione Richiesta*, *Scadenze e Promemoria*, *Farmaci Attivi*). Never force-translate Italian health reports or clinical notes into English when writing to disk.
+> Specifically, if a document or report is in Italian, **all notes, headings, table summaries, and modifications to the files inside the `${BRAIN_HEALTHRECORDS_PATH}` folder must be written in Italian** (e.g., *Quadro Clinico*, *Cronologia*, *Referto*, *Sintesi*, *Azione Richiesta*, *Scadenze e Promemoria*, *Farmaci Attivi*). Never force-translate Italian health reports or clinical notes into English when writing to disk.
 
 ## When to activate this skill
 Use this skill when the user provides medical information, lab reports (*referti di analisi*), photographic reports (*referti fotografici*), symptoms (*sintomi*), therapies/medications (*terapie*), follow-up schedules, or general health status updates (*salute*) for themselves or any family member.
@@ -29,7 +29,7 @@ Use this skill when the user provides medical information, lab reports (*referti
 
 ## 1. Family Member Alias & Relationship Resolution
 Before modifying any files, explicitly verify **which family member** the input pertains to:
-- **Canonical Folder Naming:** Every family member has a folder in lowercase hyphen-separated format: `$BRAIN_HEALTHRECORDS_PATH/<first-last-name>/` (e.g., `mario-rossi`).
+- **Canonical Folder Naming:** Every family member has a folder in lowercase hyphen-separated format: `${BRAIN_HEALTHRECORDS_PATH}/<first-last-name>/` (e.g., `mario-rossi`).
 - **Alias & Relationship Mapping:**
   - If the user refers to pronouns or relationships (e.g., *"my wife"*, *"my son Sofia"*, *"my lab results"*), map the entity to their canonical `<first-last-name>` directory.
   - **Ambiguity Rule:** If the subject is ambiguous or omitted (e.g., *"Add this blood pressure reading: 130/80"* when multiple family profiles exist), **ask the user for confirmation** before inserting or overwriting clinical data.
@@ -39,7 +39,7 @@ Before modifying any files, explicitly verify **which family member** the input 
 ## 2. BRAIN Project Structure
 Each family member's health dossier adheres to the following structure:
 ```text
-$BRAIN_HEALTHRECORDS_PATH/<first-last-name>/
+${BRAIN_HEALTHRECORDS_PATH}/<first-last-name>/
 ├── quadro_clinico.md                         <-- Current clinical snapshot, active/discontinued meds, follow-ups
 ├── cronologia.md                             <-- Sequential clinical diary (reverse chronological order)
 └── referti/                                  <-- Folder for physical documents, images, and structured summaries
@@ -53,7 +53,7 @@ $BRAIN_HEALTHRECORDS_PATH/<first-last-name>/
 
 > [!IMPORTANT]
 > **Language & Localization Rule:**
-> Although this skill specification (`SKILL.md`) is written in English for system consistency, **all dossier files, notes, summaries, and updates inside `$BRAIN_HEALTHRECORDS_PATH` must be managed in the language of the input document or user conversation**.
+> Although this skill specification (`SKILL.md`) is written in English for system consistency, **all dossier files, notes, summaries, and updates inside `${BRAIN_HEALTHRECORDS_PATH}` must be managed in the language of the input document or user conversation**.
 > For example, if a report is in Italian or the user speaks Italian, all content written to `quadro_clinico.md`, `cronologia.md`, and `referti/*.summary.md`—including headings, notes, lab summaries, and follow-up reminders—**must be written in Italian** (e.g., *Sintesi*, *Referto*, *Azione Richiesta*, *Scadenze e Promemoria*, *Farmaci Attivi*, *Farmaci Sospesi*). Never force-translate Italian health records or lab summaries into English.
 
 When processing a health update or uploaded document, execute the following steps sequentially:

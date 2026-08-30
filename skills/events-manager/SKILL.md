@@ -50,7 +50,7 @@ When called to add an event, the caller MUST provide the following parameters:
 
 Pass these parameters to the script's `add` command:
 ```bash
-$SCRIPT_PATH --category <event_category> add \
+${SCRIPT_PATH} --category <event_category> add \
     --title "Event Title" \
     --start-date "YYYY-MM-DD" \
     --end-date "YYYY-MM-DD" \
@@ -71,10 +71,10 @@ OR BOTH:
 Pass these parameters to the script's `remove` command:
 ```bash
 # Using slug:
-$SCRIPT_PATH --category <event_category> remove --slug "event-slug"
+${SCRIPT_PATH} --category <event_category> remove --slug "event-slug"
 
 # Using title and start date:
-$SCRIPT_PATH --category <event_category> remove --title "Event Title" --start-date "YYYY-MM-DD"
+${SCRIPT_PATH} --category <event_category> remove --title "Event Title" --start-date "YYYY-MM-DD"
 ```
 
 ### 3. Query the List of Events (`operation_mode: query`)
@@ -84,7 +84,7 @@ When called to query events, the caller MUST provide the following parameters:
 
 Pass these parameters to the script's `query` command. It will output a JSON array of all events that intersect or overlap with the range.
 ```bash
-$SCRIPT_PATH --category <event_category> query --start-date "YYYY-MM-DD" --end-date "YYYY-MM-DD"
+${SCRIPT_PATH} --category <event_category> query --start-date "YYYY-MM-DD" --end-date "YYYY-MM-DD"
 ```
 
 ### 4. Archive Events (`operation_mode: archive`)
@@ -93,7 +93,7 @@ When called to archive past events, the caller MUST provide the following parame
 
 Pass this parameter to the script's `archive` command. The script will find all events that ended before this date, remove them from the active file, and append them to the `events_archive.json` file.
 ```bash
-$SCRIPT_PATH --category <event_category> archive --before-date "YYYY-MM-DD"
+${SCRIPT_PATH} --category <event_category> archive --before-date "YYYY-MM-DD"
 ```
 
 ## Supported Format

@@ -30,12 +30,12 @@ When the user provides a quote/phrase in text or an image containing text, and i
    - If the original quote is in a language other than Italian, translate it into Italian.
    - **Exception:** If the user explicitly instructs to keep the sentence in the original language, do not translate it.
 3. **Deduplication**:
-   - Read `$BRAIN_APHORISMS_PATH/aphorisms.json`.
+   - Read `${BRAIN_APHORISMS_PATH}/aphorisms.json`.
    - Compare the extracted/translated text with existing entries in the JSON array using semantic/fuzzy matching.
    - If a duplicate is found (matching meaning/key words), provide a brief message stating it's a duplicate, show the existing duplicate phrase, and DO NOT add it. No further explanation is needed.
 4. **Image Handling (if applicable)**:
    - Generate a filename formatted as `YYYYMMDD-summary-of-the-aphorism.ext` (using the current date and a brief description of the quote).
-   - Move or copy the provided image to `$BRAIN_APHORISMS_PATH/sources/<filename>`.
+   - Move or copy the provided image to `${BRAIN_APHORISMS_PATH}/sources/<filename>`.
 5. **JSON Construction**:
    - Create a JSON object matching this schema:
      ```json
@@ -49,6 +49,6 @@ When the user provides a quote/phrase in text or an image containing text, and i
    - Omit `imagesrc` or `source` if they are not applicable.
 6. **Save**:
    - Append the new object to the array.
-   - Write the updated JSON back to `$BRAIN_APHORISMS_PATH/aphorisms.json`.
+   - Write the updated JSON back to `${BRAIN_APHORISMS_PATH}/aphorisms.json`.
 7. **Confirmation**:
    - Provide a very brief confirmation that the aphorism was added (e.g. "Frase aggiunta: "), and then the phrase. Do not display the parsed JSON data or explain the steps taken. Do not add comments or consideration on the added sentence.

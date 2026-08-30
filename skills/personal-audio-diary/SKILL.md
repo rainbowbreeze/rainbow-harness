@@ -1,7 +1,7 @@
 ---
 name: personal-audio-diary
 description: Use when processing, correcting, and formatting voice note transcriptions for user's personal diary. Helps handle raw transcription errors, structure monthly log entries, and maintain durable facts.
-version: 1.2.0
+version: 1.2.1
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -23,8 +23,8 @@ This skill guides the processing of Alfredo's personal diary, which is primarily
 ## When to Use
 - When Alfredo sends a voice message or raw transcribed text intended for his personal diary.
 - When Alfredo asks "Puoi processare queste note?" or similar "catch-up" requests without explicitly providing the content (implying the gateway has already transcribed them).
-- When reviewing, updating, or maintaining the personal diary directory structure under `$BRAIN_PERSONALDIARY_PATH/`.
-- When updating `$BRAIN_PERSONALDIARY_PATH/life_facts.md`.
+- When reviewing, updating, or maintaining the personal diary directory structure under `${BRAIN_PERSONALDIARY_PATH}/`.
+- When updating `${BRAIN_PERSONALDIARY_PATH}/life_facts.md`.
 
 ## Workflow & Guidelines
 
@@ -43,10 +43,10 @@ This skill guides the processing of Alfredo's personal diary, which is primarily
 
 ### 3. State Recovery (Handling catch-up requests)
 If the user asks to "process these notes" but no new notes are in the immediate turn:
-- **Check Gateway Logs**: Run `strings $HERMES_HOME/logs/gateway.log | grep "inbound message"` to identify recent timestamps of received messages.
+- **Check Gateway Logs**: Run `strings ${HERMES_HOME}/logs/gateway.log | grep "inbound message"` to identify recent timestamps of received messages.
 - **Search Sessions**: Use `session_search()` with recent queries or date-based terms to find transcribed voice notes that might have been received but not yet written to the logs (often due to mid-turn interruptions).
-- **Verify Files**: Cross-reference the found notes with the latest entries in `$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md` to ensure you don't create duplicates.
-- **Gateway Errors**: If voice notes fail to reach the agent, check `$HERMES_HOME/logs/gateway.log` for "unpack" errors. See [references/gateway-log-recovery.md](references/gateway-log-recovery.md) and [references/gateway-transcription-error-unpack.md](references/gateway-transcription-error-unpack.md).
+- **Verify Files**: Cross-reference the found notes with the latest entries in `${BRAIN_PERSONALDIARY_PATH}/logs/YYYY-MM.md` to ensure you don't create duplicates.
+- **Gateway Errors**: If voice notes fail to reach the agent, check `${HERMES_HOME}/logs/gateway.log` for "unpack" errors. See [references/gateway-log-recovery.md](references/gateway-log-recovery.md) and [references/gateway-transcription-error-unpack.md](references/gateway-transcription-error-unpack.md).
 
 ### 4. Phonetic Decoding of STT Anomalies
 Local STT transcription models frequently produce phonetic misspellings of names, places, and cultural references in Italian. You must actively cross-reference these anomalies:
@@ -79,12 +79,12 @@ Local STT transcription models frequently produce phonetic misspellings of names
 
 ### 5. Local Transcription Fallback (Plan B)
 If the gateway logs show "The user sent a message with no text content" or if no transcription is found in `session_search()` for a recent voice note:
-1. **Locate the Audio**: Check `$HERMES_HOME/audio_cache/` for the most recent `.ogg` file (`ls -ltr $HERMES_HOME/audio_cache/ | tail`).
+1. **Locate the Audio**: Check `${HERMES_HOME}/audio_cache/` for the most recent `.ogg` file (`ls -ltr ${HERMES_HOME}/audio_cache/ | tail`).
 2. **Local Inference**: Use `execute_code` to run `faster_whisper` (which is installed in the environment) on the file. Use `model_size="base"` for a balance of speed and accuracy.
 3. **Merge & Process**: Once the transcript is obtained, proceed with the standard polishing and logging workflow.
 
 ### 6. File Updates and Structure
-The personal diary lives in `$BRAIN_PERSONALDIARY_PATH/`. Every new entry requires:
+The personal diary lives in `${BRAIN_PERSONALDIARY_PATH}/`. Every new entry requires:
 
 #### Monthly Log (`logs/YYYY-MM.md`)
 Append the entry under the correct date. 
@@ -95,7 +95,7 @@ Append the entry under the correct date.
 3. **Midnight Boundary**: If system time is 00:00 - 04:00 AM, treat "oggi" or "stasera" as yesterday.
 4. **Ask User**: If ambiguity remains, stop and explicitly ask the user for the correct date *before* writing.
 
-**Standard Template for Log Entries (`$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md`):**
+**Standard Template for Log Entries (`${BRAIN_PERSONALDIARY_PATH}/logs/YYYY-MM.md`):**
 ```markdown
 ## [YYYY-MM-DD] [Optional Day of Week]
 
@@ -112,13 +112,13 @@ Append the entry under the correct date.
 If the user uploaded/attached an image, save it completely unmodified (no AI processing, no visual edits):
 - Inquire/extract the current date: `YYYYMMDD`.
 - Infer a short, hyphenated, descriptive name in Italian (e.g., `visita-reggia-di-venaria`, `cena-famiglia`) strictly from the accompanying transcription/text notes of that session—never use AI vision models on the image itself.
-- Rename and copy/move the image to `$BRAIN_PERSONALDIARY_PATH/images/YYYY/YYYYMMDD-nome-breve.ext` (where `YYYY` is the current year, maintaining the original extension).
+- Rename and copy/move the image to `${BRAIN_PERSONALDIARY_PATH}/images/YYYY/YYYYMMDD-nome-breve.ext` (where `YYYY` is the current year, maintaining the original extension).
 - Add a standard markdown link to the image in the monthly log under the entry (e.g., `![[Descrizione breve]](../images/YYYY/YYYYMMDD-nome-breve.ext)`).
 
 #### Life Facts (`life_facts.md`)
 Check if any *durable, long-term facts* emerged. Extract and append them. (Note: When adding facts here or to logs, **never** add anything to the LLM Wiki; they must remain strictly separate).
 
-**Standard Template for `$BRAIN_PERSONALDIARY_PATH/life_facts.md`:**
+**Standard Template for `${BRAIN_PERSONALDIARY_PATH}/life_facts.md`:**
 ```markdown
 # Personal Life Facts
 
@@ -137,9 +137,9 @@ Check if any *durable, long-term facts* emerged. Extract and append them. (Note:
 
 ### 7. Privacy & Test Session Cleanup (Hygiene)
 When Alfredo runs voice tests or requests a privacy-based cleanup of a session or test messages ("cancella le memorie", "non lasciare tracce", etc.), execute a thorough purge of all transient traces:
-- **Audio Cache:** Scan `$HERMES_HOME/audio_cache/` for any recently created `.ogg` files (e.g. within the hour or linked to the session) and delete them.
-- **Log Files:** Scan `$HERMES_HOME/logs/agent.log`, `$HERMES_HOME/logs/gateway.log`, and `$HERMES_HOME/logs/errors.log`. Replace any lines containing the active test `session_id` or exact transcript substrings of test messages with `[LOG ENTRY REDACTED FOR PRIVACY]`.
-- **Database Messages:** Open `$HERMES_HOME/state.db` using Python's `sqlite3` module. Locate the messages for the test session in the `messages` table and delete them (FTS search indexes will be automatically updated by SQLite triggers).
+- **Audio Cache:** Scan `${HERMES_HOME}/audio_cache/` for any recently created `.ogg` files (e.g. within the hour or linked to the session) and delete them.
+- **Log Files:** Scan `${HERMES_HOME}/logs/agent.log`, `${HERMES_HOME}/logs/gateway.log`, and `${HERMES_HOME}/logs/errors.log`. Replace any lines containing the active test `session_id` or exact transcript substrings of test messages with `[LOG ENTRY REDACTED FOR PRIVACY]`.
+- **Database Messages:** Open `${HERMES_HOME}/state.db` using Python's `sqlite3` module. Locate the messages for the test session in the `messages` table and delete them (FTS search indexes will be automatically updated by SQLite triggers).
 
 ### 8. Whisper Hallucinations (Silent/Low Audio)
 When the voice message is silent, contains only sighs, breathing, or background noise, the local Whisper model frequently hallucinates specific fixed Italian phrases:
@@ -163,5 +163,5 @@ Sometimes Alfredo might accidentally record a voice note on Discord, such as pre
 ## Verification Checklist
 - [ ] Resolved date and raw transcription included at the start of the response.
 - [ ] Polished Italian interpretation supplied.
-- [ ] Log entry appended to the correct `$BRAIN_PERSONALDIARY_PATH/logs/YYYY-MM.md` file following the template.
-- [ ] Durable facts extracted to `$BRAIN_PERSONALDIARY_PATH/life_facts.md` following the template (if applicable).
+- [ ] Log entry appended to the correct `${BRAIN_PERSONALDIARY_PATH}/logs/YYYY-MM.md` file following the template.
+- [ ] Durable facts extracted to `${BRAIN_PERSONALDIARY_PATH}/life_facts.md` following the template (if applicable).
