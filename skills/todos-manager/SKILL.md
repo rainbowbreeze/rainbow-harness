@@ -1,7 +1,7 @@
 ---
 name: todos-manager
 description: Manage a shared to-do list for the Yellow Family. Use this skill when the user asks to add, remove, update, or query to-dos.
-version: 1.1.0
+version: 1.2.0
 author: Rainbowbreeze
 license: MIT
 metadata:

@@ -55,10 +55,10 @@ def generate_slug(title: str, creation_date: str) -> str:
     return slug
 
 def get_db_path() -> str:
-    """Determine the database path based on the BRAIN_TODOS_PATH env var."""
-    base_path = os.environ.get("BRAIN_TODOS_PATH")
+    """Determine the database path based on the BRAIN_TODOSDB_PATH env var."""
+    base_path = os.environ.get("BRAIN_TODOSDB_PATH")
     if not base_path:
-        print("Error: BRAIN_TODOS_PATH environment variable is not set.", file=sys.stderr)
+        print("Error: BRAIN_TODOSDB_PATH environment variable is not set.", file=sys.stderr)
         sys.exit(1)
         
     return os.path.join(base_path, "todos.json")

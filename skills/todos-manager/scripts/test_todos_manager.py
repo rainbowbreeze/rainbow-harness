@@ -12,7 +12,7 @@ class TestTodosManager(unittest.TestCase):
         # Create an isolated temporary directory for the event database
         self.test_dir = tempfile.TemporaryDirectory()
         self.env = os.environ.copy()
-        self.env["BRAIN_TODOS_PATH"] = self.test_dir.name
+        self.env["BRAIN_TODOSDB_PATH"] = self.test_dir.name
         
         # Path to the target manager script
         self.script_path = os.path.join(os.path.dirname(__file__), "todos_manager.py")
