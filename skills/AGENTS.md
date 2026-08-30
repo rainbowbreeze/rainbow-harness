@@ -39,5 +39,22 @@ metadata:
         prompt: "Where can I store the medical health records of your family?"
 ```
 
-## 5. How to Add New Rules in the Future
+## 5. Scripting & Code Quality Rules
+When writing or maintaining Python or shell scripts within the `scripts/` folder of any skill:
+- **Dependency Management First:** All Python scripts must be executable using `uv run --with <package>` to ensure they run in isolated environments without requiring global dependency installation. Do not assume packages are globally available.
+- **Absolute Path Resolution:** Scripts must never use hardcoded absolute paths or rely on relative `../` paths for data storage. They must always read the storage location dynamically from the Environment Variables defined in the `SKILL.md` frontmatter (e.g., `os.environ.get("BRAIN_ROOT_PATH")`).
+- **Graceful Error Handling:** Scripts should never fail silently. If a script encounters an error (e.g., missing file, network timeout), it must print a clear, human-readable error message to `stderr` so the agent can read the error and explain the problem to the user.
+- **Standardized CLI Arguments:** All Python scripts should use a standard library like `argparse` with clear `--help` descriptions. Positional arguments should be avoided in favor of explicit flags (e.g., `--title`, `--url`) to prevent the LLM from passing arguments in the wrong order.
+
+## 6. Screen Formatting & Output Rules
+When generating responses and interacting with the user on the screen:
+- **Anti-Spam Link Previews:** Whenever an agent outputs a URL to a chat platform (like Discord or Slack), it MUST wrap the URL in angle brackets (e.g., `<https://example.com>`). This suppresses massive, unwanted link previews that clutter the screen.
+- **The "Silent Cron" Rule:** If a skill is designed to run automatically (like a daily digest or fetcher) and it finds no new data, the agent MUST output exactly `[SILENT]` and nothing else. This prevents the agent from sending empty "I found nothing today!" messages to the user every day.
+
+## 7. Prompt & Instruction Writing
+When drafting the `SKILL.md` file instructions:
+- **Explicit Trigger Conditions:** Every `SKILL.md` must have a `## Trigger` or `## When to use` section clearly defining the exact phrasing or context in which the LLM should invoke the skill.
+- **Step-by-Step Determinism:** Complex operations must be broken down into numbered lists (e.g., 1. Check Duplicates, 2. Fetch Data, 3. Write File). Agents perform much more reliably when instructions are numbered rather than written as paragraphs.
+
+## 8. How to Add New Rules in the Future
 To add new rules that apply globally to all skills in this folder, simply edit this `AGENTS.md` file and append the new rule in the most appropriate section.
