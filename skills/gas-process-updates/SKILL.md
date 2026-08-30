@@ -1,6 +1,6 @@
 ---
 name: gas-process-updates
-description: Processa i nuovi aggiornamenti del GAS dalle email, aggiorna il BRAIN, elimina le email elaborate e invia un riepilogo. Usa questa skill per gestire comunicazioni e ordini del GAS.
+description: Processa i nuovi aggiornamenti del GAS dalle email, aggiorna il BRAIN, elimina le email elaborate e genera un riepilogo. Usa questa skill per gestire comunicazioni e ordini del GAS.
 version: 1.1.2
 author: Rainbowbreeze
 license: MIT
@@ -88,6 +88,10 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
     - Elenco delle modifiche effettuate ai file nel `BRAIN`. Usa `find ${BRAIN_ROOT_PATH} -mmin -[minuti_sessione]` per identificare rapidamente i file toccati.
     - **Stato Ordini**: Elenca sempre tutti gli ordini presenti in `BRAIN/ordini/correnti.json` con relativo stato e referenti.
     - **Feedback Post-Consegna**: Se un ordine è appena stato consegnato (oggi o ieri), controlla se ci sono nuove informazioni sui pagamenti o problemi nelle email e aggiorna sia la scheda fornitore che `storico.json`.
+- **Creazione Bulletin**:
+    - Oltre al report generale, genera una versione "pubblica" del report che includa SOLO scadenze, stato ordini e comunicazioni (escludendo il riepilogo delle email eliminate e dei file modificati).
+    - Aggiungi (append) questo report pubblico in coda al file `${BRAIN_ROOT_PATH}/bulletin/YYYY-MM-DD-bulletin.md` (es. `2026-08-30-bulletin.md`).
+    - Crea la cartella `bulletin` e il file se non esistono. Se il file esiste già per la giornata odierna, separa i nuovi aggiornamenti con una linea orizzontale (`---`).
 - **Delivery (Cron)**: Se la skill determina che non c'è nulla da segnalare (nessun aggiornamento e nessun ordine corrente), rispondi esattamente con `[SILENT]`. L'agente chiamante deve rispettare questo segnale e non produrre output.
 
 ### 4. Eliminazione Email Elaborate

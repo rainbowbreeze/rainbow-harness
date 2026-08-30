@@ -10,6 +10,8 @@ The `BRAIN/` directory is the central source of truth for the GAS. All paths mus
 - `${BRAIN_ROOT_PATH}/ordini/`:
   - `correnti.json`: Active orders (Open, Waiting for Delivery, Problems).
   - `storico.json`: Archived list of all past orders.
+- `${BRAIN_ROOT_PATH}/bulletin/`:
+  - `YYYY-MM-DD-bulletin.md`: Daily public-facing bulletins containing order status and news, without internal AI operational details.
 
 ## Update Rules
 1. **Suppliers**: Updates based on email feedback (quality, logistics).
