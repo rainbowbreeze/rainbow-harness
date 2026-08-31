@@ -35,11 +35,11 @@ Example of how to declare variables:
 ```yaml
 metadata:
   hermes:
-    config:
-      - key: BRAIN_HEALTHRECORDS_PATH
-        description: "Path to store the health records files"
-        default: "/opt/data/BRAIN/fascicolo-sanitario"
-        prompt: "Where can I store the medical health records of your family?"
+required_environment_variables:
+  - name: BRAIN_HEALTHRECORDS_PATH
+    prompt: Where can I store the medical health records of your family?
+    help: Path to store the health records files
+    required_for: full functionality
 ```
 
 ## 5. Scripting & Code Quality Rules
