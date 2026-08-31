@@ -65,12 +65,15 @@ When creating or modifying multiple skills that belong to the same logical domai
 ### Registered Categories
 Skills could be assigned to one of these valid categories in their frontmatter:
 - **`GAS`**: Skills managing the Gruppo Acquisto Solidale (`gas-agentmail`, `gas-process-updates`).
+- **`yellowfamily`**: Skills managing the Yellow Family domain.
 
 ### Common Environment Variables
 Skills within a specific group must tap into these registered environment variables:
 - **`GAS`**:
   - `${BRAIN_ROOT_PATH}`: Root of the BRAIN knowledge base.
   - `${AGENTMAIL_GASTRONAUTI_API_KEY}`: API key for the GAS mailbox.
+- **`yellowfamily`**:
+  - `${YELLOWFAMILY_CALENDAR_ID}`: Calendar ID for Yellow Family events.
 
 ### Shared Assets & References
 Skills must reference the existing central assets for their group instead of creating redundant definitions:
