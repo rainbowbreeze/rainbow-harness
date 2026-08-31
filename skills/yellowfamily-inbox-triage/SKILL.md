@@ -1,16 +1,18 @@
 ---
 name: yellowfamily-inbox-triage
 description: "Scans YellowFamily emails to distinguish between appointments (calendar events) and tasks (TODOs). Trigger this skill when the user asks to triage, check, or process the family emails or inbox."
-version: 1.1.0
+version: 1.1.1
 author: Rainbowbreeze
 license: MIT
 metadata:
   hermes:
     tags: [google-gmail, reminders, calendar, archiving, autonomous, automation]
-    config:
-      - key: YELLOWFAMILY_CALENDAR_ID
-        description: "Google Calendar ID for the Yellow Family"
-        prompt: "What is the Calendar ID for the Yellow Family?"
+    category: yellowfamily
+required_environment_variables:
+  - name: YELLOWFAMILY_CALENDAR_ID
+    prompt: What is the Calendar ID for the Yellow Family?
+    help: Google Calendar ID for the Yellow Family
+    required_for: full functionality
 ---
 
 # YellowFamily Inbox Triage

@@ -1,18 +1,18 @@
 ---
 name: gas-send-daily-updates
 description: Legge il bollettino giornaliero dal BRAIN e lo invia ai membri del GAS. Usa questa skill per distribuire le comunicazioni e le scadenze.
-version: 1.3.0
+version: 1.3.1
 author: Rainbowbreeze
 license: MIT
 metadata:
   hermes:
     tags: ["GAS", "gruppo acquisto solidale", "communications"]
     category: GAS
-    config:
-      - key: BRAIN_ROOT_PATH
-        description: "Path to the BRAIN knowledge base directory"
-        default: "/opt/data/BRAIN"
-        prompt: "Where is the root of the BRAIN knowledge base?"
+required_environment_variables:
+  - name: BRAIN_ROOT_PATH
+    prompt: Where is the root of the BRAIN knowledge base?
+    help: Path to the BRAIN knowledge base directory
+    required_for: full functionality
 ---
 
 # 📤 Send GAS Daily Updates

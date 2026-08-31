@@ -1,18 +1,18 @@
 ---
 name: gas-agentmail
 description: "Gestione email per il GAS GAStronauti tramite AgentMail. Permette di leggere, inviare e cancellare email dalla casella gastronauti@agentmail.to."
-version: 1.0.0
+version: 1.0.1
 license: MIT
 author: Rainbowbreeze
 metadata:
   hermes:
     tags: ["GAS", "gruppo acquisto solidale", "community management", "email", "agentmail.to"]
     category: GAS
-    config:
-      - key: AGENTMAIL_GASTRONAUTI_API_KEY
-        description: "API KEY per gestire la casella di posta dei GAStronauti"
-        default: "ADD_ME"
-        prompt: "Qual'è la API KEY per accedere alla casella di posta su agentmail?"
+required_environment_variables:
+  - name: AGENTMAIL_GASTRONAUTI_API_KEY
+    prompt: "Qual'è la API KEY per accedere alla casella di posta su agentmail?"
+    help: "API KEY per gestire la casella di posta dei GAStronauti"
+    required_for: full functionality
 ---
 
 # AgentMail GAStronauti

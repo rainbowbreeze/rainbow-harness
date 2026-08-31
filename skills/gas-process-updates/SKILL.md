@@ -1,18 +1,18 @@
 ---
 name: gas-process-updates
 description: Processa i nuovi aggiornamenti del GAS dalle email, aggiorna il BRAIN, elimina le email elaborate e genera un riepilogo. Usa questa skill per gestire comunicazioni e ordini del GAS.
-version: 1.2.0
+version: 1.2.1
 author: Rainbowbreeze
 license: MIT
 metadata:
   hermes:
     tags: ["GAS", "gruppo acquisto solidale", "community management"]
     category: GAS
-    config:
-      - key: BRAIN_ROOT_PATH
-        description: "Path to the BRAIN knowledge base directory"
-        default: "/opt/data/BRAIN"
-        prompt: "Where is the root of the BRAIN knowledge base?"
+required_environment_variables:
+  - name: BRAIN_ROOT_PATH
+    prompt: Where is the root of the BRAIN knowledge base?
+    help: Path to the BRAIN knowledge base directory
+    required_for: full functionality
 ---
 
 # 🔄 Process GAS Updates

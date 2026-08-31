@@ -1,18 +1,18 @@
 ---
 name: todos-manager
 description: Manage a shared to-do list for the Yellow Family. Use this skill when the user asks to add, remove, update, or query to-dos.
-version: 1.2.0
+version: 1.2.1
 author: Rainbowbreeze
 license: MIT
 metadata:
   hermes:
     tags: [productivity, task-management]
-    category: rainbowskills
-    config:
-      - key: BRAIN_TODOSDB_PATH
-        description: "Path to store the to-do list files"
-        default: "/opt/data/BRAIN/todos-db"
-        prompt: "Where can I store the list of to-dos?"
+    category: productivity
+required_environment_variables:
+  - name: BRAIN_TODOSDB_PATH
+    prompt: Where can I store the list of to-dos?
+    help: Path to store the to-do list files
+    required_for: full functionality
 ---
 
 # Todos Manager

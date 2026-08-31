@@ -1,8 +1,9 @@
 ---
 name: aphorism-tracker
 description: Use to save text/image quotes or aphorisms to the BRAIN.
-version: 1.1.0
+version: 1.1.1
 author: Rainbowbreeze
+license: MIT
 metadata:
   hermes:
     tags: [aphorisms, wisdom]

@@ -4,15 +4,15 @@ description: "Generates the daily agenda for the YellowFamily, consolidating cal
 version: 1.1.0
 author: Rainbowbreeze
 license: MIT
-category: yellowfamily
 metadata:
   hermes:
     tags: [yellowfamily, agenda, calendar, todo]
-    config:
-      - key: YELLOWFAMILY_CALENDAR_ID
-        description: "Calendar ID for Yellow Family events"
-        default: "ADD_ME"
-        prompt: "What is the Calendar ID for the Yellow Family?"
+    category: yellowfamily
+required_environment_variables:
+  - name: YELLOWFAMILY_CALENDAR_ID
+    prompt: What is the Calendar ID for the Yellow Family?
+    help: Google Calendar ID for the Yellow Family
+    required_for: full functionality
 ---
 
 # YellowFamily Agenda Generation
