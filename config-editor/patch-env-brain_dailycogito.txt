@@ -1,0 +1,7 @@
+edit_id = patch-env-brain_dailycogito
+filename = .env
+
+```
+# BRAIN Knowledge repository for wisdom tracker skills
+BRAIN_WISDOMDB_PATH=/opt/data/BRAIN/daily-cogito
+```

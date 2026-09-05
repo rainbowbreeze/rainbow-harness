@@ -44,7 +44,7 @@ def main():
     Provides functionality to add new thoughts or retrieve a random one.
     """
     parser = argparse.ArgumentParser(description="Manage the Daily Cogito thoughts archive.")
-    parser.add_argument('--action', required=True, choices=['add', 'random'], help="Action to perform.")
+    parser.add_argument('--action', required=True, choices=['add', 'random', 'check'], help="Action to perform.")
     parser.add_argument('--body', type=str, help="Body of the thought (required for 'add' action).")
     parser.add_argument('--url', type=str, default="", help="Source URL of the thought (optional for 'add' action).")
     
@@ -77,6 +77,18 @@ def main():
         print(f"Body:\n{thought.get('body', '')}\n")
         if thought.get('url'):
             print(f"URL: {thought.get('url')}")
+
+    elif args.action == 'check':
+        if not args.url:
+            print("Error: --url is required when action is 'check'.", file=sys.stderr)
+            sys.exit(1)
+            
+        archive = load_archive(archive_path)
+        for thought in archive:
+            if thought.get('url') == args.url:
+                print("EXISTS")
+                return
+        print("NOT_FOUND")
 
 if __name__ == '__main__':
     main()

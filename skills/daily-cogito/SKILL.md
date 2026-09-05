@@ -3,7 +3,7 @@ name: daily-cogito
 description: "Use this skill when the user wants to extract wisdom or add a new thought (from a text snippet or a YouTube video) to their archive, or when they ask to retrieve a random thought or wisdom from the archive."
 author: Rainbowbreeze
 license: MIT
-version: 1.0.1
+version: 1.0.3
 metadata:
   hermes:
     required_environment_variables:
@@ -25,14 +25,15 @@ Use this skill when:
 - The user asks to retrieve a random thought.
 
 ## Workflow for Adding a YouTube Video
-1. **Summarize Video**: Delegate the summarization of the video to the existing video summarization skill. Instruct it to extract exactly five key topics and any aphorisms or quotes from philosophers or authors.
-2. **Present for Review**: Present the returned summarization to the user.
-3. **Ask for Confirmation**: Ask the user for confirmation to store it, whether they want to cancel the operation, or if they have any changes to the content before storing it. Wait for the user's reply.
-4. **Store Thought**: Once approved or modified by the user, execute `scripts/manage_archive.py` using `uv run python scripts/manage_archive.py --action add --body "<FINALIZED_BODY>" --url "<VIDEO_URL>"`. Ensure that environment variable `${BRAIN_WISDOMDB_PATH}` is available.
-5. **Confirm Success**: Confirm success to the user.
+1. **Check if Already Added**: First, check if the video has already been added to the archive by running `uv run python scripts/manage_archive.py --action check --url "<VIDEO_URL>"`. If the script returns `EXISTS`, inform the user that the video is already in the archive and abort the workflow. If it returns `NOT_FOUND`, proceed to the next step.
+2. **Summarize Video**: Delegate the summarization of the video to the existing video summarization skill. Instruct it to extract exactly five key topics and any aphorisms or quotes from philosophers or authors. Ensure the summary is detailed, but not extremely detailed.
+3. **Present for Review**: Present the returned summarization to the user.
+4. **Ask for Confirmation**: Ask the user for confirmation to store it, whether they want to cancel the operation, or if they have any changes to the content before storing it. Wait for the user's reply.
+5. **Store Thought**: Once approved or modified by the user, execute `scripts/manage_archive.py` using `uv run python scripts/manage_archive.py --action add --body "<FINALIZED_BODY>" --url "<VIDEO_URL>"`. Ensure that environment variable `${BRAIN_WISDOMDB_PATH}` is available.
+6. **Confirm Success**: Confirm success to the user.
 
 ## Workflow for Adding Text
-1. **Summarize Text**: Analyze the provided text and summarize it into exactly five key topics.
+1. **Summarize Text**: Analyze the provided text and summarize it into exactly five key topics. Ensure the summary is detailed, but not extremely detailed.
 2. **Extract Quotes**: Extract any aphorisms or quotes and list them below the key topics.
 3. **Present for Review**: Present the summarization to the user.
 4. **Ask for Confirmation**: Ask the user for confirmation to store it, whether they want to cancel the operation, or if they have any changes to the content before storing it. Wait for the user's reply.
