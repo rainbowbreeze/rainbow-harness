@@ -3,7 +3,7 @@ name: daily-cogito
 description: "Use this skill when the user wants to extract wisdom or add a new thought (from a text snippet or a YouTube video) to their archive, or when they ask to retrieve a random thought or wisdom from the archive."
 author: Rainbowbreeze
 license: MIT
-version: 1.0.3
+version: 1.0.4
 metadata:
   hermes:
     required_environment_variables:
@@ -42,4 +42,4 @@ Use this skill when:
 
 ## Workflow for Retrieving a Random Thought
 1. **Retrieve Thought**: Execute `scripts/manage_archive.py` using `uv run python scripts/manage_archive.py --action random`. Ensure that environment variable `${BRAIN_WISDOMDB_PATH}` is available.
-2. **Present Thought**: Display the retrieved thought to the user (excluding the submission date). Ensure to include the source URL if present.
+2. **Present Thought**: Display the retrieved thought to the user (excluding the submission date). Ensure to include the source URL if present, wrapping it in angle brackets (e.g., `<URL>`) to prevent chat clients from generating link previews.
