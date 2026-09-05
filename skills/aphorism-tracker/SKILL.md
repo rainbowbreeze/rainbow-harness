@@ -1,7 +1,7 @@
 ---
 name: aphorism-tracker
-description: Use to save text/image quotes or aphorisms to the BRAIN.
-version: 1.1.1
+description: Use to save or retrieve text/image quotes or aphorisms to the BRAIN.
+version: 1.2.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -19,8 +19,9 @@ required_environment_variables:
 
 Use this skill to process and save phrases, quotes, and aphorisms provided by the user.
 
-## 1. Trigger
-When the user provides a quote/phrase in text or an image containing text, and indicates it should be saved or tracked.
+## 1. Triggers
+- **Save a quote:** When the user provides a quote/phrase in text or an image containing text, and indicates it should be saved or tracked.
+- **Retrieve a random quote:** When the user asks for a random quote, aphorism, or phrase.
 
 ## 2. Processing Steps
 1. **Extraction**: 
@@ -53,3 +54,9 @@ When the user provides a quote/phrase in text or an image containing text, and i
    - Write the updated JSON back to `${BRAIN_APHORISMS_PATH}/aphorisms.json`.
 7. **Confirmation**:
    - Provide a very brief confirmation that the aphorism was added (e.g. "Frase aggiunta: "), and then the phrase. Do not display the parsed JSON data or explain the steps taken. Do not add comments or consideration on the added sentence.
+
+## 3. Retrieving a Random Aphorism
+When the user asks for a random aphorism:
+1. Execute the script `scripts/get_random_aphorism.py` using `uv run` and pass the path to the aphorisms JSON file using the `--file` argument: 
+   `uv run scripts/get_random_aphorism.py --file ${BRAIN_APHORISMS_PATH}/aphorisms.json`.
+2. Display the returned formatted text to the user exactly as it is outputted by the script. Do not add extra commentary.
