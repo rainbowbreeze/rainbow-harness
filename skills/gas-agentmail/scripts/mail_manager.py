@@ -50,7 +50,7 @@ def get_message(api_key, message_id):
     }
     print(json.dumps(output, indent=2))
 
-def send_message(api_key, to, subject, text):
+def send_message(api_key, to, subject, text=None, html=None):
     client = get_client(api_key)
     inboxes = client.inboxes.list().inboxes
     if not inboxes:
@@ -58,11 +58,19 @@ def send_message(api_key, to, subject, text):
         return
     
     inbox_id = inboxes[0].inbox_id
+    
+    kwargs = {
+        "to": to,
+        "subject": subject
+    }
+    if text:
+        kwargs["text"] = text
+    if html:
+        kwargs["html"] = html
+        
     res = client.inboxes.messages.send(
         inbox_id,
-        to=to,
-        subject=subject,
-        text=text
+        **kwargs
     )
     print(f"Message sent. ID: {res.message_id}")
 
@@ -108,7 +116,8 @@ if __name__ == "__main__":
     send_p = subparsers.add_parser("send")
     send_p.add_argument("--to", required=True)
     send_p.add_argument("--subject", required=True)
-    send_p.add_argument("--text", required=True)
+    send_p.add_argument("--text", required=False)
+    send_p.add_argument("--html", required=False)
     
     del_p = subparsers.add_parser("delete")
     del_p.add_argument("--thread_id", required=True)
@@ -123,7 +132,7 @@ if __name__ == "__main__":
     elif args.command == "get-message":
         get_message(args.api_key, args.message_id)
     elif args.command == "send":
-        send_message(args.api_key, args.to, args.subject, args.text)
+        send_message(args.api_key, args.to, args.subject, text=args.text, html=args.html)
     elif args.command == "delete":
         delete_thread(args.api_key, args.thread_id)
     elif args.command == "delete-message":

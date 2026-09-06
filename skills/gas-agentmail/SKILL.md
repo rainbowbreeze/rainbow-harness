@@ -1,7 +1,7 @@
 ---
 name: gas-agentmail
 description: "Gestione email per il GAS GAStronauti tramite AgentMail. Permette di leggere, inviare e cancellare email dalla casella gastronauti@agentmail.to."
-version: 1.0.1
+version: 1.1
 license: MIT
 author: Rainbowbreeze
 metadata:
@@ -45,9 +45,13 @@ uv run --with agentmail scripts/mail_manager.py --api-key "${AGENTMAIL_GASTRONAU
 ```
 
 ### Invio Email
-Per inviare una nuova email a un fornitore o referente:
+Per inviare una nuova email a un fornitore o referente in formato testo:
 ```bash
 uv run --with agentmail scripts/mail_manager.py --api-key "${AGENTMAIL_GASTRONAUTI_API_KEY}" send --to "email@esempio.com" --subject "Oggetto" --text "Corpo del messaggio"
+```
+Per inviare un'email in formato HTML (utile per tabelle, link e formattazione avanzata), usa `--html` invece di `--text`:
+```bash
+uv run --with agentmail scripts/mail_manager.py --api-key "${AGENTMAIL_GASTRONAUTI_API_KEY}" send --to "email@esempio.com" --subject "Oggetto" --html "<h1>Titolo</h1><p>Corpo del messaggio html</p>"
 ```
 
 ### Cancellazione Thread
