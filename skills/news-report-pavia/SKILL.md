@@ -1,7 +1,7 @@
 ---
 name: news-report-pavia
 description: Generates a structured daily report in Italian about Pavia city and its province using specific sources.
-version: 1.2.0
+version: 1.3.0
 author: Rainbowbreeze
 metadata:
   hermes:
@@ -21,7 +21,8 @@ This skill automates the generation of a daily report in Italian covering local 
 ## Core Execution Workflow
 
 1. **Information Gathering - News (Last 24h)**:
-   - **Primary Method**: Run the included Python script `scripts/parse_rss.py` via the terminal. This script will automatically process all RSS-enabled sources from `assets/news-sources.json` and output articles from the last 24 hours in JSON format. For the remaining sources in the JSON file that do *not* have an RSS feed, you must directly use web scraping (`web_extract` or `web_search`).
+   - **Primary Method**: Run the included Python script `scripts/parse_rss.py` via the terminal. This script will automatically process all RSS-enabled sources from `assets/news-sources.json` and output a list of articles from the last 24 hours in JSON format. For the remaining sources in the JSON file that do *not* have an RSS feed, you must directly use web scraping (`web_extract` or `web_search`).
+   - **Summarization**: Do NOT rely solely on the short description provided by the RSS feed. For each valid news article you intend to include in the report, you MUST use the `web_extract` tool on the article's URL to fetch the full text, read it, and use that full content to write your summary.
    - **Primary Focus**: Pavia city.
    - **Volume Limits**: Minimum 10 news items. Maximum 3 items related to the wider province.
    - **Exclusions**: Do NOT include commercial, advertising, crime news, or sports news.
