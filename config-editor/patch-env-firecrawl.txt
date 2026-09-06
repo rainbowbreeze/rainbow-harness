@@ -1,0 +1,9 @@
+edit_id = patch-env-firecrawl
+filename = .env
+
+```
+# Web_extract tool with Firecrawl
+FIRECRAWL_API_URL=http://firecrawl:3002
+# Session TTL in seconds (default: 300)
+FIRECRAWL_BROWSER_TTL=600
+```
