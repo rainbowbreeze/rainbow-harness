@@ -2,18 +2,17 @@
 
 > **Target:** Autonomous AI agents initializing or upgrading a local Markdown knowledge base.
 
-## 0. Prerequisites
-- **Bun**: The JavaScript runtime `bun` MUST be installed and available in your environment's PATH to execute the knowledge base maintenance and validation scripts.
-
 ## 0. Architectural Invariants
 1. **Execution Plane (`${WORKSPACE_ROOT}`)**: Where the agent runs (`${HERMES_HOME}` or `pwd`). Contains `skills/` and configs. **Never** dump knowledge files here.
 2. **Data Plane (`${BRAIN_PATH}`)**: Where knowledge entities live. **MUST NOT EQUAL** `${WORKSPACE_ROOT}`.
+3. **Bun**: The JavaScript runtime `bun` MUST be installed and available in your environment's PATH to execute the knowledge base maintenance and validation scripts.
 
 ---
 
 ## 1. Version Pre-Flight (Mandatory)
 
 ### 1.1 Path Resolution
+> **Agent Execution Rule:** Execute the following bash block. If the script exits with an error code (e.g., `exit 1`), you MUST HALT IMMEDIATELY. Do not proceed to Phase 1.2. Report the error to the operator.
 ```bash
 WORKSPACE_ROOT="${HERMES_HOME:-$(pwd)}"
 if [ -z "${BRAIN_PATH:-}" ]; then
