@@ -13,7 +13,7 @@ A configuration utility to safely apply patches and edit configuration files to 
 ### `rainbow-llm-wiki`
 The core blueprints and installation scripts for an agent knowledge base management tool, following the llm-wiki approach.
 
-To install, tell the agent
+To install or update, tell the agent
 ```
 Read and execute the instructions at https://github.com/rainbowbreeze/rainbow-harness/raw/refs/heads/main/rainbow-llm-wiki/INSTALL_FOR_AGENTS.md to install, or update, the wiki 
 ```

@@ -48,6 +48,7 @@ VERSION_CMP="$(bun -e '
 
 echo "--- PRE-FLIGHT RESULTS ---"
 echo "INSTALLED_VERSION=$INSTALLED_VERSION | UPSTREAM_VERSION=$UPSTREAM_VERSION | VERSION_CMP=$VERSION_CMP"
+echo "WORKSPACE_ROOT=${WORKSPACE_ROOT} | BRAIN_PATH=${BRAIN_PATH}"
 ```
 
 **Agent Decision Logic (based on `VERSION_CMP`):**
@@ -57,7 +58,10 @@ echo "INSTALLED_VERSION=$INSTALLED_VERSION | UPSTREAM_VERSION=$UPSTREAM_VERSION 
 - **Ahead** (`-1`): **ABORT** (downgrade prevented).
 
 ### 1.3 Confirmation
-Ask operator: *"Ready for [Install/Upgrade] to v$UPSTREAM_VERSION at ${BRAIN_PATH}?"* (Wait for approval).
+Ask operator: *"Ready for [Install/Upgrade] to v$UPSTREAM_VERSION?
+- Workspace: ${WORKSPACE_ROOT}
+- Brain Path: ${BRAIN_PATH}"*
+(Wait for explicit approval before proceeding to Phase 2).
 
 ---
 
