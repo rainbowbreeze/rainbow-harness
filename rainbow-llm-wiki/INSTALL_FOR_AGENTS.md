@@ -2,6 +2,9 @@
 
 > **Target:** Autonomous AI agents initializing or upgrading a local Markdown knowledge base.
 
+## 0. Prerequisites
+- **Bun**: The JavaScript runtime `bun` MUST be installed and available in your environment's PATH to execute the knowledge base maintenance and validation scripts.
+
 ## 0. Architectural Invariants
 1. **Execution Plane (`${WORKSPACE_ROOT}`)**: Where the agent runs (`${HERMES_HOME}` or `pwd`). Contains `skills/` and configs. **Never** dump knowledge files here.
 2. **Data Plane (`${BRAIN_PATH}`)**: Where knowledge entities live. **MUST NOT EQUAL** `${WORKSPACE_ROOT}`.
@@ -16,6 +19,12 @@ WORKSPACE_ROOT="${HERMES_HOME:-$(pwd)}"
 if [ -z "${BRAIN_PATH:-}" ]; then
   echo "Error: BRAIN_PATH environment variable is not set."
   echo "Please provide the BRAIN_PATH environment variable (or ask the operator) and try again."
+  exit 1
+fi
+
+if ! command -v bun &> /dev/null; then
+  echo "Error: 'bun' runtime is not installed or not in PATH."
+  echo "Please install Bun (https://bun.sh) and try again."
   exit 1
 fi
 
