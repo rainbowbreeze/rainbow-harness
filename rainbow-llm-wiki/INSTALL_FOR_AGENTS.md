@@ -3,7 +3,7 @@
 > **Target:** Autonomous AI agents initializing or upgrading a local Markdown knowledge base.
 
 ## 0. Architectural Invariants
-1. **Execution Plane (`${WORKSPACE_ROOT}`)**: Where the agent runs (`${HOME}`). Contains `skills/` and configs. **Never** dump knowledge files here.
+1. **Execution Plane (`${WORKSPACE_ROOT}`)**: Where the agent runs (`${HERMES_HOME}` or `pwd`). Contains `skills/` and configs. **Never** dump knowledge files here.
 2. **Data Plane (`${BRAIN_PATH}`)**: Where knowledge entities live. **MUST NOT EQUAL** `${WORKSPACE_ROOT}`.
 
 ---
@@ -12,7 +12,7 @@
 
 ### 1.1 Path Resolution
 ```bash
-WORKSPACE_ROOT="${HOME}"
+WORKSPACE_ROOT="${HERMES_HOME:-$(pwd)}"
 if [ -z "${BRAIN_PATH:-}" ]; then
   echo "Error: BRAIN_PATH environment variable is not set."
   echo "Please provide the BRAIN_PATH environment variable (or ask the operator) and try again."
