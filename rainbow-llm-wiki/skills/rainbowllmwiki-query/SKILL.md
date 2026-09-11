@@ -28,7 +28,7 @@ How to answer complex user questions and trace entity relationships without an e
 2. **Direct Keyword & Regex Search**:
    - Grep across frontmatter tags, roles, and titles across the relevant MECE directory in `${BRAIN_PATH}/`.
 3. **Backlink Traversal (Relationship Exploration)**:
-   - Run `bun run graph` or inspect `${BRAIN_PATH}/graph.md` and the `See Also` / `relations` frontmatter fields to trace connections (e.g. Person $\to$ Company $\to$ Deals).
+   - Run `bun ${BRAIN_PATH}/.scripts/graph.mjs` or inspect `${BRAIN_PATH}/graph.md` and the `See Also` / `relations` frontmatter fields to trace connections (e.g. Person $\to$ Company $\to$ Deals).
 4. **Deep Semantic Synthesis**:
    - Read the Compiled Truth (above the line) of all relevant pages.
    - Combine disparate threads into a coherent executive briefing.

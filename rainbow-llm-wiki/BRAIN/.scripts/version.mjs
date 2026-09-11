@@ -3,14 +3,14 @@
 /**
  * @file version.js
  * @description Zero-dependency version tracking and update checker utility for the Rainbow LLM Wiki.
- * Reads the installed version from BRAIN/.version and workspace package.json,
+ * Reads the installed version from BRAIN/.version and workspace version.json,
  * and optionally probes upstream GitHub to verify if a newer release exists.
  */
 
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import { getBrainDir } from './resolve-brain.js';
+import { getBrainDir } from './resolve-brain.mjs';
 
 // Resolve the brain data directory (Data Plane) and workspace root (Execution Plane)
 const brainDir = getBrainDir();
@@ -74,7 +74,7 @@ export function compareSemver(v1, v2) {
 }
 
 /**
- * Reads local installed version information from BRAIN/.version and package.json.
+ * Reads local installed version information from BRAIN/.version and version.json.
  * @returns {object} Object containing installed version and metadata
  */
 export function getInstalledVersion() {
@@ -107,20 +107,20 @@ export function getInstalledVersion() {
   }
 
   try {
-    // 2. Fallback: check workspace package.json
-    const packageJsonPath = path.join(workspaceRoot, 'package.json');
-    if (fs.existsSync(packageJsonPath)) {
-      const rawContent = fs.readFileSync(packageJsonPath, 'utf-8');
+    // 2. Fallback: check workspace version.json
+    const versionJsonPath = path.join(workspaceRoot, 'version.json');
+    if (fs.existsSync(versionJsonPath)) {
+      const rawContent = fs.readFileSync(versionJsonPath, 'utf-8');
       const parsed = JSON.parse(rawContent);
       if (parsed.version) {
         result.version = parsed.version;
-        result.source = 'package.json';
+        result.source = 'version.json';
         result.isLegacy = true;
         return result;
       }
     }
   } catch (err) {
-    console.warn(`⚠️ Warning reading ${path.join(workspaceRoot, 'package.json')}:`, err.message);
+    console.warn(`⚠️ Warning reading ${path.join(workspaceRoot, 'version.json')}:`, err.message);
   }
 
   // 3. Unversioned legacy install
@@ -136,8 +136,8 @@ export function getInstalledVersion() {
  */
 export function fetchUpstreamVersion(upstream = 'rainbowbreeze/rainbow-harness', branch = 'main') {
   return new Promise((resolve) => {
-    // Target upstream package.json for version retrieval
-    const url = `https://raw.githubusercontent.com/${upstream}/${branch}/rainbow-llm-wiki/package.json`;
+    // Target upstream version.json for version retrieval
+    const url = `https://raw.githubusercontent.com/${upstream}/${branch}/rainbow-llm-wiki/version.json`;
 
     const request = https.get(url, { headers: { 'User-Agent': 'Rainbow-LLM-Wiki-Agent' } }, (res) => {
       if (res.statusCode < 200 || res.statusCode >= 300) {

@@ -10,4 +10,4 @@
 
 ## 2. Invariant Rule
 - The inbox is **temporary**.
-- During routine maintenance (`bun run lint` / `skills/maintain/SKILL.md`), items in `inbox/` must be categorized into their permanent MECE directory and removed from here.
+- During routine maintenance (`bun ${BRAIN_PATH}/.scripts/lint.mjs`), items in `inbox/` must be categorized into their permanent MECE directory and removed from here.

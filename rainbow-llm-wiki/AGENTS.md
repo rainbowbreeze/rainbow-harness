@@ -10,8 +10,6 @@ This repository implements an LLM-maintained, interlinked wiki organized along M
 ```text
 .
 ├── AGENTS.md            — Operational instructions for all AI agents (this file)
-├── INSTALL_FOR_AGENTS.md— Detailed installation and setup instructions
-├── package.json         — Convenience script runners (bun)
 ├── skills/              — Agent skill SOPs
 │   ├── RESOLVER.md              — Master Dispatcher / Skill router
 │   ├── rainbowllmwiki-enrich/   — 7-step tiered entity enrichment protocol
@@ -79,9 +77,9 @@ For detailed step-by-step instructions on specific tasks, read the corresponding
 
 ## 5. Pre-Flight Checklist & Tooling Commands
 Before finalizing any changes to the knowledge base, run the appropriate validation scripts from `${WORKSPACE_ROOT}`:
-- **Version Check**: `bun run version` (verify update status against upstream).
-- **Validation**: `bun run lint` (ensure frontmatter validity, `.version` integrity, and verify no broken internal links exist).
-- **Indexing**: `bun run index` (refresh `${BRAIN_PATH}/index.md` and `${BRAIN_PATH}/aliases.json` if new entities were added).
-- **Relationship Graph**: `bun run graph` (re-generate relationship graph and backlink matrix).
-- **Health/Stats**: `bun run stats` (inspect knowledge base size and link density metrics).
+- **Version Check**: `bun ${BRAIN_PATH}/.scripts/version.mjs` (verify update status against upstream).
+- **Validation**: `bun ${BRAIN_PATH}/.scripts/lint.mjs` (ensure frontmatter validity, `.version` integrity, and verify no broken internal links exist).
+- **Indexing**: `bun ${BRAIN_PATH}/.scripts/index.mjs` (refresh `${BRAIN_PATH}/index.md` and `${BRAIN_PATH}/aliases.json` if new entities were added).
+- **Relationship Graph**: `bun ${BRAIN_PATH}/.scripts/graph.mjs` (re-generate relationship graph and backlink matrix).
+- **Health/Stats**: `bun ${BRAIN_PATH}/.scripts/stats.mjs` (inspect knowledge base size and link density metrics).
 - **Logging**: Always append a brief summary of what was ingested or updated to [`${BRAIN_PATH}/log.md`](${BRAIN_PATH}/log.md).

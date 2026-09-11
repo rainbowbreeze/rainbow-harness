@@ -78,5 +78,5 @@ Calibrate research depth to the entity's importance:
 - When adding a link to another entity (e.g. linking `jane-doe.md` to `acme-corp.md`), also add the reciprocal backlink in the related entity's page.
 
 ### Step 7: Update Index & Log
-- Run `bun run index` (or `node ${BRAIN_PATH}/.scripts/index.js`) to reflect changes in `${BRAIN_PATH}/index.md` and `${BRAIN_PATH}/aliases.json`.
+- Run `bun ${BRAIN_PATH}/.scripts/index.mjs`  to reflect changes in `${BRAIN_PATH}/index.md` and `${BRAIN_PATH}/aliases.json`.
 - Append a 1-line summary of the enrichment to `${BRAIN_PATH}/log.md`.

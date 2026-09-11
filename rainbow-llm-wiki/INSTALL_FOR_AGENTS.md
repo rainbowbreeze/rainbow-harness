@@ -33,12 +33,10 @@ Before downloading tarballs or modifying files, probe the installed version and 
 INSTALLED_VERSION="0.0.0"
 if [ -f "${BRAIN_PATH}/.version" ]; then
   INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"${BRAIN_PATH}"'/.version")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
-elif [ -f "${WORKSPACE_ROOT}/package.json" ]; then
-  INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"${WORKSPACE_ROOT}"'/package.json")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
 fi
 
 # 2. Fetch upstream release version from GitHub without downloading full repository
-UPSTREAM_VERSION="$(curl -fsSL https://raw.githubusercontent.com/rainbowbreeze/rainbow-harness/main/rainbow-llm-wiki/package.json 2>/dev/null | bun -e 'let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>console.log(JSON.parse(d).version||"unknown"))')"
+UPSTREAM_VERSION="$(curl -fsSL https://raw.githubusercontent.com/rainbowbreeze/rainbow-harness/main/rainbow-llm-wiki/version.json 2>/dev/null | bun -e 'let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>console.log(JSON.parse(d).version||"unknown"))')"
 
 VERSION_CMP="$(bun -e '
   const p = v => v.replace(/^v/,"").split(".").map(n=>parseInt(n,10)||0);
@@ -77,10 +75,10 @@ curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/m
 # 3. Scaffold and Update Workspace Execution Plane Skills
 mkdir -p "${WORKSPACE_ROOT}/skills"
 cp -r "$STAGING_DIR/skills"/* "${WORKSPACE_ROOT}/skills/"
-cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "${WORKSPACE_ROOT}/"
+cp "$STAGING_DIR/AGENTS.md" "${WORKSPACE_ROOT}/"
 
 # 4. Copy Zero-Dependency Automation Utilities into Data Plane (.scripts/)
-cp -r "$STAGING_DIR/scripts"/* "${BRAIN_PATH}/.scripts/"
+cp -r "$STAGING_DIR/BRAIN/.scripts"/* "${BRAIN_PATH}/.scripts/"
 # 5. Update Core Data Plane Taxonomy and Schema
 cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$STAGING_DIR/BRAIN/schema.md" "${BRAIN_PATH}/"
 
@@ -122,13 +120,13 @@ Append `SYSTEM_UPGRADE` event to `log.md`. **Do not** overwrite user entities.
 ```bash
 rm -rf "$STAGING_DIR"
 cd "${WORKSPACE_ROOT}"
-bun run version
-bun run lint
-bun run index
-bun run graph
-bun run stats
+bun "${BRAIN_PATH}/.scripts/version.mjs"
+bun "${BRAIN_PATH}/.scripts/lint.mjs"
+bun "${BRAIN_PATH}/.scripts/index.mjs"
+bun "${BRAIN_PATH}/.scripts/graph.mjs"
+bun "${BRAIN_PATH}/.scripts/stats.mjs"
 ```
-Verify `lint.js` reports 0 errors and all indexes are populated.
+Verify `lint.mjs` reports 0 errors and all indexes are populated.
 
 ---
 

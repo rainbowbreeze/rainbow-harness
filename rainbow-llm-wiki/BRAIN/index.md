@@ -1,6 +1,6 @@
 # Knowledge Base Index
 
-> Automatically generated via `bun run index` / `node scripts/index.js`.
+> Automatically generated via `bun ${BRAIN_PATH}/.scripts/index.mjs`.
 > Last updated: 2026-08-15
 
 ---

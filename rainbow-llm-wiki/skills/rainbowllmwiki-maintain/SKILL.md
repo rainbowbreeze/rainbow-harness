@@ -24,10 +24,10 @@ Regular maintenance procedures to ensure the `${BRAIN_PATH}/` knowledge base sta
 
 Run the validation and indexing suite:
 ```bash
-bun run lint
-bun run index
-bun run graph
-bun run stats
+bun ${BRAIN_PATH}/.scripts/lint.mjs
+bun ${BRAIN_PATH}/.scripts/index.mjs
+bun ${BRAIN_PATH}/.scripts/graph.mjs
+bun ${BRAIN_PATH}/.scripts/stats.mjs
 ```
 
 The linter and indexer verify:

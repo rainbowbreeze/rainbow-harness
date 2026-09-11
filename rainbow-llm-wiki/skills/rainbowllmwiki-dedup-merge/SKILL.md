@@ -30,8 +30,8 @@ When two separate files exist for the same entity in `${BRAIN_PATH}/` (e.g. `j-s
 6. **Move Duplicate to Archive (or Delete)**: Move the duplicate to `${BRAIN_PATH}/archive/` or delete it if completely absorbed.
 7. **Rebuild Index & Log**:
    ```bash
-   bun run index
-   bun run lint
+   bun ${BRAIN_PATH}/.scripts/index.mjs
+   bun ${BRAIN_PATH}/.scripts/lint.mjs
    ```
    Append a merge record to `${BRAIN_PATH}/log.md`:
    `- **MERGE** | Merged duplicate.md into survivor.md`
