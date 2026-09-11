@@ -1,6 +1,6 @@
 ---
 name: rainbowllmwiki-maintain
-version: 1.0.0
+version: 1.1.0
 description: Knowledge base health, linting, dead link detection, and audit protocol for BRAIN/
 metadata:
   hermes:
@@ -16,13 +16,15 @@ Regular maintenance procedures to ensure the `BRAIN/` knowledge base stays clean
 
 ## 1. Automated Health Audit Checklist
 
-Run the validation suite:
+Run the validation and indexing suite:
 ```bash
 bun run lint
+bun run index
+bun run graph
 bun run stats
 ```
 
-The linter verifies:
+The linter and indexer verify:
 1. **Frontmatter Integrity**: All files have valid YAML frontmatter with mandatory fields (`type`, `id`, `title`, `updated_at`).
 2. **Broken Internal Links**: Detects broken relative markdown links (`[Target](../category/file.md)`).
 3. **Duplicate Aliases**: Identifies colliding alias strings across multiple entities.

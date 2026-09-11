@@ -1,50 +1,28 @@
-# INSTALL_FOR_AGENTS.md — Installation, Setup and Upgrade Guide for AI Agents
+# INSTALL_FOR_AGENTS.md — Setup & Upgrade Guide
 
-> **Target Audience:** Autonomous AI agents (Hermes, OpenClaw, Claude Code, Cursor, Codex, Gemini CLI, Aider) tasked with initializing or upgrading a pure local Markdown knowledge base.
-> **Design Philosophy:** 100% local, zero-database, zero-cloud-lock-in, Git-native Markdown wiki.
+> **Target:** Autonomous AI agents initializing or upgrading a local Markdown knowledge base.
 
----
-
-## Architectural Invariant: Execution Plane vs. Data Plane
-
-Before doing anything, understand this strict two-plane separation:
-
-1. **`$WORKSPACE_ROOT` (Agent Execution Plane)**:
-   - The root repository or workspace where the AI agent runs (`pwd`).
-   - Contains: `skills/`, `package.json`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` (`.scripts/` live inside `$BRAIN_PATH`).
-   - **CRITICAL RULE:** Skills MUST live in `$WORKSPACE_ROOT/skills/`. **NEVER create or copy `skills/` inside the brain data directory.**
-
-2. **`$BRAIN_PATH` (Knowledge Base Data Plane)**:
-   - Where knowledge notes, entity files, logs, and schemas live.
-   - Contains: `RESOLVER.md`, `schema.md`, `index.md`, `log.md`, `graph.md`, `aliases.json`, `.scripts/`, and the MECE entity directories (`people/`, `companies/`, `events/`, etc.).
-   - **HARD INVARIANT:** `$BRAIN_PATH` **MUST NEVER EQUAL** `$WORKSPACE_ROOT`. Knowledge files must NEVER be dumped directly into the root workspace folder.
+## 0. Architectural Invariants
+1. **Execution Plane (`$WORKSPACE_ROOT`)**: Where the agent runs (`${HOME}`). Contains `skills/` and configs. **Never** dump knowledge files here.
+2. **Data Plane (`$BRAIN_PATH`)**: Where knowledge entities live. **MUST NOT EQUAL** `$WORKSPACE_ROOT`.
 
 ---
 
-## Phase 1: Initial Discovery and Version Pre-Flight (DO NOT SKIP)
+## 1. Version Pre-Flight (Mandatory)
 
-Whether performing an **initial installation** or a **framework upgrade**, first discover the paths, verify versions, and ask the human operator for explicit confirmation.
-
-### Step 1.1: Determine Target Paths
-Execute this path resolution logic strictly:
+### 1.1 Path Resolution
 ```bash
-WORKSPACE_ROOT="$(pwd)"
-
-# Precedence 1: Check existing environment variable ($BRAIN_PATH)
-if [ -n "${BRAIN_PATH:-}" ]; then
-  echo "Using existing BRAIN_PATH environment variable: $BRAIN_PATH"
-# Precedence 2: Check .brainpath file if present
-elif [ -f "$WORKSPACE_ROOT/.brainpath" ]; then
-  BRAIN_PATH="$(cat "$WORKSPACE_ROOT/.brainpath")"
-# Precedence 3: Default In-Workspace Folder ($WORKSPACE_ROOT/BRAIN)
-else
-  BRAIN_PATH="$WORKSPACE_ROOT/BRAIN"
+WORKSPACE_ROOT="${HOME}"
+if [ -z "${BRAIN_PATH:-}" ]; then
+  echo "Error: BRAIN_PATH environment variable is not set."
+  echo "Please provide the BRAIN_PATH environment variable (or ask the operator) and try again."
+  exit 1
 fi
 
 # Hard Invariant Guard Check:
 if [ "$BRAIN_PATH" = "$WORKSPACE_ROOT" ]; then
-  echo "Error: BRAIN_PATH cannot equal WORKSPACE_ROOT. Defaulting to $WORKSPACE_ROOT/BRAIN"
-  BRAIN_PATH="$WORKSPACE_ROOT/BRAIN"
+  echo "Error: BRAIN_PATH cannot equal WORKSPACE_ROOT.
+  exit 1
 fi
 ```
 
@@ -52,87 +30,55 @@ fi
 Before downloading tarballs or modifying files, probe the installed version and compare it against upstream GitHub:
 
 ```bash
-# 1. Detect local installed version
 INSTALLED_VERSION="0.0.0"
-IS_LEGACY=true
-
 if [ -f "$BRAIN_PATH/.version" ]; then
-  INSTALLED_VERSION="$(node -e 'try { console.log(JSON.parse(fs.readFileSync("'"$BRAIN_PATH"'/.version")).version || "0.0.0"); } catch(e) { console.log("0.0.0"); }')"
-  IS_LEGACY=false
+  INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"$BRAIN_PATH"'/.version")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
 elif [ -f "$WORKSPACE_ROOT/package.json" ]; then
-  INSTALLED_VERSION="$(node -e 'try { console.log(JSON.parse(fs.readFileSync("'"$WORKSPACE_ROOT"'/package.json")).version || "0.0.0"); } catch(e) { console.log("0.0.0"); }')"
+  INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"$WORKSPACE_ROOT"'/package.json")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
 fi
 
 # 2. Fetch upstream release version from GitHub without downloading full repository
-UPSTREAM_VERSION="$(curl -fsSL https://raw.githubusercontent.com/rainbowbreeze/rainbow-harness/main/rainbow-llm-wiki/package.json 2>/dev/null | \
-  node -e 'let data=""; process.stdin.on("data", c=>data+=c); process.stdin.on("end", ()=>{ try { console.log(JSON.parse(data).version || "unknown"); } catch(e) { console.log("unknown"); } });')"
+UPSTREAM_VERSION="$(curl -fsSL https://raw.githubusercontent.com/rainbowbreeze/rainbow-harness/main/rainbow-llm-wiki/package.json 2>/dev/null | bun -e 'let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>console.log(JSON.parse(d).version||"unknown"))')"
 
-# 3. Determine Operation and Version Comparison
-# Comparison logic: 1 = UPGRADE_AVAILABLE, 0 = UP_TO_DATE, -1 = LOCAL_NEWER
-VERSION_CMP="$(node -e '
-  const parse = v => v.replace(/^v/,"").split(".").map(n=>parseInt(n,10)||0);
-  const [maj1,min1,pat1] = parse(process.argv[1] || "0.0.0");
-  const [maj2,min2,pat2] = parse(process.argv[2] || "0.0.0");
-  if (maj1 !== maj2) console.log(maj1 > maj2 ? 1 : -1);
-  else if (min1 !== min2) console.log(min1 > min2 ? 1 : -1);
-  else if (pat1 !== pat2) console.log(pat1 > pat2 ? 1 : -1);
-  else console.log(0);
+VERSION_CMP="$(bun -e '
+  const p = v => v.replace(/^v/,"").split(".").map(n=>parseInt(n,10)||0);
+  const [m1,n1,t1] = p(process.argv[1]||"0"), [m2,n2,t2] = p(process.argv[2]||"0");
+  if(m1!==m2) console.log(m1>m2?1:-1); else if(n1!==n2) console.log(n1>n2?1:-1); else if(t1!==t2) console.log(t1>t2?1:-1); else console.log(0);
 ' "$UPSTREAM_VERSION" "$INSTALLED_VERSION")"
+
+echo "--- PRE-FLIGHT RESULTS ---"
+echo "INSTALLED_VERSION=$INSTALLED_VERSION | UPSTREAM_VERSION=$UPSTREAM_VERSION | VERSION_CMP=$VERSION_CMP"
 ```
 
-#### Update Guard Invariants:
-- **Case 1: Fresh Installation (`INSTALLED_VERSION == "0.0.0"` and `$BRAIN_PATH` does not exist)**
-  --> Proceed with **First Installation** to v`$UPSTREAM_VERSION`.
-- **Case 2: Newer Upstream (`VERSION_CMP == 1`)**
-  --> Proceed with **Framework Upgrade** (v`$INSTALLED_VERSION` $\to$ v`$UPSTREAM_VERSION`).
-- **Case 3: Already Up-to-Date (`VERSION_CMP == 0`)**
-  --> **HALT:** Notify operator: *"Knowledge base is already up to date (v$INSTALLED_VERSION). No update needed."* (Do not overwrite unless operator explicitly specified `--force`).
-- **Case 4: Installed is Newer / Ahead (`VERSION_CMP == -1`)**
-  --> **ABORT:** Notify operator: *"Local version (v$INSTALLED_VERSION) is newer than upstream (v$UPSTREAM_VERSION). Downgrade prevented."*
+**Agent Decision Logic (based on `VERSION_CMP`):**
+- **Fresh Install** (`INSTALLED_VERSION == "0.0.0"`): Proceed to Phase 2.
+- **Upgrade** (`1`): Proceed to Phase 2.
+- **Up-to-Date** (`0`): **HALT** unless operator explicitly included `--force` in prompt.
+- **Ahead** (`-1`): **ABORT** (downgrade prevented).
+
+### 1.3 Confirmation
+Ask operator: *"Ready for [Install/Upgrade] to v$UPSTREAM_VERSION at $BRAIN_PATH?"* (Wait for approval).
 
 ---
 
-### Step 1.3: Present Pre-Flight Confirmation Prompt (MANDATORY)
-Present this prompt verbatim to the user (substituting resolved variables):
-
-> **Please confirm the lifecycle operation before proceeding:**
-> - **Operation:** `[First Installation | Upstream Framework Upgrade]`
-> - **Installed Version:** `v$INSTALLED_VERSION`
-> - **Upstream Version:** `v$UPSTREAM_VERSION`
-> - **Execution Plane (`WORKSPACE_ROOT`):** `$WORKSPACE_ROOT` *(where agent skills and root SOPs live)*
-> - **Data Plane (`BRAIN_PATH`):** `$BRAIN_PATH` *(where all markdown knowledge notes and entities live)*
->
-> Shall I proceed with downloading the upstream release and applying this operation?
-
-**Stop and wait for user approval before moving to Phase 2.**
-
----
-
-## Phase 2: Upstream Staging and Shared Core Overlay
-
-This core sequence runs for BOTH First Installation and Framework Upgrade:
-
+## 2. Upstream Staging
 ```bash
-# 1. Download latest upstream release tarball into temporary staging directory
+# 1. Scaffold Core Data Plane Directories (harmless if existing)
 STAGING_DIR="/tmp/rainbow-llm-wiki-staging-$$"
-mkdir -p "$STAGING_DIR"
-curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/main.tar.gz | \
-  tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
+mkdir -p "$STAGING_DIR" "$BRAIN_PATH"/{people/.raw,companies/.raw,schools,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive,.scripts}
 
-# 2. Scaffold Core Data Plane Directories (harmless if existing)
-mkdir -p "$BRAIN_PATH"/{people/.raw,companies/.raw,schools,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive,.scripts}
+# 2. Download latest upstream release tarball into temporary staging directory
+curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/main.tar.gz | tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
 
 # 3. Scaffold and Update Workspace Execution Plane Skills
-mkdir -p "$WORKSPACE_ROOT"/skills
+mkdir -p "$WORKSPACE_ROOT/skills"
 cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
 cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
 
 # 4. Copy Zero-Dependency Automation Utilities into Data Plane (.scripts/)
 cp -r "$STAGING_DIR/scripts"/* "$BRAIN_PATH/.scripts/"
-
 # 5. Update Core Data Plane Taxonomy and Schema
-cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$BRAIN_PATH/RESOLVER.md"
-cp "$STAGING_DIR/BRAIN/schema.md" "$BRAIN_PATH/schema.md"
+cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$STAGING_DIR/BRAIN/schema.md" "$BRAIN_PATH/"
 
 # 6. Copy / Update Canonical Directory Resolvers (README.md only — NEVER entity files)
 for dir in people companies schools projects ideas concepts meetings events deals writing sources inbox archive; do
@@ -141,107 +87,57 @@ done
 
 # 7. Write Data Plane Version Metadata File ($BRAIN_PATH/.version)
 cat << EOF > "$BRAIN_PATH/.version"
-{
-  "version": "$UPSTREAM_VERSION",
-  "installed_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-  "upstream": "rainbowbreeze/rainbow-harness",
-  "path": "rainbow-llm-wiki",
-  "ref": "main"
-}
+{"version": "$UPSTREAM_VERSION", "installed_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")", "upstream": "rainbowbreeze/rainbow-harness", "ref": "main"}
 EOF
 ```
 
 ---
 
-## Phase 3: Mode-Specific Bootstrapping
+## 3. Bootstrapping
 
-Execute **EITHER** `3A` (First Install) **OR** `3B` (Upgrade):
-
-### Option 3A: First Install Bootstrapping
-If initializing a fresh brain:
-
+**If Fresh Install:**
 ```bash
 # 1. Add placeholder .gitkeep files for .raw directories
-touch "$BRAIN_PATH"/people/.raw/.gitkeep
-touch "$BRAIN_PATH"/companies/.raw/.gitkeep
+touch "$BRAIN_PATH"/{people,companies}/.raw/.gitkeep
 
-# 2. Initialize append-only event log
-cat << EOF > "$BRAIN_PATH/log.md"
-# Knowledge Base Event Log
-
-## $(date +"%Y-%m-%d")
-- **SYSTEM_INIT** | Knowledge base initialized at v$UPSTREAM_VERSION at $BRAIN_PATH.
-EOF
-
-# 3. Initialize empty alias lookup map
+# 2. Initialize empty alias lookup map
 echo "{}" > "$BRAIN_PATH/aliases.json"
 
-# 4. Copy Optional Project-Local Memory (only if desired by user)
-cp "$STAGING_DIR/CLAUDE.md" "$STAGING_DIR/GEMINI.md" "$WORKSPACE_ROOT/"
+
+# 3. Initialize or update append-only event log
+[ ! -f "$BRAIN_PATH/log.md" ] && echo -e "# Knowledge Base Event Log\n" > "$BRAIN_PATH/log.md"
+echo "- **SYSTEM_INIT** | Initialized v$UPSTREAM_VERSION at $BRAIN_PATH." >> "$BRAIN_PATH/log.md"
 ```
 
-#### Step 3A.1: Custom User Domains (Universal Frontmatter Standard)
-If the user requested custom domains (e.g., `personal`, `household`, `civic`, `hiring`):
-1. `mkdir -p "$BRAIN_PATH/<custom_domain>"`
-2. Create `$BRAIN_PATH/<custom_domain>/README.md` with the 3 canonical sections (What Goes Here, What Does NOT Go Here, Entity Page Template).
-3. Ensure the entity page template implements the mandatory Universal Base Frontmatter Schema (`type`, `id`, `title`, `aliases`, `status`, `tags`, `relations`, `updated_at`).
+**If Upgrade:** 
+Append `SYSTEM_UPGRADE` event to `log.md`. **Do not** overwrite user entities.
 
 ---
 
-### Option 3B: Framework Upgrade Actions
-If upgrading an existing brain:
-
-1. **Strict Data Protection Invariant**: Confirm that no user entity pages (`.md` files in `people/`, `companies/`, `events/`, `.raw/` sidecars, or `log.md`) were overwritten or altered.
-2. **Preserve Project-Local Memory**: Do NOT overwrite any local `GEMINI.md` or `CLAUDE.md`.
-3. **Record Version Upgrade Event**:
-   Append an upgrade entry to `$BRAIN_PATH/log.md`:
-   ```markdown
-   - **SYSTEM_UPGRADE** | Upgraded framework from v$INSTALLED_VERSION to v$UPSTREAM_VERSION ($(date +"%Y-%m-%d")).
-   ```
-
----
-
-## Phase 4: Verification Pipeline and Cleanup
-
-Run the complete validation, version inspection, and indexing suite from `$WORKSPACE_ROOT`:
-
+## 4. Verification
 ```bash
-# 1. Clean up temporary staging directory
 rm -rf "$STAGING_DIR"
-
-# 2. Verify Installed Version and Integrity
-node "$BRAIN_PATH/.scripts/version.js"
-
-# 3. Run Schema and Link Integrity Linter
-node "$BRAIN_PATH/.scripts/lint.js"
-
-# 4. Recompile Index and Alias Lookup Table
-node "$BRAIN_PATH/.scripts/index.js"
-
-# 5. Rebuild Relationship Graph
-node "$BRAIN_PATH/.scripts/graph.js"
-
-# 6. Compute System Stats and Health Metrics
-node "$BRAIN_PATH/.scripts/stats.js"
+cd "$WORKSPACE_ROOT"
+bun run version
+bun run lint
+bun run index
+bun run graph
+bun run stats
 ```
-
-Verify that:
-- `version.js` confirms installed version matches target `$UPSTREAM_VERSION`.
-- `lint.js` reports **0 errors**.
-- `$BRAIN_PATH/index.md`, `$BRAIN_PATH/graph.md`, and `$BRAIN_PATH/aliases.json` are populated.
+Verify `lint.js` reports 0 errors and all indexes are populated.
 
 ---
 
-## Phase 5: Ongoing Agent Operational Routine
+## 4.1 Automated Maintenance Scheduler
+> **Idempotency:** Check your native scheduled task list. Add this only if it doesn't exist.
+> 
+> Use your framework's native scheduling tool (e.g., `/schedule`) to execute the `rainbowllmwiki-maintain` skill every night at 2:00 AM (`0 2 * * *`). Do not use bash crontabs.
 
-When operating on this brain in future sessions:
+---
 
-| Inbound Trigger | Action Required |
+## 5. Ongoing Operations
+| Trigger | Action |
 |---|---|
-| Check for updates | Run `node "$BRAIN_PATH/.scripts/version.js"` (or `bun run version`) |
-| Framework upgrade request | Follow Phase 1 version pre-flight $\to$ upgrade if newer $\to$ Phase 4 validation |
-| New meeting transcript or notes | Run [`skills/rainbowllmwiki-ingest/SKILL.md`](skills/rainbowllmwiki-ingest/SKILL.md) $\to$ extract entities $\to$ run [`skills/rainbowllmwiki-enrich/SKILL.md`](skills/rainbowllmwiki-enrich/SKILL.md) |
-| Researching a person or company | Check `$BRAIN_PATH/aliases.json` $\to$ read `$BRAIN_PATH/people/slug.md` $\to$ enrich delta |
-| Answering knowledge questions | Search `$BRAIN_PATH/` $\to$ inspect `## State` and `See Also` links $\to$ synthesize answer |
-| User corrects a fact | Update Compiled Truth immediately $\to$ add Timeline entry $\to$ mark `confidence: high` |
-| Routine maintenance / cleanup | Run `node "$BRAIN_PATH/.scripts/lint.js"` $\to$ prune `$BRAIN_PATH/inbox/` $\to$ resolve stale open threads |
+| Routine check / Cleanup | Run `rainbowllmwiki-maintain` (lint, empty inbox, graph) |
+| New info (email, notes) | Run `rainbowllmwiki-ingest` $\to$ `rainbowllmwiki-enrich` |
+| User fact correction | Update Compiled Truth immediately $\to$ add Timeline entry $\to$ set `confidence: high` |
