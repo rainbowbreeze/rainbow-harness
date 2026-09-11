@@ -21,12 +21,12 @@ fi
 
 # Hard Invariant Guard Check:
 if [ "$BRAIN_PATH" = "$WORKSPACE_ROOT" ]; then
-  echo "Error: BRAIN_PATH cannot equal WORKSPACE_ROOT.
+  echo "Error: BRAIN_PATH cannot equal WORKSPACE_ROOT."
   exit 1
 fi
 ```
 
-### Step 1.2: Check Installed vs. Upstream Version (Update Guard)
+### 1.2 Version Check
 Before downloading tarballs or modifying files, probe the installed version and compare it against upstream GitHub:
 
 ```bash
