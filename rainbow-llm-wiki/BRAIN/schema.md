@@ -325,9 +325,9 @@ updated_at: "2026-08-13"
 
 ## 6. Creating New Custom Domains
 
-When creating a new custom entity directory (e.g., `BRAIN/hiring/` or `BRAIN/personal/`):
-1. Create directory `BRAIN/<domain>/`.
-2. Create `BRAIN/<domain>/README.md` defining:
+When creating a new custom entity directory (e.g., `${BRAIN_PATH}/hiring/` or `${BRAIN_PATH}/personal/`):
+1. Create directory `${BRAIN_PATH}/<domain>/`.
+2. Create `${BRAIN_PATH}/<domain>/README.md` defining:
    - Section 1: **What Goes Here**
    - Section 2: **What Does NOT Go Here**
    - Section 3: **Page Template** using the Universal Base Frontmatter Schema.

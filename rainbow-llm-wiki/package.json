@@ -4,10 +4,10 @@
   "description": "Pure local Markdown knowledge management system",
   "type": "module",
   "scripts": {
-    "version": "node BRAIN/.scripts/version.js",
-    "lint": "node BRAIN/.scripts/lint.js",
-    "index": "node BRAIN/.scripts/index.js",
-    "graph": "node BRAIN/.scripts/graph.js",
-    "stats": "node BRAIN/.scripts/stats.js"
+    "version": "node ${BRAIN_PATH:-BRAIN}/.scripts/version.js",
+    "lint": "node ${BRAIN_PATH:-BRAIN}/.scripts/lint.js",
+    "index": "node ${BRAIN_PATH:-BRAIN}/.scripts/index.js",
+    "graph": "node ${BRAIN_PATH:-BRAIN}/.scripts/graph.js",
+    "stats": "node ${BRAIN_PATH:-BRAIN}/.scripts/stats.js"
   }
 }

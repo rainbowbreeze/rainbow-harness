@@ -1,16 +1,22 @@
 ---
 name: rainbowllmwiki-maintain
-version: 1.1.0
-description: Knowledge base health, linting, dead link detection, and audit protocol for BRAIN/
+version: 1.2.0
+description: Knowledge base health, linting, dead link detection, and audit protocol for ${BRAIN_PATH}/
+author: Rainbowbreeze
 metadata:
   hermes:
     category: rainbowskills
     tags: [wiki, llm-wiki, maintain, lint, audit]
+required_environment_variables:
+  - name: BRAIN_PATH
+    prompt: Where can I store the wiki files?
+    help: Path to store the wiki files
+    required_for: full functionality
 ---
 
 # Knowledge Base Health & Maintenance Protocol
 
-Regular maintenance procedures to ensure the `BRAIN/` knowledge base stays clean, consistent, and error-free.
+Regular maintenance procedures to ensure the `${BRAIN_PATH}/` knowledge base stays clean, consistent, and error-free.
 
 ---
 
@@ -34,6 +40,6 @@ The linter and indexer verify:
 
 ## 2. Manual Maintenance Tasks
 
-- **Empty Inbox**: Review `BRAIN/inbox/` files, walk `BRAIN/RESOLVER.md`, and refile them into permanent directories.
+- **Empty Inbox**: Review `${BRAIN_PATH}/inbox/` files, walk `${BRAIN_PATH}/RESOLVER.md`, and refile them into permanent directories.
 - **Prune Open Threads**: Check `Open Threads` sections across active pages; move resolved items to the `## Timeline` section.
 - **Orphan Page Linking**: Identify pages with zero incoming backlinks and link them to their relevant parent projects, companies, or concepts.

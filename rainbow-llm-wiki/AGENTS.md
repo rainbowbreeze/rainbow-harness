@@ -5,7 +5,7 @@
 ---
 
 ## 1. System Overview & Directory Structure
-This repository implements an LLM-maintained, interlinked wiki organized along MECE (Mutually Exclusive, Collectively Exhaustive) principles. All knowledge base files are isolated inside the `BRAIN/` directory to cleanly separate data/content from repository root scripts and agent skill definitions.
+This repository implements an LLM-maintained, interlinked wiki organized along MECE (Mutually Exclusive, Collectively Exhaustive) principles. All knowledge base files are isolated inside the `${BRAIN_PATH}/` directory to cleanly separate data/content from repository root scripts and agent skill definitions.
 
 ```text
 .
@@ -19,7 +19,7 @@ This repository implements an LLM-maintained, interlinked wiki organized along M
 │   ├── rainbowllmwiki-query/    — Retrieval and backlink traversal protocol
 │   ├── rainbowllmwiki-maintain/ — Knowledge base health, linting, and audit protocol
 │   └── rainbowllmwiki-dedup-merge/ — Alias search and entity merge protocol
-└── BRAIN/               — The Knowledge Base root folder
+└── ${BRAIN_PATH}/               — The Knowledge Base root folder
     ├── .scripts/        — Zero-dependency validation and indexing utilities
     ├── RESOLVER.md      — Master decision tree for routing notes and entities
     ├── schema.md        — Page formatting schemas, frontmatter specs, epistemic rules
@@ -33,12 +33,12 @@ This repository implements an LLM-maintained, interlinked wiki organized along M
 ---
 
 ## 2. Core Invariants & Golden Rules (Inviolable)
-1. **Execution Plane vs. Data Plane**: Agent tools/skills live in `$WORKSPACE_ROOT/skills/`. All knowledge files live in `BRAIN/`. Never create raw entity files in the root folder, and never put skills inside the brain.
-2. **Mandatory Resolver Consultation**: Always read `BRAIN/RESOLVER.md` before creating or moving any file. Never guess directory placement.
+1. **Execution Plane vs. Data Plane**: Agent tools/skills live in `${WORKSPACE_ROOT}/skills/`. All knowledge files live in `${BRAIN_PATH}/`. Never create raw entity files in the root folder, and never put skills inside the brain.
+2. **Mandatory Resolver Consultation**: Always read `${BRAIN_PATH}/RESOLVER.md` before creating or moving any file. Never guess directory placement.
 3. **Strict Two-Layer Separation**: Maintain the horizontal rule `---` dividing mutable compiled truth (above) and the append-only timeline (below).
-4. **Search Before Write (Deduplication Guard)**: Before creating a person or company page, scan `aliases` across all files or check `BRAIN/aliases.json` to eliminate split-brain duplicates. Execute the Update/Enrich workflow if a match exists.
+4. **Search Before Write (Deduplication Guard)**: Before creating a person or company page, scan `aliases` across all files or check `${BRAIN_PATH}/aliases.json` to eliminate split-brain duplicates. Execute the Update/Enrich workflow if a match exists.
 5. **Universal Base Schema**: All entity files must include `type`, `id`, `title`, `aliases`, `status`, `tags`, `relations`, and `updated_at`.
-6. **Epistemic Discipline**: Always tag contextual/subjective claims with `observed`, `self-described`, or `inferred`, accompanied by source and confidence level as defined in `BRAIN/schema.md`.
+6. **Epistemic Discipline**: Always tag contextual/subjective claims with `observed`, `self-described`, or `inferred`, accompanied by source and confidence level as defined in `${BRAIN_PATH}/schema.md`.
 7. **Primacy of User Corrections**: If the user corrects a fact or assessment, update the compiled truth immediately, add a timeline entry, and set confidence to `high`.
 8. **Continuous Enrichment**: Enrich entities upon encountering any signal rather than deferring to batch jobs.
 9. **No Unprompted Git Commits**: Do not execute `git commit` or stage changes unless explicitly instructed by the user.
@@ -46,7 +46,7 @@ This repository implements an LLM-maintained, interlinked wiki organized along M
 ---
 
 ## 3. Universal Base Frontmatter Contract
-Every entity file in `BRAIN/` inherits:
+Every entity file in `${BRAIN_PATH}/` inherits:
 ```yaml
 ---
 type: "<domain_singular>"   # e.g., person, company, school, project, concept, idea, meeting, event
@@ -78,10 +78,10 @@ For detailed step-by-step instructions on specific tasks, read the corresponding
 ---
 
 ## 5. Pre-Flight Checklist & Tooling Commands
-Before finalizing any changes to the knowledge base, run the appropriate validation scripts from `$WORKSPACE_ROOT`:
+Before finalizing any changes to the knowledge base, run the appropriate validation scripts from `${WORKSPACE_ROOT}`:
 - **Version Check**: `bun run version` (verify update status against upstream).
 - **Validation**: `bun run lint` (ensure frontmatter validity, `.version` integrity, and verify no broken internal links exist).
-- **Indexing**: `bun run index` (refresh `BRAIN/index.md` and `BRAIN/aliases.json` if new entities were added).
+- **Indexing**: `bun run index` (refresh `${BRAIN_PATH}/index.md` and `${BRAIN_PATH}/aliases.json` if new entities were added).
 - **Relationship Graph**: `bun run graph` (re-generate relationship graph and backlink matrix).
 - **Health/Stats**: `bun run stats` (inspect knowledge base size and link density metrics).
-- **Logging**: Always append a brief summary of what was ingested or updated to [`BRAIN/log.md`](BRAIN/log.md).
+- **Logging**: Always append a brief summary of what was ingested or updated to [`${BRAIN_PATH}/log.md`](${BRAIN_PATH}/log.md).

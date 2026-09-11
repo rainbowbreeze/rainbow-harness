@@ -3,8 +3,8 @@
 > **Target:** Autonomous AI agents initializing or upgrading a local Markdown knowledge base.
 
 ## 0. Architectural Invariants
-1. **Execution Plane (`$WORKSPACE_ROOT`)**: Where the agent runs (`${HOME}`). Contains `skills/` and configs. **Never** dump knowledge files here.
-2. **Data Plane (`$BRAIN_PATH`)**: Where knowledge entities live. **MUST NOT EQUAL** `$WORKSPACE_ROOT`.
+1. **Execution Plane (`${WORKSPACE_ROOT}`)**: Where the agent runs (`${HOME}`). Contains `skills/` and configs. **Never** dump knowledge files here.
+2. **Data Plane (`${BRAIN_PATH}`)**: Where knowledge entities live. **MUST NOT EQUAL** `${WORKSPACE_ROOT}`.
 
 ---
 
@@ -20,7 +20,7 @@ if [ -z "${BRAIN_PATH:-}" ]; then
 fi
 
 # Hard Invariant Guard Check:
-if [ "$BRAIN_PATH" = "$WORKSPACE_ROOT" ]; then
+if [ "${BRAIN_PATH}" = "${WORKSPACE_ROOT}" ]; then
   echo "Error: BRAIN_PATH cannot equal WORKSPACE_ROOT."
   exit 1
 fi
@@ -31,10 +31,10 @@ Before downloading tarballs or modifying files, probe the installed version and 
 
 ```bash
 INSTALLED_VERSION="0.0.0"
-if [ -f "$BRAIN_PATH/.version" ]; then
-  INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"$BRAIN_PATH"'/.version")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
-elif [ -f "$WORKSPACE_ROOT/package.json" ]; then
-  INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"$WORKSPACE_ROOT"'/package.json")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
+if [ -f "${BRAIN_PATH}/.version" ]; then
+  INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"${BRAIN_PATH}"'/.version")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
+elif [ -f "${WORKSPACE_ROOT}/package.json" ]; then
+  INSTALLED_VERSION="$(bun -e 'try{console.log(JSON.parse(fs.readFileSync("'"${WORKSPACE_ROOT}"'/package.json")).version||"0.0.0")}catch(e){console.log("0.0.0")}')"
 fi
 
 # 2. Fetch upstream release version from GitHub without downloading full repository
@@ -57,7 +57,7 @@ echo "INSTALLED_VERSION=$INSTALLED_VERSION | UPSTREAM_VERSION=$UPSTREAM_VERSION 
 - **Ahead** (`-1`): **ABORT** (downgrade prevented).
 
 ### 1.3 Confirmation
-Ask operator: *"Ready for [Install/Upgrade] to v$UPSTREAM_VERSION at $BRAIN_PATH?"* (Wait for approval).
+Ask operator: *"Ready for [Install/Upgrade] to v$UPSTREAM_VERSION at ${BRAIN_PATH}?"* (Wait for approval).
 
 ---
 
@@ -65,28 +65,28 @@ Ask operator: *"Ready for [Install/Upgrade] to v$UPSTREAM_VERSION at $BRAIN_PATH
 ```bash
 # 1. Scaffold Core Data Plane Directories (harmless if existing)
 STAGING_DIR="/tmp/rainbow-llm-wiki-staging-$$"
-mkdir -p "$STAGING_DIR" "$BRAIN_PATH"/{people/.raw,companies/.raw,schools,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive,.scripts}
+mkdir -p "$STAGING_DIR" "${BRAIN_PATH}"/{people/.raw,companies/.raw,schools,projects,ideas,concepts,meetings,events,deals,writing,sources,inbox,archive,.scripts}
 
 # 2. Download latest upstream release tarball into temporary staging directory
 curl -fsSL https://github.com/rainbowbreeze/rainbow-harness/archive/refs/heads/main.tar.gz | tar -xz --strip-components=2 -C "$STAGING_DIR" "rainbow-harness-main/rainbow-llm-wiki"
 
 # 3. Scaffold and Update Workspace Execution Plane Skills
-mkdir -p "$WORKSPACE_ROOT/skills"
-cp -r "$STAGING_DIR/skills"/* "$WORKSPACE_ROOT/skills/"
-cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "$WORKSPACE_ROOT/"
+mkdir -p "${WORKSPACE_ROOT}/skills"
+cp -r "$STAGING_DIR/skills"/* "${WORKSPACE_ROOT}/skills/"
+cp "$STAGING_DIR/AGENTS.md" "$STAGING_DIR/INSTALL_FOR_AGENTS.md" "$STAGING_DIR/package.json" "${WORKSPACE_ROOT}/"
 
 # 4. Copy Zero-Dependency Automation Utilities into Data Plane (.scripts/)
-cp -r "$STAGING_DIR/scripts"/* "$BRAIN_PATH/.scripts/"
+cp -r "$STAGING_DIR/scripts"/* "${BRAIN_PATH}/.scripts/"
 # 5. Update Core Data Plane Taxonomy and Schema
-cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$STAGING_DIR/BRAIN/schema.md" "$BRAIN_PATH/"
+cp "$STAGING_DIR/BRAIN/RESOLVER.md" "$STAGING_DIR/BRAIN/schema.md" "${BRAIN_PATH}/"
 
 # 6. Copy / Update Canonical Directory Resolvers (README.md only — NEVER entity files)
 for dir in people companies schools projects ideas concepts meetings events deals writing sources inbox archive; do
-  cp "$STAGING_DIR/BRAIN/$dir/README.md" "$BRAIN_PATH/$dir/README.md"
+  cp "$STAGING_DIR/BRAIN/$dir/README.md" "${BRAIN_PATH}/$dir/README.md"
 done
 
-# 7. Write Data Plane Version Metadata File ($BRAIN_PATH/.version)
-cat << EOF > "$BRAIN_PATH/.version"
+# 7. Write Data Plane Version Metadata File (${BRAIN_PATH}/.version)
+cat << EOF > "${BRAIN_PATH}/.version"
 {"version": "$UPSTREAM_VERSION", "installed_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")", "upstream": "rainbowbreeze/rainbow-harness", "ref": "main"}
 EOF
 ```
@@ -98,15 +98,15 @@ EOF
 **If Fresh Install:**
 ```bash
 # 1. Add placeholder .gitkeep files for .raw directories
-touch "$BRAIN_PATH"/{people,companies}/.raw/.gitkeep
+touch "${BRAIN_PATH}"/{people,companies}/.raw/.gitkeep
 
 # 2. Initialize empty alias lookup map
-echo "{}" > "$BRAIN_PATH/aliases.json"
+echo "{}" > "${BRAIN_PATH}/aliases.json"
 
 
 # 3. Initialize or update append-only event log
-[ ! -f "$BRAIN_PATH/log.md" ] && echo -e "# Knowledge Base Event Log\n" > "$BRAIN_PATH/log.md"
-echo "- **SYSTEM_INIT** | Initialized v$UPSTREAM_VERSION at $BRAIN_PATH." >> "$BRAIN_PATH/log.md"
+[ ! -f "${BRAIN_PATH}/log.md" ] && echo -e "# Knowledge Base Event Log\n" > "${BRAIN_PATH}/log.md"
+echo "- **SYSTEM_INIT** | Initialized v$UPSTREAM_VERSION at ${BRAIN_PATH}." >> "${BRAIN_PATH}/log.md"
 ```
 
 **If Upgrade:** 
@@ -117,7 +117,7 @@ Append `SYSTEM_UPGRADE` event to `log.md`. **Do not** overwrite user entities.
 ## 4. Verification
 ```bash
 rm -rf "$STAGING_DIR"
-cd "$WORKSPACE_ROOT"
+cd "${WORKSPACE_ROOT}"
 bun run version
 bun run lint
 bun run index

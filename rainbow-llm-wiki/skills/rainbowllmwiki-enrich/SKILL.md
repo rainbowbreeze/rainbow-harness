@@ -1,16 +1,22 @@
 ---
 name: rainbowllmwiki-enrich
-version: 1.0.0
-description: Tiered intelligence enrichment for people and companies in BRAIN/
+version: 1.2.0
+description: Tiered intelligence enrichment for people and companies in ${BRAIN_PATH}/
+author: Rainbowbreeze
 metadata:
   hermes:
     category: rainbowskills
     tags: [wiki, llm-wiki, enrichment, intelligence]
+required_environment_variables:
+  - name: BRAIN_PATH
+    prompt: Where can I store the wiki files?
+    help: Path to store the wiki files
+    required_for: full functionality
 ---
 
 # Tiered Entity Enrichment Protocol
 
-Enrich person and company pages in `BRAIN/` to create comprehensive intelligence dossiers rather than shallow directory scrapes.
+Enrich person and company pages in `${BRAIN_PATH}/` to create comprehensive intelligence dossiers rather than shallow directory scrapes.
 
 ---
 
@@ -38,9 +44,9 @@ Calibrate research depth to the entity's importance:
 - Generate canonical slug (e.g. `john-doe.md` or `acme-corp.md`).
 
 ### Step 2: Check Brain State & Deduplicate
-- Search `aliases` across `BRAIN/people/*.md` or `BRAIN/companies/*.md` (or check `BRAIN/aliases.json`) using name, all email addresses, and phone numbers.
+- Search `aliases` across `${BRAIN_PATH}/people/*.md` or `${BRAIN_PATH}/companies/*.md` (or check `${BRAIN_PATH}/aliases.json`) using name, all email addresses, and phone numbers.
 - If an alias or slug matches **UPDATE existing file** (merge newly discovered emails, phone numbers, and aliases).
-- If no match **CREATE new file** in `BRAIN/people/` or `BRAIN/companies/` using the standard template.
+- If no match **CREATE new file** in `${BRAIN_PATH}/people/` or `${BRAIN_PATH}/companies/` using the standard template.
 
 ### Step 3: Extract Signal & Epistemic Attribution
 - Classify claims into:
@@ -72,5 +78,5 @@ Calibrate research depth to the entity's importance:
 - When adding a link to another entity (e.g. linking `jane-doe.md` to `acme-corp.md`), also add the reciprocal backlink in the related entity's page.
 
 ### Step 7: Update Index & Log
-- Run `bun run index` (or `node BRAIN/.scripts/index.js`) to reflect changes in `BRAIN/index.md` and `BRAIN/aliases.json`.
-- Append a 1-line summary of the enrichment to `BRAIN/log.md`.
+- Run `bun run index` (or `node ${BRAIN_PATH}/.scripts/index.js`) to reflect changes in `${BRAIN_PATH}/index.md` and `${BRAIN_PATH}/aliases.json`.
+- Append a 1-line summary of the enrichment to `${BRAIN_PATH}/log.md`.
