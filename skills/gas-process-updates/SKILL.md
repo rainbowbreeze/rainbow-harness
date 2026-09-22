@@ -1,7 +1,7 @@
 ---
 name: gas-process-updates
 description: Processa i nuovi aggiornamenti del GAS dalle email, aggiorna il BRAIN, elimina le email elaborate e genera un riepilogo. Usa questa skill per gestire comunicazioni e ordini del GAS.
-version: 1.2.1
+version: 1.3.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -94,6 +94,23 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
     - **Feedback Post-Consegna**: Se un ordine è appena stato consegnato (oggi o ieri), controlla se ci sono nuove informazioni sui pagamenti o problemi nelle email e aggiorna sia la scheda fornitore che `storico.json`.
 - **Creazione Bulletin**:
     - Oltre al report generale, genera una versione "pubblica" del report che includa SOLO scadenze, stato ordini e comunicazioni (escludendo il riepilogo delle email eliminate e dei file modificati).
+    - **Formato Rigoroso**: Usa ESATTAMENTE il seguente template Markdown per il bollettino, mantenendo costanti i titoli H1 e H2:
+      ```markdown
+      # 📢 Bollettino GAStronauti - [Giorno Mese Anno]
+
+      ## 🚨 SCADENZE IMMINENTI
+      - [elenco scadenze di oggi e prossime]
+
+      ## 📦 STATO ORDINI CORRENTI
+      🛒 **Aperti**
+      - [ordini aperti]
+      🚚 **In Attesa di Consegna**
+      - [ordini in consegna]
+
+      ## 📧 COMUNICAZIONI E AGGIORNAMENTI
+      - [note di logistica, avvisi dai soci, ecc.]
+      ```
+    - Se una sezione è vuota, omettila (ad eccezione del titolo principale).
     - Aggiungi (append) questo report pubblico in coda al file `${BRAIN_ROOT_PATH}/bulletin/YYYY-MM-DD-bulletin.md` (es. `2026-08-30-bulletin.md`).
     - Crea la cartella `bulletin` e il file se non esistono. Se il file esiste già per la giornata odierna, separa i nuovi aggiornamenti con una linea orizzontale (`---`).
 - **Delivery (Cron)**: Se la skill determina che non c'è nulla da segnalare (nessun aggiornamento e nessun ordine corrente), rispondi esattamente con `[SILENT]`. L'agente chiamante deve rispettare questo segnale e non produrre output.
