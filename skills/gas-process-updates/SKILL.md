@@ -1,7 +1,7 @@
 ---
 name: gas-process-updates
 description: Processa i nuovi aggiornamenti del GAS dalle email, aggiorna il BRAIN, elimina le email elaborate e genera un riepilogo. Usa questa skill per gestire comunicazioni e ordini del GAS.
-version: 1.3.0
+version: 1.3.1
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -77,8 +77,8 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
 - Componi un report testuale dettagliato, conciso e amichevole in italiano (Persona: GAStronAI).
 - **Continuità**: Controlla gli ultimi report in `/opt/data/cron/output/` per assicurarti di non ripetere informazioni già inviate o per dare seguito a promesse fatte nel run precedente.
 - **Formattazione**:
-    - Usa **molte emoji** per migliorare la leggibilità e dare un tono comunitario (es. 🚚, 🍎, 🛑, 🚨).
-    - Suddividi il report in sezioni chiare (es. "🚨 SCADENZE DI OGGI", "📅 PROSSIME SCADENZE", "📧 AGGIORNAMENTI DAI SOCI").
+    - Usa **emoji** per migliorare la leggibilità e dare un tono comunitario (es. 🚚, 🍎, 🛑, 🚨).
+    - Suddividi il report in sezioni chiare (es. "🚨 Scadenze di oggi", "📅 Prossime scadenze", "📧 Aggiornamenti dai soci").
     - **CRITICO**: Controlla le scadenze usando `python3 scripts/order_manager.py check`. Prima di generare il report, esegui sempre l'archiviazione degli ordini passati con `python3 scripts/order_manager.py archive`. 
     - **NOTA**: Lo script `archive` sposta solo gli ordini con `Data Consegna` strettamente minore della data odierna. Se un'email conferma la consegna avvenuta **oggi**, devi spostare manualmente l'ordine da `correnti.json` a `storico.json` e aggiornare la scheda fornitore per riflettere lo stato nel report.
     - Se ci sono scadenze **OGGI**, mettile **in cima** al messaggio con emoji vistose (es. 🚨, 📅).
@@ -98,16 +98,16 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
       ```markdown
       # 📢 Bollettino GAStronauti - [Giorno Mese Anno]
 
-      ## 🚨 SCADENZE IMMINENTI
+      ## 🚨 Scadenze imminenti
       - [elenco scadenze di oggi e prossime]
 
-      ## 📦 STATO ORDINI CORRENTI
+      ## 📦 Stato ordini correnti
       🛒 **Aperti**
       - [ordini aperti]
       🚚 **In Attesa di Consegna**
       - [ordini in consegna]
 
-      ## 📧 COMUNICAZIONI E AGGIORNAMENTI
+      ## 📧 Comunicazione e aggiornamenti
       - [note di logistica, avvisi dai soci, ecc.]
       ```
     - Se una sezione è vuota, omettila (ad eccezione del titolo principale).
