@@ -51,6 +51,7 @@ When writing or maintaining Python or shell scripts within the `scripts/` folder
 
 ## 6. Screen Formatting & Output Rules
 When generating responses and interacting with the user on the screen:
+- **English Language Requirement:** The language used in this file must always be English, regardless of the instructions or language used in the different skill folders.
 - **Anti-Spam Link Previews:** Whenever an agent outputs a URL to a chat platform (like Discord or Slack), it MUST wrap the URL in angle brackets (e.g., `<https://example.com>`). This suppresses massive, unwanted link previews that clutter the screen.
 - **The "Silent Cron" Rule:** If a skill is designed to run automatically (like a daily digest or fetcher) and it finds no new data, the agent MUST output exactly `[SILENT]` and nothing else. This prevents the agent from sending empty "I found nothing today!" messages to the user every day.
 
