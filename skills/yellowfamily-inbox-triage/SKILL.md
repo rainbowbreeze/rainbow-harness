@@ -1,7 +1,7 @@
 ---
 name: yellowfamily-inbox-triage
 description: "Scans YellowFamily emails to distinguish between appointments (calendar events) and tasks (TODOs). Trigger this skill when the user asks to triage, check, or process the family emails or inbox."
-version: 1.1.1
+version: 1.2.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -39,6 +39,7 @@ Use this skill when the user asks to "triage family emails", "check the YellowFa
    - Note: Triaged emails may still be marked as `UNREAD` in the inbox; always filter them out using `-label:Processed` to avoid re-processing.
 4. If an item is identified:
    - **Appointments**: Create an event in the "Yellow family" Google Calendar. Label the email `Processed/Appointment`.
+     - **Exception**: Skip notices, schedules, or convocation emails for basketball or volleyball games/matches (e.g., "Partita di basket", "Partita di pallavolo", "Convocazione", campionati sportivi di basket/pallavolo). Do not create calendar events for them; just label the email `Processed` and move on.
    - **Tasks**: Delegate task creation to the `todos-manager` skill. You must provide the following parameters to the skill:
      - `operation_mode`: `add`
      - `source`: `email`
@@ -46,10 +47,15 @@ Use this skill when the user asks to "triage family emails", "check the YellowFa
      - `description`: Relevant details and context from the email body.
      - `due_date`: (Optional) The deadline in `YYYY-MM-DD` format, if one is specified in the email.
      After delegating, apply the Gmail label `Processed/Reminder` to the email.
-     - **Exception**: Skip bills and invoices that are paid automatically via SDD (Direct Debit), Domiciliazione, or recurring credit card payments (e.g., Octopus Energy, TIM, utility bills, etc.). These do not require manual intervention and should not be added to the TODO list. Just label the email `Processed` and move on.
+     - **Exception**: Skip bills, invoices, and automated school payment notices (e.g., tuition/rette, mensa, school fees) that are paid automatically via SDD/RID (Direct Debit), Domiciliazione, or recurring credit card payments (e.g., school payments, Octopus Energy, TIM, utility bills, etc.). These are handled automatically by the bank, do not require manual intervention, and must not be added to the TODO list. Just label the email `Processed` and move on.
      - **Exception**: Skip informational receipts and order confirmations (e.g., "Ricevuta pagamento", "Conferma ordine").
-     - **Exception**: Skip generic school newsletters or informational circulars (e.g., "Mailing classe", "Documento di valutazione", "Consigli di Classe"). Only create tasks for school emails if a clear manual action is demanded (e.g., "Sign and return", "Buy these specific books"). Do not create generic "Verify [Subject]" tasks for every email with an attachment.
+     - **Exception**: Skip generic school newsletters, informational circulars, automated school payment reminders/notices, or school uniform reordering notices (e.g., "Mailing classe", "Documento di valutazione", "Consigli di Classe", "Avviso di pagamento", "Riordino divise/uniformi"). Since school payments are managed via bank RID and uniform reorders are optional, only create tasks for school emails if a clear mandatory manual action is demanded (e.g., "Sign and return", "Buy these specific books"). Do not create generic "Verify [Subject]" tasks for every email with an attachment.
      - **Exception**: Skip utility promotional or informational notices (e.g., Octopus Power Up free energy periods) unless they require manual account action.
+     - **Exception**: Skip notices, schedules, or convocation emails for basketball or volleyball games/matches (e.g., "Partita di basket", "Partita di pallavolo", "Convocazione"). Do not create tasks or "Verify [Subject]" TODOs for them; just label the email `Processed` and move on.
+5. **Cleanup Expired Tasks**:
+   - Query existing tasks via the `todos-manager` skill (`operation_mode: query`).
+   - Identify any task older than 15 days from the current date (checking the `YYYYMMDD` creation date prefix in the `slug` or a `due_date` that passed more than 15 days ago, provided it does not have a `due_date` in the future or within the last 15 days).
+   - Remove each expired task by delegating to the `todos-manager` skill with `operation_mode: remove` and the corresponding `slug`.
 
 ## Pitfalls
 - **CLI Label Modification**: When adding or removing multiple labels using `google_api.py gmail modify`, IDs must be comma-separated without spaces (e.g., `--add-labels ID1,ID2`). Providing them as separate arguments will cause a CLI error.
