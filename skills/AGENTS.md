@@ -51,7 +51,7 @@ When writing or maintaining Python or shell scripts within the `scripts/` folder
 
 ## 6. Screen Formatting & Output Rules
 When generating responses and interacting with the user on the screen:
-- **English Language Requirement:** The language used in this file must always be English, regardless of the instructions or language used in the different skill folders.
+- **Repository Documentation Language:** Repository-level documentation (`AGENTS.md` and `README.md`) must always be written in English, regardless of the instructions or language used inside the individual skill folders.
 - **Anti-Spam Link Previews:** Whenever an agent outputs a URL to a chat platform (like Discord or Slack), it MUST wrap the URL in angle brackets (e.g., `<https://example.com>`). This suppresses massive, unwanted link previews that clutter the screen.
 - **The "Silent Cron" Rule:** If a skill is designed to run automatically (like a daily digest or fetcher) and it finds no new data, the agent MUST output exactly `[SILENT]` and nothing else. This prevents the agent from sending empty "I found nothing today!" messages to the user every day.
 
@@ -59,14 +59,16 @@ When generating responses and interacting with the user on the screen:
 When drafting the `SKILL.md` file instructions:
 - **Explicit Trigger Conditions:** Every `SKILL.md` must have a `## Trigger` or `## When to use` section clearly defining the exact phrasing or context in which the LLM should invoke the skill.
 - **Step-by-Step Determinism:** Complex operations must be broken down into numbered lists (e.g., 1. Check Duplicates, 2. Fetch Data, 3. Write File). Agents perform much more reliably when instructions are numbered rather than written as paragraphs.
+- **Strict Output Templates:** When a skill produces a structured report, status check, or summary, include an explicit Markdown output template and instruct the agent to omit conversational filler.
+- **External Resource & Dependency Fallbacks:** When a skill relies on external URLs or other skills, define explicit fallback and error-handling steps (e.g., searching the main domain and notifying the user if a URL 404s/changes, or halting with a clear error if a required companion skill is missing).
 
 ## 8. Domain Consistency & Grouping
 When creating or modifying multiple skills that belong to the same logical domain, they must adhere to the registered categories, shared variables, and assets below:
 
 ### Registered Categories
 Skills could be assigned to one of these valid categories in their frontmatter:
-- **`GAS`**: Skills managing the Gruppo Acquisto Solidale (`gas-agentmail`, `gas-process-updates`).
-- **`yellowfamily`**: Skills managing the Yellow Family domain.
+- **`GAS`**: Skills managing the Gruppo Acquisto Solidale (e.g., `gas-agentmail`, `gas-process-updates`).
+- **`yellowfamily`**: Skills managing the Yellow Family domain (e.g., `yellowfamily-agenda-tomorrow`, `yellowfamily-inbox-triage`).
 
 ### Common Environment Variables
 Skills within a specific group must tap into these registered environment variables:
