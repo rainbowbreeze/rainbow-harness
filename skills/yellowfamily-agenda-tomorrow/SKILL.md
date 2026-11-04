@@ -1,7 +1,7 @@
 ---
 name: yellowfamily-agenda-tomorrow
 description: "Generates the daily agenda for the YellowFamily, consolidating calendar events and BRAIN TODOs. Use this skill when the user asks for tomorrow's agenda, schedule, or upcoming tasks for the family."
-version: 1.1.0
+version: 1.2.0
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -44,6 +44,8 @@ Use this skill when the user explicitly requests to see tomorrow's agenda, sched
      - `⚠️ Scadenze Urgenti e Arretrati`
      - `📝 Prossime Scadenze (3 giorni)`
      - `💡 Nota del Maggiordomo` (Include ONLY if there are critical warnings, like scheduling conflicts. Do not add general tips, greetings, or fluff).
+4. **Skip reasoning**
+   - Produce EXCLUSIVELY the formatted agenda report. Do not include any reflections, progress updates, interim summaries, or preambles: the response must begin directly with the first header of the agenda.
 
 ## Pitfalls
 - **Default Calendar:** The account's primary calendar is often empty; the family uses the shared "Yellow family" calendar.
