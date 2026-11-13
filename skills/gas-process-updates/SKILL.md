@@ -1,7 +1,7 @@
 ---
 name: gas-process-updates
 description: Processa i nuovi aggiornamenti del GAS dalle email, aggiorna il BRAIN, elimina le email elaborate e genera un riepilogo. Usa questa skill per gestire comunicazioni e ordini del GAS.
-version: 1.3.1
+version: 1.4.1
 author: Rainbowbreeze
 license: MIT
 metadata:
@@ -65,6 +65,8 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
   - **CRITICO**: Se un membro lascia il gruppo o abbandona un ruolo di referente, rimuovilo da `referenti.md` e aggiorna tutte le schede fornitore in `BRAIN/fornitori/` in cui era indicato, impostando il referente come "Da definire".
 - **Ordini (`BRAIN/ordini/`)**:
   - Aggiorna `BRAIN/ordini/correnti.json` con nuovi ordini o cambiamenti di stato (Apertura, Chiusura, Consegna).
+  - **Anti-Duplicazione**: Prima di aggiungere un nuovo ordine in `aperti`, verifica se ne esiste già uno per lo stesso fornitore. Se esiste, aggiorna quel blocco, NON creare duplicati.
+  - **Stato Scadenze (Fallback)**: Oltre a eseguire lo script `archive`, ispeziona visivamente le `Date di Chiusura` della sezione `aperti`. Se una chiusura è passata e l'ordine è ancora lì, spostalo tu in `chiusi_in_attesa_consegna`.
   - **Ambiguità Ordini**: Se un'email aggiorna un ordine in modo vago e il referente gestisce più ordini aperti, deduci a quale ordine si riferisce basandoti sul contesto o sulla scadenza più prossima.
   - Sposta gli ordini completati in `BRAIN/ordini/storico.json`.
   - **Post-Consegna (Contabilità)**: Quando ricevi comunicazioni sui conti finali per ordini in `storico.json`, aggiorna le "Note" e la scheda fornitore seguendo questi pattern:
@@ -93,6 +95,7 @@ Elabora il contenuto delle email e aggiorna la directory `BRAIN`:
     - **Stato Ordini**: Elenca sempre tutti gli ordini presenti in `BRAIN/ordini/correnti.json` con relativo stato e referenti.
     - **Feedback Post-Consegna**: Se un ordine è appena stato consegnato (oggi o ieri), controlla se ci sono nuove informazioni sui pagamenti o problemi nelle email e aggiorna sia la scheda fornitore che `storico.json`.
 - **Creazione Bulletin**:
+    - **Fuso Orario (CRITICO)**: Calcola esplicitamente la data odierna nel fuso orario di Roma (CET/CEST) prima di generare l'intestazione e stabilire il nome file (`YYYY-MM-DD-bulletin.md`), per evitare off-by-one errors se il task gira in UTC o di notte.
     - Oltre al report generale, genera una versione "pubblica" del report che includa SOLO scadenze, stato ordini e comunicazioni (escludendo il riepilogo delle email eliminate e dei file modificati).
     - **Formato Rigoroso**: Usa ESATTAMENTE il seguente template Markdown per il bollettino, mantenendo costanti i titoli H1 e H2:
       ```markdown
